@@ -90,6 +90,9 @@ public class DruidDBConfig {
 		datasource.setMinIdle(minIdle);
 		datasource.setMaxActive(maxActive);
 		datasource.setMaxWait(maxWait);
+		datasource.setRemoveAbandoned(true);
+		datasource.setRemoveAbandonedTimeout(3600);//单位秒
+		datasource.setLogAbandoned(true);
 		datasource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
 		datasource.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
 		datasource.setValidationQuery(validationQuery);

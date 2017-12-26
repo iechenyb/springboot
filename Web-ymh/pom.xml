@@ -160,7 +160,7 @@
             </plugin>  
 		</plugins>
 		<resources>  
-		<resource>  
+		  <resource>  
                 <directory>${project.basedir}/src/main/resources/</directory>  
                 <targetPath>BOOT-INF/classes/</targetPath>  
                 <includes>  
