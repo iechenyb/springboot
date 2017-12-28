@@ -21,7 +21,8 @@ public class NetResult  extends NetInfor{
 	private String infor;
 	
 	//存储时间
-	private String time;
+	private String time;//用于查看
+	
 	
 	public String getInfor() {
 		return infor;

@@ -11,24 +11,17 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class NetInfor {
 	
-	//服务名称  比如某某管理系统
+	//服务名称  比如某某管理系统-网点名称
 	private String name;
-	
 	//ip
 	private String ip;
-	
 	//端口号
 	private String port;
-	
-	
 	private String url;
-	
 	//域名
 	private String domain;
-	
 	//  port url ip  
 	private String type;
-	
 	private String sysType;//操作系统类型
 	
 	public String getName() {
@@ -87,5 +80,5 @@ public class NetInfor {
 	public void setSysType(String sysType) {
 		this.sysType = sysType;
 	}
-
+	
 }

@@ -86,8 +86,6 @@ public class DruidDBConfig {
 		datasource.setDriverClassName(driverClassName);
 
 		// configuration
-		datasource.setRemoveAbandonedTimeoutMillis(6*10*1000);//六分钟没有使用的就关闭
-		datasource.setRemoveAbandoned(true);
 		datasource.setInitialSize(initialSize);
 		datasource.setMinIdle(minIdle);
 		datasource.setMaxActive(maxActive);

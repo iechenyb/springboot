@@ -39,15 +39,15 @@ public class ScheduledTasks{
     	  System.out.println ("执行默认的检测信息！: The time is now " + dateFormat ().format (new Date ()));
     }
     //单位是毫秒  10分钟执行一次定制
-    @Scheduled(fixedRate = 1000 * 60*10)
+    @Scheduled(fixedRate = 1000 * 60)
     public void checkNet(){
     	System.out.println("执行定制的检测信息！");
-    	List<NetClass> lst = clsService.getList();
+    	/*List<NetClass> lst = clsService.getList();
     	if(!CollectionUtils.isEmpty(lst)){
     		for(NetClass cls:lst){
     			netService.saveUrlTest(cls);
     		}
-    	}
+    	}*/
     }
 
 
@@ -60,5 +60,53 @@ public class ScheduledTasks{
     private SimpleDateFormat dateFormat(){
         return new SimpleDateFormat ("HH:mm:ss");
     }
+    
+   /* @Bean
+    public JobFactory jobFactory(ApplicationContext applicationContext) {
+        AutowiringSpringBeanJobFactory jobFactory = new AutowiringSpringBeanJobFactory();
+        jobFactory.setApplicationContext(applicationContext);
+        return jobFactory;
+    }*/
+ 
+    /*@Bean
+    public Properties quartzProperties() throws IOException {
+        PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
+        propertiesFactoryBean.setLocation(new ClassPathResource("/quartz.properties"));
+        propertiesFactoryBean.afterPropertiesSet();
+        return propertiesFactoryBean.getObject();
+    }
+    *//**这是一组定时任务A   开始*//*
+    @Bean(name = "cronJob")
+    public JobDetailFactoryBean creatptdataBetDayJob() {
+        JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();
+        factoryBean.setJobClass(CronJob.class);
+        factoryBean.setName(CronJob.class.getName());
+        factoryBean.setGroup("cronmygroup");
+        factoryBean.setDurability(true);
+        return factoryBean;
+    }
+ 
+    @Bean(name = "cronJobTrigger")
+    public CronTriggerFactoryBean cronptdatajobTriggerFactoryBean(@Qualifier("cronJob") JobDetail jobDetail){
+        CronTriggerFactoryBean stFactory = new CronTriggerFactoryBean();
+        stFactory.setJobDetail(jobDetail);
+        stFactory.setStartDelay(3000);
+        stFactory.setName("crontrigger");
+        stFactory.setGroup("cronmygroup");
+        String express = "0 * *  * * *";
+        stFactory.setCronExpression(express);
+        return stFactory;
+    }
+ 
+    @Bean
+    public SchedulerFactoryBean ptdatajobSchedulerFactoryBean(DataSource dataSource, JobFactory jobFactory, @Qualifier("cronJobTrigger") Trigger sampleJobTrigger) throws IOException {
+        SchedulerFactoryBean factory = new SchedulerFactoryBean();
+        factory.setOverwriteExistingJobs(true);
+        factory.setJobFactory(jobFactory);
+        factory.setDataSource(dataSource);
+        factory.setQuartzProperties(quartzProperties());
+        factory.setTriggers(sampleJobTrigger);
+        return factory;
+    }*/
     
 }
