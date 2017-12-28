@@ -45,7 +45,7 @@ public class NetServiceImpl {
 		dao.save(nr);
 		NetResult nr_0 = pingTask.execute("www.baidu.com");
 		dao.save(nr_0);
-		NetResult nr_1 = telNetTask.execute("127.0.0.1","8080");
+		NetResult nr_1 = telNetTask.execute("www.baidu.com","80");
 		dao.save(nr_1);
 	}
 	

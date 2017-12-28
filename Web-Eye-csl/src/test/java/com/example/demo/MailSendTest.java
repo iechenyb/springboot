@@ -17,6 +17,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.cyb.MyBootStarter;
+import com.cyb.h2.H2Manager;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
@@ -30,24 +31,24 @@ public class MailSendTest {
     private JavaMailSender sender;
     
     private String to = "1048417686@qq.com";
-    private String from ="383065059@qq.com";
-    
+    //private String from ="383065059@qq.com";
+    private String from ="mailteam@qq.com";
     
     
     @Test
     public void sendSimpleMail() throws Exception {
-    	
+    		H2Manager.start();
     	 String subject="主题：简单邮件";
     	 String content = "测试邮件内容!";
     	SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(to);
         
-        message.setSubject("主题：简单邮件");
-        message.setText("测试邮件内容");
-        //sender.send(message);
+        message.setSubject(subject);
+        message.setText(content);
+        sender.send(message);
         
-        sendAttachmentsMail(subject,content,"d:/data/mail.txt");
+        //sendAttachmentsMail(subject,content,"d:/data/mail.txt");
     }
     /** 
      * 发送纯文本的简单邮件 

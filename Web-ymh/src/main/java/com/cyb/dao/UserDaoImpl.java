@@ -107,7 +107,7 @@ public class UserDaoImpl {
 	 */
 	public String saveRegister(MyUser user) {
 		// return addUserHibernate(user);
-		return addUserJpa(user);
+		return addUserHibernate(user);
 	}
 
 	public String addUserJpa(MyUser user) {
@@ -163,6 +163,6 @@ public class UserDaoImpl {
 	
 	public void saveMyUser(MyUser user){
 		hibernateDao.save(user);
-		commonDaoImpl.save(user);
+		//commonDaoImpl.save(user);
 	}
 }

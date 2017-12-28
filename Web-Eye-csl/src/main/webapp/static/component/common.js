@@ -121,6 +121,6 @@ angular.module('getTitle', [])
       }
     });
 
-function goto(url) {
+function goto1(url) {
   window.location.href = url;
 }

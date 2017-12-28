@@ -24,6 +24,8 @@ public class Plan {
 
 	public String jhlx;
 	public String jhbh;
+	public String xh;
+	
 	@Column(length=2000)
 	public String content;
 
@@ -49,6 +51,14 @@ public class Plan {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public String getXh() {
+		return xh;
+	}
+
+	public void setXh(String xh) {
+		this.xh = xh;
 	}
 
 }

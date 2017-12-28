@@ -27,6 +27,11 @@
 	</properties>
 
 	<dependencies>
+	<dependency>    
+        <groupId>org.springframework.boot</groupId>    
+        <artifactId>spring-boot-devtools</artifactId>    
+        <optional>true</optional>    
+    </dependency> 
 		<dependency>
                 <groupId>io.dubbo.springboot</groupId>
                 <artifactId>spring-boot-starter-dubbo</artifactId>
@@ -40,10 +45,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-	    <dependency>
+	    <!-- <dependency>
 	      <groupId>org.springframework.boot</groupId>
 	      <artifactId>spring-boot-devtools</artifactId>
-	    </dependency>
+	    </dependency> -->
 		<dependency>
 			<groupId>org.springframework.security.oauth</groupId>
 			<artifactId>spring-security-oauth2</artifactId>
@@ -121,11 +126,11 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
                 <groupId>io.dubbo.springboot</groupId>
                 <artifactId>spring-boot-starter-dubbo</artifactId>
               <version>1.0.0</version>
-        </dependency>
+        </dependency> -->
         <dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-core</artifactId>
@@ -154,7 +159,7 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-			 <plugin>
+			 <!-- <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.7</source>
@@ -164,16 +169,16 @@
                         <extdirs>${project.basedir}/src/main/webapp/WEB-INF/lib</extdirs>
                     </compilerArguments>
                 </configuration>
-            </plugin>
+            </plugin> -->
 		</plugins>
-		<resources>
-			  <resource>  
-                <directory>${project.basedir}/src/main/resources/</directory>  
-                <targetPath>BOOT-INF/classes/</targetPath>  
-                <includes>  
-                    <include>**/*.*</include>  
-                </includes>  
-            </resource>  
+		<!-- <resources>
+			 <resource>
+			<directory>${project.basedir}/src/main/webapp/WEB-INF/lib</directory>
+			<targetPath>/BOOT-INF/lib/</targetPath>
+			<includes>
+			<include>*/.jar</include>
+			</includes>
+			</resource> 
 			<resource>
                 <directory>${project.basedir}/src/main/webapp/WEB-INF/lib</directory>
                 <targetPath>BOOT-INF/lib/</targetPath>
@@ -181,6 +186,6 @@
                     <include>**/*.jar</include>
                 </includes>
             </resource>
-		</resources>
+		</resources> -->
 	</build>
 </project>

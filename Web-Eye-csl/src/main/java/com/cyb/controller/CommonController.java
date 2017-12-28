@@ -5,7 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -114,5 +117,20 @@ public class CommonController {
 		res.put("status", "1");//成功
 		res.put("msg", "删除成功");
 		return res;
+	}
+    @Autowired
+    private JavaMailSender sender;
+    @ResponseBody
+	@GetMapping("mailTest")
+	public String sendEmail(String from,String to){
+		 String subject="主题：简单邮件";
+    	 String content = "测试邮件内容!";
+    	SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(content);
+        sender.send(message);
+		return "邮件发送成功！";
 	}
 }

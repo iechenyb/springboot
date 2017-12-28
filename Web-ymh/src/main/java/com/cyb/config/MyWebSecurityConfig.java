@@ -35,11 +35,13 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/users/signup").permitAll()//.hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/users/login").permitAll()
                 .antMatchers("/users/toLogin").permitAll()
+                .antMatchers("/users/register").permitAll()
+                .antMatchers("/users/logout").permitAll()
                 .antMatchers("/users/toRedirect").permitAll()
                 .antMatchers( "/login.jsp").permitAll()
                 .antMatchers( "/users/exit").permitAll()
                 .antMatchers("/sw/**").permitAll()
-                .antMatchers("/plan/**").hasAnyRole("USER","ADMIN")
+                .antMatchers("/plan/**").hasAnyRole("USER","ADMIN")//.permitAll()
                 .antMatchers("/net/**").permitAll()
                 .antMatchers("/common/**").permitAll()
                 .antMatchers("/visitor1/home").hasAnyRole("USER","ADMIN")
@@ -51,7 +53,6 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-    	
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
     
@@ -60,8 +61,8 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
         //解决静态资源被拦截的问题
         web.ignoring()
         .antMatchers("/lhmj/**")  .antMatchers("/static/**")
-        .antMatchers("/css/**")
-        .antMatchers("/js/**")
+        .antMatchers("/css/**").antMatchers("/phone/**")
+        .antMatchers("/js/**").antMatchers("/exception/**")
         .antMatchers("/img/**")
         .antMatchers("/css/**")
         .antMatchers("/login.jsp")

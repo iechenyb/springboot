@@ -48,15 +48,17 @@ public class PlanServiceImpl {
 					Iterator<String> keys = jhs.keySet().iterator();
 					while (keys.hasNext()) {
 						Plan p = null;
-						p = planRep.findPlan(type.getJhlx(), type.getJhbh());
+						String cur = keys.next();
+						p = planRep.findPlan(type.getJhlx(), type.getJhbh(),cur);
 						if (p == null) {
 							p = new Plan();
 							p.setJhlx(type.getJhlx());
 							p.setJhbh(type.getJhbh());
-							p.setContent(jhs.get(keys.next()).toString());
+							p.setXh(cur);
+							p.setContent(jhs.get(cur).toString());
 							dao.save(p);
 						} else {
-							p.setContent(jhs.get(keys.next()).toString());
+							p.setContent(jhs.get(cur).toString());
 							dao.update(p);
 						}
 					}
@@ -65,15 +67,6 @@ public class PlanServiceImpl {
 				System.out.println(type.getJhmc() + "," + e.getMessage());
 			}
 		}
-		/*
-		 * url =
-		 * "http://www.28ma.net/index.php?get=neirong&username=17NS1246227907&type=houerdanshi&time=";
-		 * Map<String,StringBuffer> jhs = HttpRequest.sendGetJh(url, null);
-		 * Iterator<String> keys = jhs.keySet().iterator();
-		 * while(keys.hasNext()){ Plan p = new Plan(); p.setJhlx("x");
-		 * p.setJhbh("y"); p.setContent(jhs.get(keys.next()).toString());
-		 * dao.save(p); }
-		 */
 	}
 
 }
