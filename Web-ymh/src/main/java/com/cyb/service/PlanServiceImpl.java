@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.cyb.dao.PlanDaoImpl;
 import com.cyb.dao.PlanRepository;
 import com.cyb.dao.PlanTypeDaoImpl;
+import com.cyb.date.DateUtil;
 import com.cyb.po.Plan;
 import com.cyb.po.PlanType;
 import com.cyb.utils.HttpRequest;
@@ -55,11 +56,15 @@ public class PlanServiceImpl {
 							p.setJhlx(type.getJhlx());
 							p.setJhbh(type.getJhbh());
 							p.setXh(cur);
+							p.setTime(DateUtil.timeToSec());
 							p.setContent(jhs.get(cur).toString());
 							dao.save(p);
 						} else {
-							p.setContent(jhs.get(cur).toString());
-							dao.update(p);
+							System.out.println("更新...");
+							p.setTime(DateUtil.timeToSec());
+							p.setContent(jhs.get(cur).toString());//jhs.get(cur).toString()
+							//dao.update(p);
+							dao.updatePlan(p);
 						}
 					}
 				}

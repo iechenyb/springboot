@@ -143,6 +143,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		   <!--  <version>6.0.2</version> -->
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -170,10 +175,10 @@
                 </configuration>  
             </plugin>  
 		</plugins>
-		<resources>  
+		 <resources>  
 		   <resource>  
                 <directory>${project.basedir}/src/main/resources/</directory>  
-                <targetPath>BOOT-INF/classes/</targetPath>  
+              <!--   <targetPath>BOOT-INF/classes/</targetPath>   -->
                 <includes>  
                     <include>**/*.*</include>  
                 </includes>  
@@ -185,7 +190,7 @@
                     <include>**/*.jar</include>  
                 </includes>  
             </resource>  
-        </resources> 
+        </resources>
 	</build>
 
 

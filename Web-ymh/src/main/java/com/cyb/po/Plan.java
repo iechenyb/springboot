@@ -25,7 +25,8 @@ public class Plan {
 	public String jhlx;
 	public String jhbh;
 	public String xh;
-	
+	//存储时间
+	private String time;//用于查看
 	@Column(length=2000)
 	public String content;
 
@@ -59,6 +60,14 @@ public class Plan {
 
 	public void setXh(String xh) {
 		this.xh = xh;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
 	}
 
 }

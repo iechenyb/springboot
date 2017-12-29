@@ -1,5 +1,7 @@
 package com.cyb.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.cyb.base.HibernateBaseDao;
@@ -11,4 +13,12 @@ import com.cyb.po.Plan;
  */
 @Repository
 public class PlanDaoImpl extends HibernateBaseDao<Plan> {
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+	
+	public void updatePlan(Plan plan){
+		String sql = "update WEB_YH_JH  set content=?"
+		+",time='"+plan.getTime()+"' where id= ?";
+		jdbcTemplate.update(sql,new Object[]{plan.getContent()+"cyb",plan.getId()});
+	}
 }
