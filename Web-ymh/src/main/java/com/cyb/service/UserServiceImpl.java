@@ -1,7 +1,11 @@
 package com.cyb.service;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cyb.dao.MyUserRepository;
 import com.cyb.dao.UserDaoImpl;
 import com.cyb.po.MyUser;
 /**
@@ -15,6 +19,12 @@ public class UserServiceImpl {
 	@Autowired
 	UserDaoImpl userDao;
 	
+	@Autowired
+	MyUserRepository myUserRep;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
+	
 	public void updateTX(int hasException,String newName,int type){
 		userDao.updateTx(hasException,newName,type);
 	}
@@ -27,6 +37,12 @@ public class UserServiceImpl {
 		return userDao.saveRegister(user);
 	}
 	
+	public void saveJap2 (MyUser user){
+		 myUserRep.save(user);
+	}
+	public void saveJap1 (MyUser user){
+		 entityManager.persist(user);
+	}
 	public void saveMyUser(MyUser user){
 		userDao.saveMyUser(user);
 	}

@@ -26,7 +26,7 @@ public class ScheduledTasks {
 
 	@Autowired
 	PlanServiceImpl planService;
-	@Scheduled(cron = "0 0 *  * * * ")
+	@Scheduled(cron = "0 * *  * * * ")
 	//@Scheduled(fixedRate = 1000 * 60*5)
 	public void reportCurrentTime() {
 		planService.savePlan(null);

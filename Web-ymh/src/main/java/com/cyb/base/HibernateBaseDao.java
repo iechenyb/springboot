@@ -112,7 +112,12 @@ public class HibernateBaseDao<T> implements IHibernateBaseDao<T> {
     @SuppressWarnings("unchecked")
     public List<T> getAll() {
         String hql = "from " + this.entityClass.getName();
-        return this.getSession().createQuery(hql).list();
+        try{
+        	return this.getSession().createQuery(hql).list();
+        }catch(Exception e){
+        	e.printStackTrace();
+        	return new ArrayList<T>();
+        }
     }
 
     

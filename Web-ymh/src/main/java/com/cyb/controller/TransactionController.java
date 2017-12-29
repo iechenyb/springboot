@@ -36,6 +36,17 @@ public class TransactionController {
     	return "测试结束！";
     }
     
+    @GetMapping("/testJpaSW")
+    @ResponseBody
+    public String jpaTra(int type,MyUser user){
+    	if(type==1){
+    	   userService.saveJap1(user);
+        }else{
+    	   userService.saveJap2(user);
+       }
+    	return "测试结束！";
+    }
+    
     @GetMapping("/commDao")
     @ResponseBody
     public String hibernate(MyUser user){
