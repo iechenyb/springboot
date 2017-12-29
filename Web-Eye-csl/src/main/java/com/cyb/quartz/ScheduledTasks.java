@@ -36,18 +36,18 @@ public class ScheduledTasks{
     public void reportCurrentTime(){
     	//默认测试
     	  netService.saveUrlTest("http://www.baidu.com");
-    	  System.out.println ("执行默认的检测信息！: The time is now " + dateFormat ().format (new Date ()));
+    	  log.info ("执行默认的检测信息！: The time is now " + dateFormat ().format (new Date ()));
     }
     //单位是毫秒  10分钟执行一次定制
     @Scheduled(fixedRate = 1000 * 60)
     public void checkNet(){
     	System.out.println("执行定制的检测信息！");
-    	/*List<NetClass> lst = clsService.getList();
+    	List<NetClass> lst = clsService.getList();
     	if(!CollectionUtils.isEmpty(lst)){
     		for(NetClass cls:lst){
     			netService.saveUrlTest(cls);
     		}
-    	}*/
+    	}
     }
 
 

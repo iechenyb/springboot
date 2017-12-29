@@ -41,13 +41,13 @@ public class NetServiceImpl {
 	
 	 
 	public void saveUrlTest(String url){
-		NetResult nr  = null;
+		/*NetResult nr  = null;
 		nr =urlTask.execute("http://www.baidu.com");
-		dao.save(nr);
+		dao.save(nr);*/
 		NetResult nr_0 = pingTask.execute("www.baidu.com");
 		dao.save(nr_0);
-		NetResult nr_1 = telNetTask.execute("www.baidu.com","80");
-		dao.save(nr_1);
+		/*NetResult nr_1 = telNetTask.execute("www.baidu.com","80");
+		dao.save(nr_1);*/
 	}
 	
 	public void saveCommon(){

@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
+	<include resource="org/springframework/boot/logging/logback/base.xml"/>  
 	<!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 -->
-	<property name="LOG_HOME" value="D://logs" />
+	<property name="LOG_HOME" value="D://data//logs" />
+	<!-- <logger name="org.springframework.web"  level="error"/>
+    <logger name="org.springboot.sample"  level="error" />
+    <logger name="com.alibaba.druid"  level="error" /> -->
+     <!--输出sql语句-->
+ <!--    <logger name="com.sun" level="debug" /> -->
 	<!-- 控制台输出 -->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
@@ -14,7 +20,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!--日志文件输出的文件名 .%d{yyyy-MM-dd}-->
-			<FileNamePattern>${LOG_HOME}/TestWeb-%d{yyyy-MM-dd}.log
+			<FileNamePattern>${LOG_HOME}/WebEye-%d{yyyy-MM-dd}.log
 			</FileNamePattern>
 			<!--日志文件保留天数 -->
 			<MaxHistory>30</MaxHistory>
@@ -26,11 +32,12 @@
 		<!--日志文件最大的大小 -->
 		<triggeringPolicy
 			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>10MB</MaxFileSize>
+			<MaxFileSize>30MB</MaxFileSize>
 		</triggeringPolicy>
 	</appender>
 	<!-- 日志输出级别INFO ERROR WARN -->
 	<root level="INFO">
-		<appender-ref ref="STDOUT" />
+		 <appender-ref ref="STDOUT" />  
+        <appender-ref ref="FILE" />  
 	</root>
 </configuration>
