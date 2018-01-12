@@ -35,7 +35,9 @@ function copy(){
 }
 </script>
 <!-- oncontextmenu='return false' onselectstart="return false"  ondragstart="return false" -->
-<body oncontextmenu='return false;'  onselectstart="return false;"  ondragstart="return false;" 
+<body oncontextmenu='return false;'  
+onselectstart="return false;"  
+ondragstart="return false;" 
 onselect='document.selection.empty()'   
 oncopy='document.selection.empty()'   
 onbeforecopy='return false'   

@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -129,6 +132,21 @@ public class CommonController {
 		view.addObject("name", "chenyb");
 		view.setViewName("index");
 		return view;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping("userinfor")
+	@ResponseBody
+	public String userInfor(){
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()  
+			    .getAuthentication()  
+			    .getPrincipal();  
+		Iterator<GrantedAuthority> iter = (Iterator<GrantedAuthority>) userDetails.getAuthorities().iterator();
+		while(iter.hasNext()){
+			GrantedAuthority g = iter.next();
+			System.out.println("用户角色"+g.getAuthority());
+		}
+		return userDetails.getUsername() ;
 	}
 	
 }

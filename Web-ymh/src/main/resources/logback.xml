@@ -8,7 +8,7 @@
     <logger name="com.alibaba.druid" level="error" />
     
     <logger name="org.hibernate.type.descriptor.sql.BasicBinder"  level="infor" />
-    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor"  level="infor" />
+    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor"  level="infor" ></logger>
     <logger name="org.hibernate.SQL" level="infor" />
     <logger name="org.hibernate.engine.QueryParameters" level="infor" />
     <logger name="org.hibernate.engine.query.HQLQueryPlan" level="infor" />
@@ -17,6 +17,7 @@
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
 			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}	-%msg%n</pattern>
+			<charset>UTF-8</charset> 
 		</encoder>
 	</appender>
 	<!-- 按照每天生成日志文件 -->
@@ -32,8 +33,9 @@
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
 			<pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%p] [%t] [%F] [%L] %m%n</pattern>
+			<charset>utf-8</charset> 
 		</encoder>
-		<!--日志文件最大的大小 -->
+		<!--日志文件最大的大小  -Dfile.encoding=UTF-8-->
 		<triggeringPolicy
 			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
 			<MaxFileSize>10MB</MaxFileSize>
@@ -41,7 +43,7 @@
 	</appender>
 	<!-- 日志输出级别INFO ERROR WARN -->
 	<root level="INFO">
-		<appender-ref ref="STDOUT" />
+		<!-- <appender-ref ref="STDOUT" /> -->
 		<appender-ref ref="FILE" />
 	</root>
 	   <!--输出sql语句-->

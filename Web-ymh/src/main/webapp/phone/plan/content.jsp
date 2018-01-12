@@ -4,6 +4,10 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+String jhlx =  request.getParameter("jhlx");
+String jhbh = request.getParameter("jhbh");
+String idx = request.getParameter("idx");
+if(idx==null||idx=="") idx="0";
 %>
 <!DOCTYPE html>
 <html>
@@ -27,12 +31,73 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         li{font-size: 20px;margin-left:0px;}
         ul{font-size: 30px;}
     </style>
+    <script> 
+    function CurentTime()
+    { 
+        var now = new Date();
+       
+        var year = now.getFullYear();       //年
+        var month = now.getMonth() + 1;     //月
+        var day = now.getDate();            //日
+       
+        var hh = now.getHours();            //时
+        var mm = now.getMinutes();          //分
+        var ss = now.getSeconds()      //分
+       
+        var clock = year + "-";
+       
+        if(month < 10)
+            clock += "0";
+       
+        clock += month + "-";
+       
+        if(day < 10)
+            clock += "0";
+           
+        clock += day + " ";
+       
+        if(hh < 10)
+            clock += "0";
+           
+        clock += hh + ":";
+        
+        if (mm < 10) clock += '0'; 
+        clock += mm+ ":";
+        
+        if (ss < 10) clock += '0'; 
+        clock += ss; 
+        
+        return(clock); 
+    } 
+    var idx=<%=idx%>;
+    function setVar(i){
+    	console.log("idx="+i);
+    	idx=i;
+    }
+	//定时器 异步运行 
+	function hello(){ 
+		console.log("refresh..."+CurentTime());
+		var href="<%=basePath%>plan/getPlan?jhbh=<%=jhbh%>&jhlx=<%=jhlx%>&idx="+idx;
+		window.location.replace(href);
+	} 
+		//使用方法名字执行方法 
+		var t1 = window.setInterval(hello,1000*10);//毫秒 
+		//var t2 = window.setTimeout("hello()",3000);//使用字符串执行方法 
+		//window.clearTimeout(t1);//去掉定时器 
+</script> 
 </head>
-<body>
+<body
+ oncontextmenu='return false;'  
+onselectstart="return false;"  
+ondragstart="return false;" 
+onselect='document.selection.empty()'   
+oncopy='document.selection.empty()'   
+onbeforecopy='return false' 
+onmouseup='document.selection.empty()'>
 <!--header-->
 <header data-am-widget="header" class="am-header am-header-default">
     <div class="am-header-left am-header-nav">
-        <a href="<%=basePath%>phone/plan/index.jsp" class="">
+        <a href="<%=basePath%>plan/index" class="" >
             <i class="am-header-icon am-icon-home"></i>
         </a>
     </div>
@@ -51,7 +116,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div id="doc-oc-demo3" class="am-offcanvas">
     <div class="am-offcanvas-bar am-offcanvas-bar-flip">
         <div class="am-offcanvas-content">
-             <ul>重庆
+             <ul><img src="<%=basePath%>phone/plan/sscb.png"></img>重庆
               <c:forEach items="${t1}" var="tmp">  
                 <li>
 	                 <a href="<%=basePath%>plan/getPlan?jhbh=<c:out value="${tmp.jhbh}" />&jhlx=<c:out value="${tmp.jhlx}" />"> 
@@ -60,7 +125,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                </li>
                </c:forEach>
             </ul>
-            <ul>PK10
+            <ul><img src="<%=basePath%>phone/plan/PK10b.png"></img>PK10
                <c:forEach items="${t2}" var="tmp">  
                 <li>
 	                 <a href="<%=basePath%>plan/getPlan?jhbh=<c:out value="${tmp.jhbh}" />&jhlx=<c:out value="${tmp.jhlx}" />"> 
@@ -72,13 +137,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         </div>
     </div>
 </div>
+<c:set var="idx" scope="session" value="<%=idx%>"/>
 <section data-am-widget="accordion" class="am-accordion am-accordion-gapped" data-am-accordion='{  }'>
-    <c:forEach items="${data}" var="t">  
-    <dl class="am-accordion-item am-active">
-        <dt class="am-accordion-title">
-            <img src="<%=basePath %>phone/plan/1.jpg"/> <c:out value="${t.jhlx}" ></c:out> 
+    <c:forEach items="${data}" var="t" varStatus="status">  
+    <!--  am-active -->
+    <c:if test="${status.index==idx}">
+    	<dl class="am-accordion-item am-active">
+    </c:if>
+     <c:if test="${status.index!=idx}">
+    	<dl class="am-accordion-item">
+    </c:if>
+        <dt class="am-accordion-title" onclick="setVar(${status.index})">
+            <img width="50px"  height="50px" src="${t.pic}"/> ${t.name}
         </dt>
+          <c:if test="${status.index==idx}">
         <dd class="am-accordion-bd am-collapse am-in">
+        </c:if>
+         <c:if test="${status.index!=idx}">
+        <dd class="am-accordion-bd am-collapse">
+        </c:if>
             <div class="am-accordion-content" id="1234">
             	<c:out value="${t.content}" escapeXml="false"> </c:out> 
             </div>
@@ -90,9 +167,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      id="">
     <ul class="am-navbar-nav am-cf am-avg-sm-4">
         <li >
-            <a href="tel:123456789" class="">
-                <span class="am-icon-phone"></span>
-                <span class="am-navbar-label">呼叫</span>
+           <a href="###" class="">
+                <span class="am-icon-qq" data-am-popover="{content: 'QQ:466074875'}"></span>
+                <span class="am-navbar-label" data-am-popover="{content: 'QQ:466074875'}">客服</span>
             </a>
         </li>
         <li data-am-navbar-share>
@@ -101,12 +178,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <span class="am-navbar-label">分享</span>
             </a>
         </li>
-        <li data-am-navbar-qrcode>
+       <!--  <li data-am-navbar-qrcode>
             <a href="###" class="">
                 <span class="am-icon-qrcode"></span>
                 <span class="am-navbar-label">二维码</span>
             </a>
-        </li>
+        </li> -->
         <%-- <li >
             <a href="https://github.com/allmobilize/amazeui" class="">
                 <span class="am-icon-github"></span>
@@ -131,9 +208,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="<%=basePath %>static/js/jquery.min.js"></script>
 <script type="text/javascript" src="http://cdn.amazeui.org/amazeui/2.7.2/js/amazeui.min.js"></script>
 <script src="<%=basePath %>static/js/amazeui.widgets.helper.min.js"></script>
-<script type="text/javascript" src="jquery.zclip.min.js"></script>
 <script type="text/javascript">
-    $(function() {
+    /* $(function() {
         $("#cp-btn").zclip({
             path: 'ZeroClipboard.swf', //è®°å¾æZeroClipboard.swfå¼å¥å°é¡¹ç®ä¸­
             copy: function () {
@@ -141,6 +217,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 return $('#inviteUrl').val();
             }
         });
-    });
+    }); */
 </script>
 </html>

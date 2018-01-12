@@ -1,5 +1,7 @@
 package com.cyb.po;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +11,11 @@ import javax.persistence.Table;
 
 @Table(name = "web_yh_jh")
 @Entity
-public class Plan {
+public class Plan implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long id;
@@ -29,6 +35,9 @@ public class Plan {
 	private String time;//用于查看
 	@Column(length=2000)
 	public String content;
+	
+	public String pic;
+	public String name;
 
 	public String getJhlx() {
 		return jhlx;
@@ -68,6 +77,22 @@ public class Plan {
 
 	public void setTime(String time) {
 		this.time = time;
+	}
+
+	public String getPic() {
+		return pic;
+	}
+
+	public void setPic(String pic) {
+		this.pic = pic;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

@@ -105,7 +105,11 @@ var myApp = angular.module('myApp', ['ui.router',"mytop",'ngSanitize'])
         template: '<div class="app"><div ui-view></div></div>',
         restrict: 'E'
     })
-    .controller('pageController', function ($scope) {
-        $scope.title = "角色管理";
+    .controller('pageController', function ($scope,$http) {
         $scope.basePath=$('#basePath').val();
+        $http.get($scope.basePath+'plan/getPlanFromFile?jhbh=01&jhlx=cq')
+        .success(function (data) {
+            console.log("data："+data);
+      });
+        
     });

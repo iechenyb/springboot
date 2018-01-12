@@ -7,8 +7,11 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.cyb.file.ObjectFileUtils;
 
 public class HttpRequest {
     /**
@@ -24,7 +27,10 @@ public class HttpRequest {
         String result = "";
         BufferedReader in = null;
         try {
-            String urlNameString = url + "?" + param;
+            String urlNameString = url ;
+            if(param!=null){
+            	urlNameString = urlNameString+ "?" + param;
+            }
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
             URLConnection connection = realUrl.openConnection();
@@ -43,10 +49,10 @@ public class HttpRequest {
             }
             // 定义 BufferedReader输入流来读取URL的响应
             in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
+                    connection.getInputStream(),"UTF-8"));
             String line;
             while ((line = in.readLine()) != null) {
-                result += line;
+                result += line+"<br>";
             }
         } catch (Exception e) {
             System.out.println("发送GET请求出现异常！" + e);
@@ -69,7 +75,7 @@ public class HttpRequest {
     public static  Map<String,StringBuffer>  sendGetJh(String url, String param) {
         String result = "";
         BufferedReader in = null;
-        Map<String,StringBuffer> jhs= new HashMap<String,StringBuffer>();
+        Map<String,StringBuffer> jhs= new LinkedHashMap<String,StringBuffer>();
         try {
             String urlNameString = url + "?" + param;
             URL realUrl = new URL(urlNameString);
@@ -80,13 +86,15 @@ public class HttpRequest {
             connection.setRequestProperty("connection", "Keep-Alive");
             connection.setRequestProperty("user-agent",
                     "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            /*connection.setRequestProperty("Accept-Charset", "GBK");
+            connection.setRequestProperty("contentType", "GBK");*/
             // 建立实际的连接
             connection.connect();
             // 获取所有响应头字段
             // 遍历所有的响应头字段
             // 定义 BufferedReader输入流来读取URL的响应
             in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
+                    connection.getInputStream(),"UTF-8"));
             String line;
             String cur ="";
             while ((line = in.readLine()) != null) {
@@ -97,11 +105,16 @@ public class HttpRequest {
 	            		continue;
 	            	}
             	}
+	            if(jhs.get(cur)==null){
+	            	jhs.put(cur, new StringBuffer());
+	            }
             	jhs.get(cur).append(line+"<br>");
             }
+            System.out.println(jhs);
             return  jhs;
         } catch (Exception e) {
             System.out.println("发送GET请求出现异常！" + url);
+            e.printStackTrace();
             return null;
         }
         // 使用finally块来关闭输入流

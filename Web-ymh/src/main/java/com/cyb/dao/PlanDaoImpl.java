@@ -21,4 +21,8 @@ public class PlanDaoImpl extends HibernateBaseDao<Plan> {
 		+",time='"+plan.getTime()+"' where id= ?";
 		jdbcTemplate.update(sql,new Object[]{plan.getContent()+"cyb",plan.getId()});
 	}
+	public void deletePlans(){
+		String sql = "delete from  WEB_YH_JH ";
+		jdbcTemplate.execute(sql);
+	}
 }

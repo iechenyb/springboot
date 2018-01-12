@@ -2,6 +2,8 @@ package com.cyb.controller;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,8 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 @RequestMapping(value = "error")
 public class BaseErrorController implements ErrorController {
-	Log log = LogFactory.getLog(BaseErrorController.class);
-
+	//Log log = LogFactory.getLog(BaseErrorController.class);
+	Logger log = LoggerFactory.getLogger(getClass());
 	@Override
 	public String getErrorPath() {
 		log.info("出错啦！进入自定义错误控制器");

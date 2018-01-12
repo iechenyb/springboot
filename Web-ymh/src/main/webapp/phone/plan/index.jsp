@@ -5,6 +5,8 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <head lang="zh-cn">
@@ -13,7 +15,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <meta name="description" content="">
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>首页</title>
+    <title>首页<%-- <sec:authentication property="name"/>
+	<sec:authentication property="principal.username"></sec:authentication>  --%></title>
     <meta name="renderer" content="webkit">
     <!-- No Baidu Siteapp-->
     <meta http-equiv="Cache-Control" content="no-siteapp">
@@ -32,13 +35,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!--header-->
 <header data-am-widget="header" class="am-header am-header-default">
     <div class="am-header-left am-header-nav">
-        <a href="<%=basePath%>phone/plan/index.jsp" class="">
+        <a href="<%=basePath%>plan/index" class="">
             <i class="am-header-icon am-icon-home"></i>
         </a>
     </div>
     <h1 class="am-header-title">
         <a href="#" class="">
-            蓝海密剑${username}
+            欢迎你！${username}
         </a>
     </h1>
     <div class="am-header-right am-header-nav">
@@ -75,7 +78,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div id="doc-oc-demo3" class="am-offcanvas">
     <div class="am-offcanvas-bar am-offcanvas-bar-flip">
         <div class="am-offcanvas-content">
-			<ul>重庆
+			<ul><img src="<%=basePath%>phone/plan/sscb.png"></img>重庆
               <c:forEach items="${t1}" var="tmp">  
                 <li>
 	                 <a href="<%=basePath%>plan/getPlan?jhbh=<c:out value="${tmp.jhbh}" />&jhlx=<c:out value="${tmp.jhlx}" />"> 
@@ -84,7 +87,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                </li>
                </c:forEach>
             </ul>
-            <ul>PK10
+            <ul><img src="<%=basePath%>phone/plan/PK10b.png"></img>PK10
                <c:forEach items="${t2}" var="tmp">  
                 <li>
 	                 <a href="<%=basePath%>plan/getPlan?jhbh=<c:out value="${tmp.jhbh}" />&jhlx=<c:out value="${tmp.jhlx}" />"> 
@@ -136,23 +139,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      id="">
     <ul class="am-navbar-nav am-cf am-avg-sm-4">
         <li >
-            <a href="tel:123456789" class="">
+          <!--   <a href="tel:123456789" class="">
                 <span class="am-icon-phone"></span>
                 <span class="am-navbar-label">呼叫</span>
+            </a> -->
+             <a href="###" class="">
+                <span class="am-icon-qq" data-am-popover="{content: 'QQ:466074875'}"></span>
+                <span class="am-navbar-label" data-am-popover="{content: 'QQ:466074875'}">客服</span>
             </a>
-        </li>
+           <!--  <a href="tencent://message/?uin=466074875&Site=QQ交谈&Menu=yes" target="blank"><img border="0" src="http://wpa.qq.com/pa?p=1:你的QQ号:7" alt="图片不正常时显示的文字" width="71" height="24" />123</a>
+      -->   </li>
         <li data-am-navbar-share>
             <a href="###" class="">
                 <span class="am-icon-share-square-o"></span>
                 <span class="am-navbar-label">分享</span>
             </a>
         </li>
-        <li data-am-navbar-qrcode>
+       <!--  <li data-am-navbar-qrcode>
             <a href="###" class="">
                 <span class="am-icon-qrcode"></span>
                 <span class="am-navbar-label">二维码</span>
             </a>
-        </li>
+        </li> -->
         <!-- <li >
             <a href="https://github.com/allmobilize/amazeui" class="">
                 <span class="am-icon-github"></span>
