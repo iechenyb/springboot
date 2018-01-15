@@ -27,6 +27,7 @@ if(idx==null||idx=="") idx="0";
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <link rel="stylesheet" href="<%=basePath %>static/css/amazeui.min.css">
+    <script type="text/javascript" src="<%=basePath %>phone/plan/ZeroClipboard.js"></script>
     <style type="text/css">
         li{font-size: 20px;margin-left:0px;}
         ul{font-size: 30px;}
@@ -80,20 +81,42 @@ if(idx==null||idx=="") idx="0";
 		var href="<%=basePath%>plan/getPlan?jhbh=<%=jhbh%>&jhlx=<%=jhlx%>&idx="+idx;
 		window.location.replace(href);
 	} 
+	var curTxt="";
+	function setValue(val){
+		curTxt = val;
+		console.log(curTxt);
+	}
 		//使用方法名字执行方法 
 		var t1 = window.setInterval(hello,1000*10);//毫秒 
 		//var t2 = window.setTimeout("hello()",3000);//使用字符串执行方法 
 		//window.clearTimeout(t1);//去掉定时器 
+		
+		function init(id) {
+			console.log("id:"+id);
+			clip = new ZeroClipboard.Client();
+			clip.setHandCursor(true);
+			clip.addEventListener('mouseOver', function(client) {
+				// update the text on mouse over
+				console.log("inner id:"+id);
+				clip.setText($('id').value+"版权申明iechenyb！");
+			});
+
+			clip.addEventListener('complete', function(client, text) {
+				//debugstr("Copied text to clipboard: " + text );
+				alert("该地址已经复制，你可以使用Ctrl+V 粘贴。");
+			});
+			clip.glue('clip_button', 'clip_container');
+		}
 </script> 
 </head>
-<body
- oncontextmenu='return false;'  
+<body>
+<!--  oncontextmenu='return false;'  
 onselectstart="return false;"  
 ondragstart="return false;" 
 onselect='document.selection.empty()'   
 oncopy='document.selection.empty()'   
 onbeforecopy='return false' 
-onmouseup='document.selection.empty()'>
+onmouseup='document.selection.empty()' -->
 <!--header-->
 <header data-am-widget="header" class="am-header am-header-default">
     <div class="am-header-left am-header-nav">
@@ -156,8 +179,9 @@ onmouseup='document.selection.empty()'>
          <c:if test="${status.index!=idx}">
         <dd class="am-accordion-bd am-collapse">
         </c:if>
-            <div class="am-accordion-content" id="1234">
-            	<c:out value="${t.content}" escapeXml="false"> </c:out> 
+            <div class="am-accordion-content"  id="content${status.index}">
+            	<c:out value="${t.content}" escapeXml="false"> </c:out>
+            	<button onclick="setValue(123);"   onload="init(${status.index})" value="fdsd" id='clip_button'${status.index}'>sdf</button> 
             </div>
         </dd>
     </dl>
