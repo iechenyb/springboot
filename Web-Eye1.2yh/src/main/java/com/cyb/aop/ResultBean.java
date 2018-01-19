@@ -43,7 +43,12 @@ public class ResultBean<T> implements Serializable {
 		this.code = SUCCESS;
 		return this;
 	}
-
+	@SuppressWarnings("rawtypes")
+	public ResultBean success(String msg) {
+		this.code = SUCCESS;
+		this.msg = msg;
+		return this;
+	}
 	@SuppressWarnings("rawtypes")
 	public ResultBean data(T data) {
 		this.code = SUCCESS;
@@ -55,6 +60,14 @@ public class ResultBean<T> implements Serializable {
 	public ResultBean fail() {
 		this.code = FAIL;
 		this.data = null;
+		this.msg="";
+		return this;
+	}
+	@SuppressWarnings("rawtypes")
+	public ResultBean fail(String msg) {
+		this.code = FAIL;
+		this.data = null;
+		this.msg = msg;
 		return this;
 	}
 

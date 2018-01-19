@@ -5,7 +5,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="app">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,7 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <link rel="stylesheet" href="<%=basePath %>static/css/amazeui.min.css">
   <link rel="stylesheet" href="<%=basePath%>/phone/plan/app.css">
 </head>
-<body>
+<body ng-controller="loginController">
 <div class="am-g">
 	<!-- LOGO -->
 	<div class="am-u-sm-12 am-text-center" >
@@ -27,25 +27,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</div>
 	<!-- 登陆框 -->
 	<div class="am-u-sm-11 am-u-sm-centered">
-	<form class="am-form" action="<%=basePath%>users/login" method="post">
+	<input type="hidden"  value="<%= basePath%>" id="path"/>
 	  <fieldset class="myapp-login-form am-form-set">
 		<div class="am-form-group am-form-icon">
 			<i class="am-icon-user"></i>
-			<input type="text"  name="username"  value='cyb' class="myapp-login-input-text am-form-field" placeholder="请输入您的账号">
+			<input type="text"  name="username"  ng-model="user.username"  value='cyb' class="myapp-login-input-text am-form-field" placeholder="请输入您的账号">
 		</div>
 	    <div class="am-form-group am-form-icon">
 			<i class="am-icon-lock"></i>
-			<input type="password" name="password"  value='cyb' class="myapp-login-input-text am-form-field" placeholder="至少6个字符">
+			<input type="password" name="password"  ng-model="user.password"  value='cyb' class="myapp-login-input-text am-form-field" placeholder="至少6个字符">
 		</div>
 	  </fieldset>
-	  ${msg}
-	  <button type="submit" class="am-btn am-btn-primary am-btn-block ">登 陆</button>
-	</form>
+	  {{msg}}
+	  <button ng-click="submit()" class="am-btn am-btn-primary am-btn-block ">登 陆</button>
 	</div>
 </div>
 
 <script src="<%=basePath%>static/js/jquery.min.js"></script>
-<script src="<%=basePath%>/phone/plan/app.js"></script>
+<script type="text/javascript" src="<%=basePath%>static/js/angular.min.js"></script>
+<script src="<%=basePath%>/phone/plan2/login.js"></script>
 <script type="text/javascript" src="<%=basePath%>static/js/amazeui.min.js"></script>
 </body>
 </html>
