@@ -2,7 +2,7 @@
 <configuration debug="false">
 	<include resource="org/springframework/boot/logging/logback/base.xml"/> 
 	<!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 -->
-	<property name="LOG_HOME" value="D:/data/logs" />
+	<property name="LOG_HOME" value="C:/data/logs" />
 	<logger name="org.springframework.web" level="error"/>
     <logger name="org.springboot.sample" level="error" />
     <logger name="com.alibaba.druid" level="error" />

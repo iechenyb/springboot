@@ -134,7 +134,7 @@ onmouseup='document.selection.empty()' -->
     </h1>
     <div class="am-header-right am-header-nav">
         <a href="#right-link" class="" data-am-offcanvas="{target: '#doc-oc-demo3'}">
-            <i class="am-header-icon am-icon-bars"></i>
+            人工计划<i class="am-header-icon am-icon-bars"></i>
         </a>
     </div>
 </header>
@@ -159,6 +159,7 @@ onmouseup='document.selection.empty()' -->
         </div>
     </div>
 </div>
+当前查看面板：{{indexP}}--{{time}}
 <section data-am-widget="accordion"  id="collapse-nav" class="am-accordion am-accordion-gapped" data-am-accordion='{  }'>
     	<div class="am-panel-group" id="accordion">
 		  <div class="am-panel am-panel-default" ng-repeat="t in planList">

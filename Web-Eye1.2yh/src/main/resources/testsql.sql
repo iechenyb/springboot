@@ -24,3 +24,6 @@ insert into web_yh_jh_type(id,jhbh,jhlx,jhmc,url) values(19,'19','pk10','前2名
 insert into web_yh_jh_type(id,jhbh,jhlx,jhmc,url) values(20,'20','pk10','前3名复试','http://www.28ma.net/index.php?get=neirong&username=17NS1246227907&type=qiansanmingfushi&time=');
 
 
+user--->$2a$10$8tcpQndyr2xYslQ1kQkqBeUtBWYRKrk92U7Br77qWn/znoQHQsCLy
+admin-->$2a$10$CGjPLUtzP7dcm4U.toJjlOI//5TAmqgE3ZWo5/uzza0qlPWkfLXPe
+

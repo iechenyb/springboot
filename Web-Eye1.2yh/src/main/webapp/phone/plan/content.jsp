@@ -131,7 +131,7 @@ onmouseup='document.selection.empty()' -->
     </h1>
     <div class="am-header-right am-header-nav">
         <a href="#right-link" class="" data-am-offcanvas="{target: '#doc-oc-demo3'}">
-            <i class="am-header-icon am-icon-bars"></i>
+            人工计划<i class="am-header-icon am-icon-bars"></i>
         </a>
     </div>
 </header>
@@ -181,7 +181,6 @@ onmouseup='document.selection.empty()' -->
         </c:if>
             <div class="am-accordion-content"  id="content${status.index}">
             	<c:out value="${t.content}" escapeXml="false"> </c:out>
-            	<button onclick="setValue(123);"   onload="init(${status.index})" value="fdsd" id='clip_button'${status.index}'>sdf</button> 
             </div>
         </dd>
     </dl>
