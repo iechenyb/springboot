@@ -15,22 +15,12 @@ public class MyServletContextListener implements ServletContextListener {
 	  private IAuthService authService;*/
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-<<<<<<< HEAD
-        //PlanContants.context = sce.getServletContext().getRealPath("/");
-        //System.out.println("ServletContex初始化"+PlanContants.context);
-        //System.out.println("realPath:blank is "+sce.getServletContext().getRealPath(""));
-        //System.out.println("realPath:/ is "+PlanContants.context);
-        PlanContants.context = "c:/data/plan/";
         //可以直接使用工厂对象
         WebApplicationContextUtils.getRequiredWebApplicationContext(sce.getServletContext())
         .getAutowireCapableBeanFactory().autowireBean(this);
-=======
         PlanContants.context = sce.getServletContext().getRealPath("/");
-        System.out.println("ServletContex初始化"+PlanContants.context);
-        System.out.println("realPath:blank is "+sce.getServletContext().getRealPath(""));
-        System.out.println("realPath:/ is "+PlanContants.context);
         PlanContants.context = "c:/data/plan/";
->>>>>>> 2af0b915207c21d06314351034f00b5f976ed8e1
+        System.out.println("realPath:/ is "+PlanContants.context);
         H2Manager.start();
     }
 
