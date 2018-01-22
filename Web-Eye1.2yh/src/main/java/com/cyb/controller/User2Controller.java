@@ -49,13 +49,14 @@ public class User2Controller {
     @SuppressWarnings("unchecked")
 	@PostMapping("/login1")
     @ResponseBody
-    public ResultBean<Object> login1(@RequestBody MyUser user) {
+    public ResultBean<Object> login1(@RequestBody MyUser user,HttpServletRequest req) {
     	 try {
              Authentication request = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
              System.out.println("before:" + request);
              Authentication result = authenticationManager.authenticate(request);
              System.out.println("after:" + result);
              SecurityContextHolder.getContext().setAuthentication(result);
+             req.getSession().setAttribute("userid", user.getUsername());
          } catch (AuthenticationException e) {
              System.out.println("Authentication failed: " + e.getMessage());
              return new ResultBean<Object>().fail("Authentication failed: " +e.getMessage());
@@ -66,13 +67,14 @@ public class User2Controller {
     @SuppressWarnings("unchecked")
 	@PostMapping("/login2")
     @ResponseBody
-    public ResultBean<Object> login2(MyUser user) {
+    public ResultBean<Object> login2(MyUser user,HttpServletRequest req) {
     	 try {
              Authentication request = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
              System.out.println("before:" + request);
              Authentication result = authenticationManager.authenticate(request);
              System.out.println("after:" + result);
              SecurityContextHolder.getContext().setAuthentication(result);
+             req.getSession().setAttribute("userid", user.getUsername());
          } catch (AuthenticationException e) {
              System.out.println("Authentication failed: " + e.getMessage());
              return new ResultBean<Object>().fail("Authentication failed: " +e.getMessage());

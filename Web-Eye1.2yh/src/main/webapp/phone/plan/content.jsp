@@ -126,12 +126,12 @@ onmouseup='document.selection.empty()' -->
     </div>
     <h1 class="am-header-title">
         <a href="#title-link" class="">
-            蓝海密剑${username}
+            3A信誉团队${username}
         </a>
     </h1>
     <div class="am-header-right am-header-nav">
         <a href="#right-link" class="" data-am-offcanvas="{target: '#doc-oc-demo3'}">
-            <i class="am-header-icon am-icon-bars"></i>
+            人工计划<i class="am-header-icon am-icon-bars"></i>
         </a>
     </div>
 </header>
@@ -192,8 +192,8 @@ onmouseup='document.selection.empty()' -->
     <ul class="am-navbar-nav am-cf am-avg-sm-4">
         <li >
            <a href="###" class="">
-                <span class="am-icon-qq" data-am-popover="{content: 'QQ:466074875'}"></span>
-                <span class="am-navbar-label" data-am-popover="{content: 'QQ:466074875'}">客服</span>
+                <span class="am-icon-qq" data-am-popover="{content: 'QQ:}"></span>
+                <span class="am-navbar-label" data-am-popover="{content: 'QQ:'}">客服</span>
             </a>
         </li>
         <li data-am-navbar-share>

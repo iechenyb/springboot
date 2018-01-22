@@ -43,7 +43,7 @@ public class PlanServiceImpl {
 
 	@Autowired
 	PlanTypeDaoImpl planType;
-    String[] names = new String[]{"青青","小叶","冰兰","童童","小慧","阿丽","白雪","凡儿","安琦","月月"};
+    String[] names = new String[]{"计划员1号:青青","计划员2号:小叶","计划员3号:冰兰","计划员4号:童童","计划员5号:小慧","计划员6号:阿丽","计划员7号:白雪","计划员8号:凡儿","计划员9号:安琦","计划员10号:月月"};
     String[] imgs = new String[]{
     		"http://www.28ma.net/28maoem/28ma/images/girl1.jpg",
     		"http://www.28ma.net/28maoem/28ma/images/girl2.jpg",

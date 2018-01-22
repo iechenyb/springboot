@@ -42,11 +42,11 @@ public class MyBootStarter  {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {  
         return application.sources(MyBootStarter.class);  
     }  */
-	public  static ConfigurableApplicationContext context;
+	/*public  static ConfigurableApplicationContext context;
 	
 	public static ConfigurableApplicationContext getContext() {
 		return context;
-	}
+	}*/
 
 	public static void main(String[] args) {
 		 H2Manager.start();
@@ -63,6 +63,7 @@ public class MyBootStarter  {
      * 注入sessionfatory
      * @return
      */
+	@SuppressWarnings("deprecation")
 	@Bean
     public HibernateJpaSessionFactoryBean sessionFactory() {
         return new HibernateJpaSessionFactoryBean();

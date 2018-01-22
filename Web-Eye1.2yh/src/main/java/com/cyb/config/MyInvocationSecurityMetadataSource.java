@@ -31,6 +31,8 @@ implements FilterInvocationSecurityMetadataSource {
     	//普通用户权限
     	auths.put("/plan/getPlan", "ROLE_USER");
     	auths.put("/plan/index", "ROLE_USER");
+    	//auths.put("/phone/plan2/index.jsp", "ROLE_USER");
+    	//auths.put("/phone/plan2/content.jsp", "ROLE_USER");
     	return auths;
     }
     /**
@@ -68,8 +70,12 @@ implements FilterInvocationSecurityMetadataSource {
             for(String url:auths.keySet()){
           	  	Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
                 configAttributes.add(auths2.get(auths.get(url)));//只用一个地址
-                resourceMap.put(url, configAttributes);
+                //resourceMap.put(url, configAttributes);
           }
+           /* Collection<ConfigAttribute> configAttributes4 = new ArrayList<ConfigAttribute>();
+            ConfigAttribute configAttribute4 = new SecurityConfig("ROLE_USER");// 资源标识
+            configAttributes4.add(configAttribute4);
+            resourceMap.put("/phone/plan2/index.jsp", configAttributes4);*/
             /*List<WebResource> resources = webResourceDao.findAll();
             for (WebResource resource : resources) {
                 Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
@@ -89,9 +95,10 @@ implements FilterInvocationSecurityMetadataSource {
         if(requestUrl.contains("?")){
         	requestUrl = requestUrl.substring(0, requestUrl.lastIndexOf("?"));//去掉参数部分！
         }
-        System.out.println("当前访问的uri="+uri);
+        System.out.println("当前访问的uri="+requestUrl.replace("//", "/"));
+        requestUrl.replace("//", "/");
        // 返回当前 url  所需要的权限 即url对应的角色
-         return resourceMap.get(requestUrl);
+         return resourceMap.get(uri.replace("//", "/"));
     }
 
     @Override

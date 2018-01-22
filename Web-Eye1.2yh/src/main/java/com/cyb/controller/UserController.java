@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cyb.aop.ResultBean;
 import com.cyb.dao.MyUserRepository;
 import com.cyb.dao.PlanTypeRepository;
 import com.cyb.po.MyUser;
@@ -96,9 +97,10 @@ public class UserController {
          }
 		return view;
     }
-    @GetMapping("/exit")
+    @SuppressWarnings("unchecked")
+	@GetMapping("/exit")
     @ResponseBody
-    public String exit(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    public ResultBean<Object> exit(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
     	 try {
     		 Assert.notNull(request, "HttpServletRequest required");
 	         HttpSession session = request.getSession(false);
@@ -108,10 +110,10 @@ public class UserController {
     	     SecurityContextHolder.clearContext(); //清空安全上下文
          } catch (AuthenticationException e) {
              System.out.println("Authentication failed: " + e.getMessage());
-             return "退出失败";
+             return new ResultBean<Object>().fail("退出失败");
          }
     	 System.out.println("用户退出！");
-		return "退出成功";
+		return new ResultBean<Object>("退出成功");
     }
     
     @GetMapping("/logout")

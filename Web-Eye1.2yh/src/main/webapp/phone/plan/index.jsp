@@ -46,7 +46,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </h1>
     <div class="am-header-right am-header-nav">
         <a href="#right-link" class="" data-am-offcanvas="{target: '#doc-oc-demo3'}">
-            <i class="am-header-icon am-icon-bars"></i>
+            人工计划<i class="am-header-icon am-icon-bars"></i>
         </a>
     </div>
 </header>
@@ -144,8 +144,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <span class="am-navbar-label">呼叫</span>
             </a> -->
              <a href="###" class="">
-                <span class="am-icon-qq" data-am-popover="{content: 'QQ:466074875'}"></span>
-                <span class="am-navbar-label" data-am-popover="{content: 'QQ:466074875'}">客服</span>
+                <span class="am-icon-qq" data-am-popover="{content: 'QQ:'}"></span>
+                <span class="am-navbar-label" data-am-popover="{content: 'QQ:}">客服</span>
             </a>
            <!--  <a href="tencent://message/?uin=466074875&Site=QQ交谈&Menu=yes" target="blank"><img border="0" src="http://wpa.qq.com/pa?p=1:你的QQ号:7" alt="图片不正常时显示的文字" width="71" height="24" />123</a>
       -->   </li>

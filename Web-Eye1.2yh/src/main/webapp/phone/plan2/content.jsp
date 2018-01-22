@@ -109,7 +109,7 @@ if(idx==null||idx=="") idx="0";
 		}
 </script> 
 </head>
-<body ng-controller="contentController">
+<body ng-controller="contentController" oncontextmenu='return false;' >
 <!--  oncontextmenu='return false;'  
 onselectstart="return false;"  
 ondragstart="return false;" 
@@ -129,12 +129,12 @@ onmouseup='document.selection.empty()' -->
     </div>
     <h1 class="am-header-title">
         <a href="#title-link" class="">
-            蓝海密剑${username}
+            3A信誉团队${username}
         </a>
     </h1>
     <div class="am-header-right am-header-nav">
         <a href="#right-link" class="" data-am-offcanvas="{target: '#doc-oc-demo3'}">
-            <i class="am-header-icon am-icon-bars"></i>
+           人工计划 <i class="am-header-icon am-icon-bars"></i>
         </a>
     </div>
 </header>
@@ -159,15 +159,16 @@ onmouseup='document.selection.empty()' -->
         </div>
     </div>
 </div>
+<!-- <input type="text" value="1" ng-model="opidx"/><button name="open"  ng-click="show()">显示 	</button> -->
 <section data-am-widget="accordion"  id="collapse-nav" class="am-accordion am-accordion-gapped" data-am-accordion='{  }'>
     	<div class="am-panel-group" id="accordion">
-		  <div class="am-panel am-panel-default" ng-repeat="t in planList">
+		  <div class="am-panel am-panel-default" ng-repeat="t in planList" repeat-finish>
 			    <div class="am-panel-hd">
 			      <h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#do-not-say-{{$index}}}" ng-click="open($index)">
-			        <img width="50px"  height="50px" src="{{t.pic}}"/> {{t.name}}+{{count}}
+			        <img width="50px"  height="50px" src="{{t.pic}}"/> {{t.name}}
 			      </h4>
-			    </div>
-			    <div id="do-not-say-{{$index}}" class="am-panel-collapse am-collapse ">
+			    </div><!-- class="am-panel-collapse am-collapse am-in" -->
+			    <div id="do-not-say-{{$index}}"  ng-class="{'am-panel-collapse am-collapse am-in':curid==$index,'am-panel-collapse am-collapse' :curid!=$index}">
 			      <div class="am-panel-bd">
 			        	<p ng-bind-html="t.content | to_trusted"></p>
 			      </div>
@@ -175,21 +176,13 @@ onmouseup='document.selection.empty()' -->
 		  </div>
 	</div>
 </section> 
-<nav>
-  <ul id="collapse-nav" class="am-nav am-collapse">
-    <li><a href="">开始使用</a></li>
-    <li><a href="">CSS 介绍</a></li>
-    <li class="am-active"><a href="">JS 介绍</a></li>
-    <li><a href="">功能定制</a></li>
-  </ul>
-</nav>
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
      id="">
     <ul class="am-navbar-nav am-cf am-avg-sm-4">
         <li >
            <a href="###" class="">
-                <span class="am-icon-qq" data-am-popover="{content: 'QQ:466074875'}"></span>
-                <span class="am-navbar-label" data-am-popover="{content: 'QQ:466074875'}">客服</span>
+                <span class="am-icon-qq" data-am-popover="{content: 'QQ:'}"></span>
+                <span class="am-navbar-label" data-am-popover="{content: 'QQ:'}">客服</span>
             </a>
         </li>
         <li data-am-navbar-share>
@@ -199,7 +192,7 @@ onmouseup='document.selection.empty()' -->
             </a>
         </li>
         <li >
-           <a href="<%=basePath%>users/logout" class="">
+           <a href="javascript:void(0)" class=""  ng-click="exit()">
                 <span class="am-icon-download"></span>
                 <span class="am-navbar-label">退出</span>
             </a>

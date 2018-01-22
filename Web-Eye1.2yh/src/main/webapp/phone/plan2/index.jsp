@@ -47,7 +47,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </h1>
     <div class="am-header-right am-header-nav">
         <a href="#right-link" class="" data-am-offcanvas="{target: '#doc-oc-demo3'}">
-            <i class="am-header-icon am-icon-bars"></i>
+            人工计划<i class="am-header-icon am-icon-bars"></i>
         </a>
     </div>
 </header>
@@ -137,8 +137,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <ul class="am-navbar-nav am-cf am-avg-sm-4">
         <li >
              <a href="###" class="">
-                <span class="am-icon-qq" data-am-popover="{content: 'QQ:466074875'}"></span>
-                <span class="am-navbar-label" data-am-popover="{content: 'QQ:466074875'}">客服</span>
+                <span class="am-icon-qq" data-am-popover="{content: 'QQ:}"></span>
+                <span class="am-navbar-label" data-am-popover="{content: 'QQ:'}">客服</span>
             </a>
           </li>
         <li data-am-navbar-share>
