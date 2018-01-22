@@ -10,7 +10,7 @@ String idx = request.getParameter("idx");
 if(idx==null||idx=="") idx="0";
 %>
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head lang="zh-cn">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -77,9 +77,9 @@ if(idx==null||idx=="") idx="0";
     }
 	//定时器 异步运行 
 	function hello(){ 
-		console.log("refresh..."+CurentTime());
-		var href="<%=basePath%>plan/getPlan?jhbh=<%=jhbh%>&jhlx=<%=jhlx%>&idx="+idx;
-		window.location.replace(href);
+		//console.log("refresh..."+CurentTime());
+	//	var href="<%=basePath%>plan/getPlan?jhbh=<%=jhbh%>&jhlx=<%=jhlx%>&idx="+idx;
+		//window.location.replace(href);
 	} 
 	var curTxt="";
 	function setValue(val){
@@ -87,7 +87,7 @@ if(idx==null||idx=="") idx="0";
 		console.log(curTxt);
 	}
 		//使用方法名字执行方法 
-		var t1 = window.setInterval(hello,1000*10);//毫秒 
+		//var t1 = window.setInterval(hello,1000*10);//毫秒 
 		//var t2 = window.setTimeout("hello()",3000);//使用字符串执行方法 
 		//window.clearTimeout(t1);//去掉定时器 
 		
@@ -109,7 +109,7 @@ if(idx==null||idx=="") idx="0";
 		}
 </script> 
 </head>
-<body>
+<body ng-controller="contentController" oncontextmenu='return false;' >
 <!--  oncontextmenu='return false;'  
 onselectstart="return false;"  
 ondragstart="return false;" 
@@ -118,9 +118,12 @@ oncopy='document.selection.empty()'
 onbeforecopy='return false' 
 onmouseup='document.selection.empty()' -->
 <!--header-->
+<input type="hidden"  value="<%= basePath%>" id="path"/>
+<input type="hidden"  value="<%= jhlx%>" id="jhlx"/>
+<input type="hidden"  value="<%= jhbh%>" id="jhbh"/>
 <header data-am-widget="header" class="am-header am-header-default">
     <div class="am-header-left am-header-nav">
-        <a href="<%=basePath%>plan/index" class="" >
+        <a href="<%=basePath%>phone/plan2/index.jsp" class="" >
             <i class="am-header-icon am-icon-home"></i>
         </a>
     </div>
@@ -131,7 +134,11 @@ onmouseup='document.selection.empty()' -->
     </h1>
     <div class="am-header-right am-header-nav">
         <a href="#right-link" class="" data-am-offcanvas="{target: '#doc-oc-demo3'}">
+<<<<<<< HEAD
+           人工计划 <i class="am-header-icon am-icon-bars"></i>
+=======
             人工计划<i class="am-header-icon am-icon-bars"></i>
+>>>>>>> 2af0b915207c21d06314351034f00b5f976ed8e1
         </a>
     </div>
 </header>
@@ -140,58 +147,49 @@ onmouseup='document.selection.empty()' -->
     <div class="am-offcanvas-bar am-offcanvas-bar-flip">
         <div class="am-offcanvas-content">
              <ul><img src="<%=basePath%>phone/plan/sscb.png"></img>重庆
-              <c:forEach items="${t1}" var="tmp">  
-                <li>
-	                 <a href="<%=basePath%>plan/getPlan?jhbh=<c:out value="${tmp.jhbh}" />&jhlx=<c:out value="${tmp.jhlx}" />"> 
-	               		<c:out value="${tmp.jhmc}" /> 
-	                </a>
+                <li ng-repeat="cq in cqList">
+	                  <a href="<%=basePath%>phone/plan2/content.jsp?jhbh={{cq.jhbh}}&jhlx={{cq.jhlx}}"> 
+	               		{{cq.jhmc}}
+	                </a> 
                </li>
-               </c:forEach>
             </ul>
             <ul><img src="<%=basePath%>phone/plan/PK10b.png"></img>PK10
-               <c:forEach items="${t2}" var="tmp">  
-                <li>
-	                 <a href="<%=basePath%>plan/getPlan?jhbh=<c:out value="${tmp.jhbh}" />&jhlx=<c:out value="${tmp.jhlx}" />"> 
-	               		<c:out value="${tmp.jhmc}" /> 
-	                </a>
+                <li ng-repeat="cq in pkList">
+	                   <a href="<%=basePath%>phone/plan2/content.jsp?jhbh={{cq.jhbh}}&jhlx={{cq.jhlx}}"> 
+	               		{{cq.jhmc}} 
+	                </a> 
                </li>
-               </c:forEach>
             </ul>
         </div>
     </div>
 </div>
-<c:set var="idx" scope="session" value="<%=idx%>"/>
-<section data-am-widget="accordion" class="am-accordion am-accordion-gapped" data-am-accordion='{  }'>
-    <c:forEach items="${data}" var="t" varStatus="status">  
-    <!--  am-active -->
-    <c:if test="${status.index==idx}">
-    	<dl class="am-accordion-item am-active">
-    </c:if>
-     <c:if test="${status.index!=idx}">
-    	<dl class="am-accordion-item">
-    </c:if>
-        <dt class="am-accordion-title" onclick="setVar(${status.index})">
-            <img width="50px"  height="50px" src="${t.pic}"/> ${t.name}
-        </dt>
-          <c:if test="${status.index==idx}">
-        <dd class="am-accordion-bd am-collapse am-in">
-        </c:if>
-         <c:if test="${status.index!=idx}">
-        <dd class="am-accordion-bd am-collapse">
-        </c:if>
-            <div class="am-accordion-content"  id="content${status.index}">
-            	<c:out value="${t.content}" escapeXml="false"> </c:out>
-            </div>
-        </dd>
-    </dl>
-    </c:forEach>
+<<<<<<< HEAD
+<!-- <input type="text" value="1" ng-model="opidx"/><button name="open"  ng-click="show()">显示 	</button> -->
+=======
+当前查看面板：{{indexP}}--{{time}}
+>>>>>>> 2af0b915207c21d06314351034f00b5f976ed8e1
+<section data-am-widget="accordion"  id="collapse-nav" class="am-accordion am-accordion-gapped" data-am-accordion='{  }'>
+    	<div class="am-panel-group" id="accordion">
+		  <div class="am-panel am-panel-default" ng-repeat="t in planList" repeat-finish>
+			    <div class="am-panel-hd">
+			      <h4 class="am-panel-title" data-am-collapse="{parent: '#accordion', target: '#do-not-say-{{$index}}}" ng-click="open($index)">
+			        <img width="50px"  height="50px" src="{{t.pic}}"/> {{t.name}}
+			      </h4>
+			    </div><!-- class="am-panel-collapse am-collapse am-in" -->
+			    <div id="do-not-say-{{$index}}"  ng-class="{'am-panel-collapse am-collapse am-in':curid==$index,'am-panel-collapse am-collapse' :curid!=$index}">
+			      <div class="am-panel-bd">
+			        	<p ng-bind-html="t.content | to_trusted"></p>
+			      </div>
+			    </div>
+		  </div>
+	</div>
 </section> 
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
      id="">
     <ul class="am-navbar-nav am-cf am-avg-sm-4">
         <li >
            <a href="###" class="">
-                <span class="am-icon-qq" data-am-popover="{content: 'QQ:}"></span>
+                <span class="am-icon-qq" data-am-popover="{content: 'QQ:'}"></span>
                 <span class="am-navbar-label" data-am-popover="{content: 'QQ:'}">客服</span>
             </a>
         </li>
@@ -201,26 +199,8 @@ onmouseup='document.selection.empty()' -->
                 <span class="am-navbar-label">分享</span>
             </a>
         </li>
-       <!--  <li data-am-navbar-qrcode>
-            <a href="###" class="">
-                <span class="am-icon-qrcode"></span>
-                <span class="am-navbar-label">二维码</span>
-            </a>
-        </li> -->
-        <%-- <li >
-            <a href="https://github.com/allmobilize/amazeui" class="">
-                <span class="am-icon-github"></span>
-                <span class="am-navbar-label">GitHub</span>
-            </a>
-        </li>
         <li >
-            <a href="<%=basePath%>phone/plan/login.jsp" class="">
-                <span class="am-icon-location-arrow"></span>
-                <span class="am-navbar-label">登录</span>
-            </a>
-        </li> --%>
-        <li >
-           <a href="<%=basePath%>users/logout" class="">
+           <a href="javascript:void(0)" class=""  ng-click="exit()">
                 <span class="am-icon-download"></span>
                 <span class="am-navbar-label">退出</span>
             </a>
@@ -229,17 +209,9 @@ onmouseup='document.selection.empty()' -->
 </div>
 </body>
 <script src="<%=basePath %>static/js/jquery.min.js"></script>
-<script type="text/javascript" src="http://cdn.amazeui.org/amazeui/2.7.2/js/amazeui.min.js"></script>
 <script src="<%=basePath %>static/js/amazeui.widgets.helper.min.js"></script>
-<script type="text/javascript">
-    /* $(function() {
-        $("#cp-btn").zclip({
-            path: 'ZeroClipboard.swf', //è®°å¾æZeroClipboard.swfå¼å¥å°é¡¹ç®ä¸­
-            copy: function () {
-                alert($('#inviteUrl').val());
-                return $('#inviteUrl').val();
-            }
-        });
-    }); */
-</script>
+<script type="text/javascript" src="<%=basePath%>static/js/angular.min.js"></script>
+<script type="text/javascript" src="http://cdn.amazeui.org/amazeui/2.7.2/js/amazeui.min.js"></script>
+<script src="<%=basePath %>static/js/angular-sanitize.min.js"></script>
+<script src="<%=basePath%>/phone/plan2/content.js"></script>
 </html>
