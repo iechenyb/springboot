@@ -31,8 +31,12 @@ implements FilterInvocationSecurityMetadataSource {
     	//普通用户权限
     	auths.put("/plan/getPlan", "ROLE_USER");
     	auths.put("/plan/index", "ROLE_USER");
-    	//auths.put("/phone/plan2/index.jsp", "ROLE_USER");
-    	//auths.put("/phone/plan2/content.jsp", "ROLE_USER");
+    	auths.put("/plan2/getPlan", "ROLE_USER");
+    	auths.put("/plan2/cq", "ROLE_USER");
+    	auths.put("/plan2/pk10", "ROLE_USER");
+    	//auths.put("/plan/index", "ROLE_USER");
+    	auths.put("/phone/plan2/index.jsp", "ROLE_USER");
+    	auths.put("/phone/plan2/content.jsp", "ROLE_USER");
     	return auths;
     }
     /**

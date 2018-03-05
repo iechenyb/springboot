@@ -1,9 +1,6 @@
 package com.cyb.aop;
 
-import java.util.Arrays;
-import java.util.Enumeration;
-
-import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,11 +11,13 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.cyb.utils.AopUtils;
 
 /**
  * 作者 : iechenyb<br>
@@ -41,7 +40,7 @@ public class WebControllerAop {
     public void doBefore(JoinPoint joinPoint) {
         // 接收到请求，记录请求内容
         log.info("WebLogAspect.doBefore()");
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        /*ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         // 记录下请求内容
         log.info("URL : " + request.getRequestURL().toString());
@@ -55,7 +54,7 @@ public class WebControllerAop {
         while (enu.hasMoreElements()) {
             String paraName = enu.nextElement();
             System.out.println(paraName + ": " + request.getParameter(paraName));
-        }
+        }*/
     }
 
 	//@AfterThrowing(value = "executeService()", throwing = "exception")
@@ -88,25 +87,31 @@ public class WebControllerAop {
 			return null;
 		}
 	}
-
+	
 	@Around(value = "executeService()")
 	public Object doAroundAdvice(ProceedingJoinPoint proceedingJoinPoint) {
-		System.out.println("环绕通知的目标方法名：" + proceedingJoinPoint.getSignature().getName());
+		//System.out.println("环绕通知的目标方法名：" + proceedingJoinPoint.getSignature().getName());
 		Object obj = null;
-		MethodSignature methodSignature =null;
+		/*MethodSignature methodSignature =null;
 		Class<?> returnType = proceedingJoinPoint.getTarget().getClass();
 		Class<?> retCls=null;
 		if(proceedingJoinPoint.getSignature()!=null){
 			methodSignature =(MethodSignature) proceedingJoinPoint.getSignature();
 			retCls = methodSignature.getReturnType();
-		}
-		 System.out.println(retCls.getSimpleName()+"方法的返回值类型"+returnType.getClass());
+		}*/
+		Method curMethod = AopUtils.getMethod(proceedingJoinPoint);
+		Log log_ = AopUtils.getLog(proceedingJoinPoint);//获取目标类curMethod.getDeclaringClass()
+		//当前方法的类型和方法所在的类的类型
+		System.out.println(curMethod.getClass()+"----"+curMethod.getDeclaringClass());
+		 //System.out.println(retCls.getSimpleName()+"方法的返回值类型"+returnType.getClass());
 		try {// obj之前可以写目标方法执行前的逻辑
+			 log_.info(curMethod.getName()+"执行开始");
 			 obj = proceedingJoinPoint.proceed();// 调用执行目标方法
+			 log_.info(curMethod.getName()+"执行结束");
 			 return obj;
 		} catch (Throwable throwable) {
 			throwable.printStackTrace();
-			return doAfterThrowingAdvice(throwable,retCls);
+			return doAfterThrowingAdvice(throwable,curMethod.getReturnType());
 		}
 		
 	}

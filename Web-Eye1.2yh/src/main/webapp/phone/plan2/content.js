@@ -56,7 +56,7 @@ app.controller('contentController', function($scope, $http, $interval) {
 		console.log("count++");
 		$scope.count = $scope.count + 1;
 		var param = '?jhlx=' + $('#jhlx').val() + "&jhbh=" + $('#jhbh').val();
-		$http.get($scope.basePath + '/plan2/getPlan' + param).then(
+		$http.get($scope.basePath + 'plan2/getPlan' + param).then(
 				successCallback3, errorCallback3);
 	}, 3000);
 	page.open = function(id) {
@@ -83,12 +83,12 @@ app.controller('contentController', function($scope, $http, $interval) {
 	 * console.log('折叠菜单打开了！'); }).on('close.collapse.amui', function() {
 	 * console.log('折叠菜单关闭鸟！'); });
 	 */
-	$http.get($scope.basePath + '/plan2/cq').then(successCallback1,
+	$http.get($scope.basePath + 'plan2/cq').then(successCallback1,
 			errorCallback1);
-	$http.get($scope.basePath + '/plan2/pk10').then(successCallback2,
+	$http.get($scope.basePath + 'plan2/pk10').then(successCallback2,
 			errorCallback2);
 	var param = '?jhlx=' + $('#jhlx').val() + "&jhbh=" + $('#jhbh').val();
-	$http.get($scope.basePath + '/plan2/getPlan' + param).then(
+	$http.get($scope.basePath + 'plan2/getPlan' + param).then(
 			successCallback3, errorCallback3);
 });
 app.directive('repeatFinish', function() {

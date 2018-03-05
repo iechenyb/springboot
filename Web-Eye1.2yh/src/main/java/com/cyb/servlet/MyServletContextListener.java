@@ -21,6 +21,7 @@ public class MyServletContextListener implements ServletContextListener {
         PlanContants.context = sce.getServletContext().getRealPath("/");
         PlanContants.context = "c:/data/plan/";
         System.out.println("realPath:/ is "+PlanContants.context);
+        H2Manager.initServer();
         H2Manager.start();
     }
 

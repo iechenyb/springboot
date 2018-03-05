@@ -31,3 +31,6 @@ http://localhost/common/toPage2 user
 http://localhost/common/toPage3  需要other权限无 
 
 
+打war包时，需要启动h2服务！
+
+

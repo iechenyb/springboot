@@ -5,7 +5,7 @@
 	<groupId>com.plan</groupId>
 	<artifactId>0.0.2-SNAPSHOT</artifactId>
 	<version>ymh</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>demo</name>
 	<description>Demo project for Spring Boot</description>
@@ -116,10 +116,6 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<!-- <scope>provided</scope> -->
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>

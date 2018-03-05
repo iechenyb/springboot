@@ -15,6 +15,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <meta name="author" content="">
 <style type="text/css">
 body {margin:0;padding:0;font-size:14px;line-height:1.231;color:#555;text-align:center;font-family:"\5fae\8f6f\96c5\9ed1","\9ed1\4f53",tahoma,arial,sans-serif;}
+/* body
+{
+    background: url('../../exception/404.jpg') top center no-repeat; 
+    background-size:cover;
+} */
+.bg{
+ background: url('../../exception/404.jpg') top center no-repeat; 
+ background-size:cover;
+ height:600px;
+}
 a {color:#555;text-decoration:none;}
 a:hover {color:#1abc9c;}
 #container {width:80%;height:500px;margin:100px auto 0px auto;border:#2c3e50 solid 6px;background-color:#2c3e50;}
@@ -26,7 +36,7 @@ a:hover {color:#1abc9c;}
 </head>
 
 <body>
-<div id="container">
+<!-- <div id="container">
 <div id="title"><h1>请求地址不合法!</h1></div>
 <div id="content">
 <p><a href="javascript:history.go(-1)" style="color:#F00">尝试返回上一页</a></p>
@@ -34,7 +44,13 @@ a:hover {color:#1abc9c;}
 <p style="font-size:24px;font-weight:bold;color:#1abc9c">404状态页面</p>
 
 </div>
+</div> -->
+<div style="height:20rem">&nbsp;</div>
+<div class="am-g am-g-fixed " >
+  <div class="am-u-sm-12"><h1>{页面丢失} 服务器拒绝请求!</h1></div>
+  <div class="am-u-sm-12"><a href="javascript:history.go(-1)" style="color:#F00;font-size:24px;">尝试返回上一页</a></div>
+  <div class="am-u-sm-12"><p style="font-size:48px;font-weight:bold;color:#1abc9c">404状态页面</p></div>
+  <div class="am-u-sm-12"><a href="<%=basePath%>phone/plan2/login.jsp" style="color:#1abc9c;font-size:24px;">重新登陆</a></div>
 </div>
-
 </body>
 </html>

@@ -67,6 +67,7 @@ public class Plan2Controller {
 	@GetMapping("/getPlan")
 	@ResponseBody
 	public ResultBean<Object> getPlans(String jhbh,String jhlx,HttpServletRequest req) {
+		log.info("获取计划信息...");
 		Object  obj = ObjectFileUtils.readObjectFromFile(PlanContants.context + "" + jhbh + "-" + jhlx + ".obj");
 		return new ResultBean<Object>(obj);
 	}

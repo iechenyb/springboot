@@ -81,6 +81,7 @@ public class MyBootStarter  {
 	@Bean
 	public EmbeddedServletContainerCustomizer embeddedServletContainerCustomizer() {
 	    return new EmbeddedServletContainerCustomizer() {
+	    	//jar包使用
 			@Override
 			public void customize(ConfigurableEmbeddedServletContainer container) {
 				  ErrorPage error401Page = new ErrorPage(HttpStatus.FORBIDDEN, "/exception/403.jsp");

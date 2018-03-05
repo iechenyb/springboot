@@ -23,20 +23,27 @@ a:hover {color:#1abc9c;}
 #content p{ font-size:18px;height:80px;}
 #footer {width:100%;padding:20px 0px;font-size:16px;color:#555;text-align:center;}
 </style>
+ <link rel="stylesheet" href="<%=basePath %>static/css/amazeui.min.css">
 </head>
 
 <body>
-<div id="container">
-<div id="title"><h1>{禁止} 服务器拒绝请求!</h1></div>
+<%-- <div id="container">
+<div id="title"></div>
 <div id="content">
-<p><a href="javascript:history.go(-1)" style="color:#F00">尝试返回上一页</a></p>
+<p></p>
 <br />
 <p style="font-size:24px;font-weight:bold;color:#1abc9c">403状态页面</p><br/>
 <p style="font-size:24px;font-weight:bold;color:#1abc9c">
-	<a href="<%=basePath%>/phone/plan/login.jsp" style="color:#1abc9c">重新登陆</a>
+	<a href="<%=basePath%>phone/plan2/login.jsp" style="color:#1abc9c">重新登陆</a>
 </p>
 </div>
+</div> --%>
+<div style="height:20rem">&nbsp;</div>
+<div class="am-g am-g-fixed" >
+  <div class="am-u-sm-12"><h1>{禁止} 服务器拒绝请求!</h1></div>
+  <div class="am-u-sm-12"><a href="javascript:history.go(-1)" style="color:#F00;font-size:24px;">尝试返回上一页</a></div>
+  <div class="am-u-sm-12"><p style="font-size:24px;font-weight:bold;color:#1abc9c">403状态页面</p></div>
+  <div class="am-u-sm-12"><a href="<%=basePath%>phone/plan2/login.jsp" style="color:#1abc9c;font-size:24px;">重新登陆</a></div>
 </div>
-
 </body>
 </html>

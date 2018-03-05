@@ -15,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import com.cyb.h2.H2Manager;
+
 /**
  * Created by PrimaryKey on 17/2/4.
  *
