@@ -46,7 +46,9 @@ public class UserController {
     @GetMapping("/getUser")
     @ResponseBody
     public MyUser MyUser(String username){
-    	return userService.getUserByName(username);
+    	MyUser user = userService.getUserByName(username);
+    	user.setPassword("**************");
+    	return user;
     }
     
     @Autowired
@@ -120,7 +122,7 @@ public class UserController {
     @ResponseBody
     public ModelAndView logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
     	ModelAndView view = new ModelAndView(); 
-    	view.setViewName("phone/plan/login");
+    	view.setViewName("phone/plan2/login");
     	try {
     		 Assert.notNull(request, "HttpServletRequest required");
 	         HttpSession session = request.getSession(false);

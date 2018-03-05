@@ -19,7 +19,7 @@ public class MyUser {
     private long user_id;
     private String username;
     private String password;
-    private String zt="1";//0禁用  1启用
+    private String zt;//0启用  1禁用
    
     public long getUser_id() {
 		return user_id;

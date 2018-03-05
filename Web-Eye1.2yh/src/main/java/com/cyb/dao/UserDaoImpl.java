@@ -40,7 +40,7 @@ public class UserDaoImpl {
 	public MyUser getUserByName(String userName) {
 		try {
 			MyUser user = this.jdbcTemplate.queryForObject(
-					"select user_id,username,password from ms_security_user where username='" + userName + "'",
+					"select user_id,username,password,zt from ms_security_user where username='" + userName + "'",
 					new RowMapper<MyUser>() {
 						@Override
 						public MyUser mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -49,6 +49,7 @@ public class UserDaoImpl {
 							user.setUser_id(rs.getLong("user_id"));
 							user.setUsername(rs.getString("username"));
 							user.setPassword(rs.getString("password"));
+							user.setZt(rs.getString("zt"));
 							return user;
 						}
 					});

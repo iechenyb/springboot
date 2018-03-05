@@ -28,6 +28,8 @@ implements FilterInvocationSecurityMetadataSource {
     	auths.put("/users/signup", "ROLE_ADMIN");
     	auths.put("/users/register", "ROLE_ADMIN");
     	auths.put("/users/tick", "ROLE_ADMIN");
+    	auths.put("/users/getUser", "ROLE_ADMIN");
+    	auths.put("/users/hiberSave", "ROLE_ADMIN");
     	//普通用户权限
     	auths.put("/plan/getPlan", "ROLE_USER");
     	auths.put("/plan/index", "ROLE_USER");
@@ -74,7 +76,7 @@ implements FilterInvocationSecurityMetadataSource {
             for(String url:auths.keySet()){
           	  	Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
                 configAttributes.add(auths2.get(auths.get(url)));//只用一个地址
-                //resourceMap.put(url, configAttributes);
+                resourceMap.put(url, configAttributes);
           }
            /* Collection<ConfigAttribute> configAttributes4 = new ArrayList<ConfigAttribute>();
             ConfigAttribute configAttribute4 = new SecurityConfig("ROLE_USER");// 资源标识
@@ -95,14 +97,14 @@ implements FilterInvocationSecurityMetadataSource {
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         if (resourceMap == null) loadResourceDefine();
         String requestUrl = ((FilterInvocation) object).getRequestUrl();
-        String uri = ((FilterInvocation) object).getRequest().getRequestURI();
+        @SuppressWarnings("unused")
+		String uri = ((FilterInvocation) object).getRequest().getRequestURI();//ymh/users/tick
         if(requestUrl.contains("?")){
         	requestUrl = requestUrl.substring(0, requestUrl.lastIndexOf("?"));//去掉参数部分！
         }
-        System.out.println("当前访问的uri="+requestUrl.replace("//", "/"));
-        requestUrl.replace("//", "/");
+        System.out.println("当前访问的uri="+requestUrl.replace("//", "/")+",是否包含："+resourceMap.get(requestUrl));
        // 返回当前 url  所需要的权限 即url对应的角色
-         return resourceMap.get(uri.replace("//", "/"));
+         return resourceMap.get(requestUrl);
     }
 
     @Override
