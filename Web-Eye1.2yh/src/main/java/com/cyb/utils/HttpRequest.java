@@ -75,12 +75,13 @@ public class HttpRequest {
     public static  Map<String,StringBuffer>  sendGetJh(String url, String param) {
         String result = "";
         BufferedReader in = null;
+        URLConnection connection =null;
         Map<String,StringBuffer> jhs= new LinkedHashMap<String,StringBuffer>();
         try {
             String urlNameString = url + "?" + param;
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
-            URLConnection connection = realUrl.openConnection();
+            connection = realUrl.openConnection();
             // 设置通用的请求属性
             connection.setRequestProperty("accept", "*/*");
             connection.setRequestProperty("connection", "Keep-Alive");

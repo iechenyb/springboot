@@ -1,4 +1,7 @@
 package com.cyb.service;
+import java.util.List;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -50,5 +53,10 @@ public class UserServiceImpl {
 	public void jyUser(String userName,String zt){
 		userDao.jyUser(userName,zt);
 	}
-	
+	public List<Map<String,Object>>  getUserList() {
+		return userDao.getUserList();
+	}
+	public List<Map<String,Object>>  getUserLoginInfor() {
+		return userDao.getUserLoginInfor();
+	}
 }

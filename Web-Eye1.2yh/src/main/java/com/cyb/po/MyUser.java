@@ -16,7 +16,7 @@ public class MyUser {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long user_id;
+    private long user_id;//自增长字段
     private String username;
     private String password;
     private String zt;//0启用  1禁用

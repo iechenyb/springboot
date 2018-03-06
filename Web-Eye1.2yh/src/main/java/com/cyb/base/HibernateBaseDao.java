@@ -144,11 +144,13 @@ public class HibernateBaseDao<T> implements IHibernateBaseDao<T> {
     public void update(T entity) {
         Assert.notNull(entity, "entity is required");
         this.getSession().update(entity);
+        System.out.println("更新成功！");
     }
 
     
     public T saveOrUpdate(T o) {
         this.getSession().saveOrUpdate(o);
+        System.out.println("更新或者保存成功！");
         return o;
     }
 

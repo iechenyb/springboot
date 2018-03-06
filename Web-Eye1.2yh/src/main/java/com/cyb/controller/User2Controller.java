@@ -1,5 +1,9 @@
 package com.cyb.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,9 +24,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cyb.aop.ResultBean;
+import com.cyb.contants.PlanContants;
 import com.cyb.dao.MyUserRepository;
 import com.cyb.dao.PlanTypeRepository;
+import com.cyb.date.DateUtil;
 import com.cyb.po.MyUser;
+import com.cyb.po.UserLoginLog;
+import com.cyb.service.LoginLogServiceImpl;
 import com.cyb.service.UserServiceImpl;
 
 /**
@@ -36,6 +44,23 @@ public class User2Controller {
     
     @Autowired
     UserServiceImpl userService;
+    
+    @Autowired
+    LoginLogServiceImpl loginLogService;
+    
+    @SuppressWarnings("unchecked")
+	@GetMapping("/onlineInformation")
+    @ResponseBody
+    public ResultBean<Object> MyUser(HttpServletRequest req){
+    	Map<String,String> onlineUsers = new HashMap<>();
+    	onlineUsers.put("在线人数(hash)", PlanContants.onlineUser.keySet().size()+"");
+    	onlineUsers.put("在线人员账号", PlanContants.onlineUser.keySet().toString());
+    	if(req.getAttribute("count")!=null){
+    		AtomicInteger in = (AtomicInteger) req.getAttribute("count");
+    		onlineUsers.put("在线人员数（监听）",in.get()+"" );
+    	}
+    	return new ResultBean<>().success().data(onlineUsers);
+    }
     
     @GetMapping("/getUser")
     @ResponseBody
@@ -57,6 +82,8 @@ public class User2Controller {
              System.out.println("after:" + result);
              SecurityContextHolder.getContext().setAuthentication(result);
              req.getSession().setAttribute("userid", user.getUsername());
+             PlanContants.onlineUser.put(user.getUsername(), user.getUsername());
+             loginLogService.saveLoginLog(user, req);
          } catch (AuthenticationException e) {
              System.out.println("Authentication failed: " + e.getMessage());
              return new ResultBean<Object>().fail("Authentication failed: " +e.getMessage());

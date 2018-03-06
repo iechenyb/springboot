@@ -2,17 +2,22 @@ package com.cyb.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import com.cyb.base.HibernateBaseDao;
 import com.cyb.po.MyUser;
@@ -58,7 +63,44 @@ public class UserDaoImpl {
 			return null;
 		}
 	}
-
+	public int  getUserListByName(String userName) {
+		try {
+			List<Map<String,Object>> list = this.jdbcTemplate.queryForList("select user_id,username,password,zt from ms_security_user where username='" + userName + "'");
+			if(CollectionUtils.isEmpty(list)){
+				return 0;
+			}else{
+				return list.size();
+			}
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+	public List<Map<String,Object>>  getUserList() {
+		try {
+			List<Map<String,Object>> list = this.jdbcTemplate.queryForList("select username,zt from ms_security_user");
+			if(CollectionUtils.isEmpty(list)){
+				return new ArrayList<Map<String,Object>>();
+			}else{
+				return list;
+			}
+		} catch (Exception e) {
+			return new ArrayList<Map<String,Object>>();
+		}
+	}
+	public List<Map<String,Object>>  getUserLoginInfor() {
+		try {
+			List<Map<String,Object>> list = 
+					this.jdbcTemplate.queryForList("SELECT count,username,login_time,"
+							+ "last_time FROM MS_SECURITY_USER_LOGIN_LOG ");
+			if(CollectionUtils.isEmpty(list)){
+				return new ArrayList<Map<String,Object>>();
+			}else{
+				return list;
+			}
+		} catch (Exception e) {
+			return new ArrayList<Map<String,Object>>();
+		}
+	}
 	public void updateTx(int has, String newName,int type) {
 		if(type==1){
 			updateJdbcTx(has,newName);
@@ -121,12 +163,13 @@ public class UserDaoImpl {
 		}
 	}
 
-	public String addUserHibernate(MyUser user) {
-		if (getUserByName(user.getUsername()) != null) {
+	public synchronized String addUserHibernate(MyUser user) {
+		if (getUserListByName(user.getUsername()) >0) {
 			return "你已经注册！";
 		} else {
 			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-			this.entityManager.persist(user);
+			//this.entityManager.persist(user);
+			saveMyUser(user);
 			return "注册成功！";
 		}
 	}

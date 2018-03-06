@@ -1,7 +1,9 @@
 package com.cyb;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
@@ -10,6 +12,7 @@ import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
@@ -20,6 +23,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cyb.h2.H2Manager;
+import com.cyb.log.LogRule;
+import com.cyb.log.MyLog;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
@@ -33,6 +38,15 @@ import com.cyb.h2.H2Manager;
 @EnableAsync
 public class MyBootStarter  {
 //extends SpringBootServletInitializer
+	
+	@Autowired
+	LogRule logRule;
+	
+	@PostConstruct
+	public void getLogRule(){
+		logRule.saveExceptionLog(new MyLog());
+	}
+	
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();

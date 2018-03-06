@@ -5,8 +5,11 @@ import java.io.IOException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import com.cyb.config.LogFileSettings;
 import com.cyb.file.FileUtils;
 /**
  *作者 : iechenyb<br>
@@ -14,21 +17,24 @@ import com.cyb.file.FileUtils;
  *创建时间: 2018年3月5日
  */
 @Component
-public class WriteLog2TxtRule  implements LogRule{
-	Log log = LogFactory.getLog(WriteLog2TxtRule.class);
-
+@Profile("dev")
+//@Primary
+public class WriteLog2TxtRuleDev  implements LogRule{
+	Log log = LogFactory.getLog(WriteLog2TxtRuleDev.class);
+	@Autowired
+	LogFileSettings setting;
 	@Override
 	public void saveExceptionLog(MyLog log) {
 		if(StringUtils.isEmpty(log.getUserName())){
 			log.setUserName("匿名");
 		}
-		File file = new File("d:/data/logs/ymh-error.log");
+		File file = new File(setting.getException());
 		if(!file.exists()){ try {
 			file.createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}}
-		FileUtils.appendString2File(log.toString()+"\n", "d:/data/logs/ymh-error.log");
+		FileUtils.appendString2File(log.toString()+"\n", setting.getException());
 	}
 
 	@Override
@@ -36,12 +42,12 @@ public class WriteLog2TxtRule  implements LogRule{
 		if(StringUtils.isEmpty(log.getUserName())){
 			log.setUserName("匿名");
 		}
-		File file = new File("d:/data/logs/ymh-visitor.log");
+		File file = new File(setting.getVisitor());
 		if(!file.exists()){ try {
 			file.createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}}
-		FileUtils.appendString2File(log.format()+"\n", "d:/data/logs/ymh-visitor.log");
+		FileUtils.appendString2File(log.format()+"\n", setting.getVisitor());
 	}
 }

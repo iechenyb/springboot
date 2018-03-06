@@ -44,6 +44,7 @@ import com.cyb.utils.AopUtils;
 @Order(5)
 public class WebControllerAop {
 	Log log = LogFactory.getLog(WebControllerAop.class);
+	
 	@Autowired
 	LogRule logRule;
 
