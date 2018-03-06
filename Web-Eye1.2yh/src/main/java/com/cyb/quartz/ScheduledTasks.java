@@ -1,8 +1,5 @@
 package com.cyb.quartz;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +23,19 @@ public class ScheduledTasks {
 
 	@Autowired
 	PlanServiceImpl planService;
+	//好像service使用的sessin并没有关闭？？？？！！！
 	@Scheduled(cron = "0 * *  * * * ")
 	//@Scheduled(fixedRate = 1000 * 60*5)
 	public void reportCurrentTime() {
 		planService.savePlan(null);
 		// 默认测试
 		log.info("执行默认的检测信息!");
+		/*WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();  
+        SessionFactory factory=wac.getBean(SessionFactory.class);
+        Session session=factory.openSession();
+        Query query = session.createQuery("from PlanType");
+        List<PlanType> userlist=query.list();
+        session.close();*/
 	}
 	// 每1分钟执行一次
 	@Scheduled(cron = "0 0 *  * * * ")

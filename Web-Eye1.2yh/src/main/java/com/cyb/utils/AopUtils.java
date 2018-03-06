@@ -48,4 +48,19 @@ public class AopUtils {
 		} 
         return currentMethod;
 	}
+	@SuppressWarnings("rawtypes")
+	public static Class[] getParameterTypes(final JoinPoint joinPoint) {
+		try {
+			Signature sig = joinPoint.getSignature();
+	        MethodSignature msig = null;
+	        if (!(sig instanceof MethodSignature)) {
+	            throw new IllegalArgumentException("该注解只能用于方法");
+	        }
+	        msig = (MethodSignature) sig;
+	        return msig.getParameterTypes();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} 
+	}
 }

@@ -27,7 +27,6 @@ public class UserInforUtils {
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"utf-8"));
             String tempString = null;
-            int line = 1;
             // 一次读入一行，直到读入null为文件结束
             while ((tempString = reader.readLine()) != null) {
                 // 显示行号
@@ -56,7 +55,9 @@ public class UserInforUtils {
 		List<String> users = readFileToList(getAbsolutePathAtMavenClass(UserInforUtils.class)+ "/users.txt");
         int id=100;
 		for(String user:users){
-			String sql = "insert into MS_SECURITY_USER  (user_id,username,password,zt) values ('"+id+"','"+user.split("#")[0]+"','"+bpe.encode(user.split("#")[1])+"','0');";
+			String sql = "insert into MS_SECURITY_USER"
+					+ " (user_id,username,password,zt) "
+					+ "values ('"+id+"','"+user.split("#")[0]+"','"+bpe.encode(user.split("#")[1])+"','0');";
 			System.out.println(sql);
 			id++;
 		}

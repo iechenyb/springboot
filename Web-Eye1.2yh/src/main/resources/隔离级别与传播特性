@@ -1,0 +1,19 @@
+数据库   默认级别
+MySQL 可重复读（Repeatable Read）
+Oracle  读提交（Read Committed）
+SQLServer 读提交（Read Committed）
+DB2  读提交（Read Committed）
+PostgreSQL 读提交（Read Committed）
+https://www.cnblogs.com/z-sm/p/7245981.html
+事务的四个特性：原子性、一致性、隔离性、持久性
+事务不隔离带来的问题：更新丢失、脏读、不可重复读、虚读（幻读）。
+其中更新丢失就是并发写，这是一定不允许的，因此一定要解决更新丢失问题。
+事务隔离的级别：读未提交（1000）、读已提交（1100）、可重复读（1110）、串行化（1111）。
+1、PROPAGATION_REQUIRED：如果当前没有事务，就创建一个新事务，如果当前存在事务，就加入该事务，该设置是最常用的设置。
+2、PROPAGATION_SUPPORTS：支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就以非事务执行。‘
+3、PROPAGATION_MANDATORY：支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就抛出异常。
+4、PROPAGATION_REQUIRES_NEW：创建新事务，无论当前存不存在事务，都创建新事务。
+5、PROPAGATION_NOT_SUPPORTED：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。
+6、PROPAGATION_NEVER：以非事务方式执行，如果当前存在事务，则抛出异常。
+7、PROPAGATION_NESTED：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。
+http://blog.csdn.net/hsgao_water/article/details/52860380

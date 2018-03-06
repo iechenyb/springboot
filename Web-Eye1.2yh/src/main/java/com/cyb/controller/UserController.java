@@ -46,11 +46,18 @@ public class UserController {
     @GetMapping("/getUser")
     @ResponseBody
     public MyUser MyUser(String username){
+    	commonMethod();
     	MyUser user = userService.getUserByName(username);
+    	if(user==null){
+    		throw new NullPointerException("查询的用户信息是空！");
+    	}
     	user.setPassword("**************");
     	return user;
     }
     
+    public void commonMethod(){
+    	System.out.println("普通方法执行！");
+    }
     @Autowired
     private  AuthenticationManager authenticationManager ;//= new SampleAuthenticationManager();
 

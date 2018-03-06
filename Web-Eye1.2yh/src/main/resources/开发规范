@@ -1,0 +1,3 @@
+1 dao service 和controller 不要使用trycatch，使用aop统一处理，提高效率。
+2 dao service controller均需要加上执行时间统计开关，供排查原因使用。
+3 
