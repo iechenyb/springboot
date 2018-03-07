@@ -29,6 +29,7 @@ import com.cyb.contants.PlanContants;
 import com.cyb.dao.MyUserRepository;
 import com.cyb.dao.PlanTypeRepository;
 import com.cyb.date.DateUtil;
+import com.cyb.listener.OnLineBroker;
 import com.cyb.log.LogRule;
 import com.cyb.po.MyUser;
 import com.cyb.po.UserLoginLog;
@@ -57,10 +58,11 @@ public class User2Controller {
     	Map<String,String> onlineUsers = new HashMap<>();
     	onlineUsers.put("在线人数(hash)", PlanContants.onlineUser.keySet().size()+"");
     	onlineUsers.put("在线人员账号", PlanContants.onlineUser.keySet().toString());
-    	if(req.getAttribute("count")!=null){
-    		AtomicInteger in = (AtomicInteger) req.getAttribute("count");
-    		onlineUsers.put("在线人员数（监听）",in.get()+"" );
+    	if(req.getSession().getAttribute("count")!=null){
+    		AtomicInteger in = (AtomicInteger) req.getSession().getAttribute("count");
+    		onlineUsers.put("在线人员数（监听session）",in.get()+"" );
     	}
+    	onlineUsers.put("在线人员数（监听常量）",OnLineBroker.counter.get()+"" );
     	return new ResultBean<>().success().data(onlineUsers);
     }
     
@@ -68,6 +70,13 @@ public class User2Controller {
     @ResponseBody
     public MyUser MyUser(String username){
     	return userService.getUserByName(username);
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/getUserName")
+    @ResponseBody
+    public ResultBean<String> getUserName(HttpServletRequest req){
+    	return  new ResultBean().success().data(req.getSession().getAttribute("userid"));
     }
     
     @Autowired

@@ -8,6 +8,7 @@ String jhlx =  request.getParameter("jhlx");
 String jhbh = request.getParameter("jhbh");
 String idx = request.getParameter("idx");
 if(idx==null||idx=="") idx="0";
+Object username=request.getSession().getAttribute("userid");
 %>
 <!DOCTYPE html>
 <html ng-app="app">
@@ -129,7 +130,7 @@ onmouseup='document.selection.empty()' -->
     </div>
     <h1 class="am-header-title">
         <a href="#title-link" class="">
-            3A信誉团队${username}
+            3A信誉团队&nbsp;欢迎你&nbsp;{{username}}！
         </a>
     </h1>
     <div class="am-header-right am-header-nav">

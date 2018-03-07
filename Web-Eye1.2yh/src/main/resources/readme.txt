@@ -34,3 +34,7 @@ http://localhost/common/toPage3  需要other权限无
 打war包时，需要启动h2服务！
 
 
+遗留问题：
+hibernate 的更新操作和更新或者保存操作不能显示sql并提交事务。
+druid数据连接池有不释放的连接，知道具体的类，但是不知道产生原因。
+

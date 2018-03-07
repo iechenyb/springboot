@@ -42,7 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </div>
     <h1 class="am-header-title">
         <a href="#" class="">
-            欢迎你！${username}
+           3A信誉团队&nbsp;欢迎你&nbsp;{{username}}！
         </a>
     </h1>
     <div class="am-header-right am-header-nav">

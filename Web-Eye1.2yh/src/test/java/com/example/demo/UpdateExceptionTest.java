@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.cyb.MyBootStarter;
-import com.cyb.h2.H2Manager;
+
 import com.cyb.po.UserLoginLog;
 import com.cyb.service.LoginLogServiceImpl;
 /**

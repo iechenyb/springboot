@@ -18,29 +18,35 @@ import com.cyb.utils.SpringUtils;
  */
 @WebListener  
 public class OnLineBroker implements HttpSessionListener {  
-    public AtomicInteger count= new AtomicInteger(0);//记录session的数量  
+    public static AtomicInteger count= new AtomicInteger(0);//记录session的数量  
+    public static ThreadLocal<AtomicInteger> counter = new ThreadLocal<AtomicInteger>(){
+    	protected AtomicInteger initialValue() {
+            return new AtomicInteger(0);
+        };
+    };
     //监听session的创建,synchronized 防并发bug  
     public synchronized void sessionCreated(HttpSessionEvent arg0) {  
         System.out.println("【HttpSessionListener监听器】count++  增加");  
         //相同用户名不同浏览器访问算是一个客户
-        ServletContext context = arg0.getSession().getServletContext();  
-        if (context.getAttribute("count")==null) {
-        	context.setAttribute("count", new AtomicInteger(0));  
+        HttpSession session = arg0.getSession();  
+        counter.get().incrementAndGet();
+        if (session.getAttribute("count")==null) {
+        	session.setAttribute("count", new AtomicInteger(0));  
         }else {  
-        	AtomicInteger count = (AtomicInteger) context.getAttribute("count");
+        	AtomicInteger count = (AtomicInteger) session.getAttribute("count");
         	count.getAndIncrement();  
-	        context.setAttribute("count",   count);  
+        	session.setAttribute("count",   count);  
         }  
     }  
     @Override  
     public synchronized void sessionDestroyed(HttpSessionEvent arg0) {//监听session的撤销  
         System.out.println("【HttpSessionListener监听器】count--  减少");  
-        //arg0.getSession().getServletContext().setAttribute("count", count);  
-        ServletContext context = arg0.getSession().getServletContext();  
-        if (context.getAttribute("count")==null) {  
-        	context.setAttribute("count", new AtomicInteger(0));  
+        counter.get().decrementAndGet();
+        HttpSession session = arg0.getSession();  
+        if (session.getAttribute("count")==null) {  
+        	session.setAttribute("count", new AtomicInteger(0));  
         }else {  
-        	AtomicInteger count = (AtomicInteger) context.getAttribute("count");  
+        	AtomicInteger count = (AtomicInteger) session.getAttribute("count");  
         	if (count.get()<1) {  
         		count = new AtomicInteger(0);  
         	} else{
@@ -49,8 +55,6 @@ public class OnLineBroker implements HttpSessionListener {
         } 
         LogRule logRule = (LogRule) 
         		SpringUtils.getObjectFromApplication(arg0.getSession().getServletContext(), LogRule.class);  
-        context.setAttribute("count", count);  
-        HttpSession session = arg0.getSession();  
         String name = "游客";
         if( session.getAttribute("userid")!=null){
          name = (String) session.getAttribute("userid");  

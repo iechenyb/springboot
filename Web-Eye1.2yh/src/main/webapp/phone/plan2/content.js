@@ -42,6 +42,14 @@ app.controller('contentController', function($scope, $http, $interval) {
 	page = $scope;
 	$scope.curid = 0;
 	$scope.count = 0;// $scope.opidx
+	$http.get($scope.basePath + '/users2/getUserName').then(
+			function(data){
+				$scope.username=data.data.data;
+				console.log("username is "+data.data.data)
+			}, function(){
+				
+			}
+	);
 	/*
 	 * $scope.show=function(){ $('#do-not-say-'+$scope.opidx).collapse('open'); }
 	 */
