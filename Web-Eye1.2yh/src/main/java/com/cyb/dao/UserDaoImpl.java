@@ -215,4 +215,10 @@ public class UserDaoImpl {
 		user.setZt(zt);
 		this.entityManager.merge(user);
 	}
+	//禁用和启用用户
+	public void jyUser2(String userName,String zt){
+		MyUser user = getUserByName(userName);
+		user.setZt(zt);
+		hibernateDao.update(user);
+	}
 }

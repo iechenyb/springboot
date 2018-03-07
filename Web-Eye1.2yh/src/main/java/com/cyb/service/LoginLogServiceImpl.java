@@ -59,9 +59,11 @@ public class LoginLogServiceImpl {
 	}
 	
 	public void updateTest(UserLoginLog log){
+		dao.updateMy(log);
 		dao.update(log);
+		dao.saveOrUpdate(log);
 	}
-	public UserLoginLog getLog(){
-		return dao.load(33);
+	public UserLoginLog getLog(Long id){
+		return dao.load(id);
 	}
 }

@@ -207,8 +207,14 @@ public class UserController {
     }
     @GetMapping("/tick")
     @ResponseBody
-    public String hiberSave(String username,String zt) {
+    public String jpaUpdate(String username,String zt) {
     	userService.jyUser(username,zt);
+    	return "success";
+    }
+    @GetMapping("/tick2")
+    @ResponseBody
+    public String hiberUpdate(String username,String zt) {
+    	userService.jyUser2(username,zt);
     	return "success";
     }
 }

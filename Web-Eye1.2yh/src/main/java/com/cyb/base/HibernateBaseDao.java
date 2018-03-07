@@ -24,6 +24,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.metadata.ClassMetadata;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -38,7 +39,7 @@ public class HibernateBaseDao<T> implements IHibernateBaseDao<T> {
 	
     private  Class<T> entityClass;
     
-    @Resource
+    @Autowired
     protected SessionFactory sessionFactory;
 
     @SuppressWarnings("unchecked")
@@ -54,9 +55,9 @@ public class HibernateBaseDao<T> implements IHibernateBaseDao<T> {
         Assert.notNull(id, "id is required");
         return (T) this.getSession().load(this.entityClass, id);
     }
-    protected void setSessionFactory(SessionFactory sessionFactory) {
+   /* protected void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-    }
+    }*/
     protected Session getSession() {
     	Session session = null ;
 		try {
@@ -144,13 +145,13 @@ public class HibernateBaseDao<T> implements IHibernateBaseDao<T> {
     public void update(T entity) {
         Assert.notNull(entity, "entity is required");
         this.getSession().update(entity);
-        System.out.println("更新成功！");
+        System.out.println("更新成功！"+entity.getClass());
     }
 
     
     public T saveOrUpdate(T o) {
         this.getSession().saveOrUpdate(o);
-        System.out.println("更新或者保存成功！");
+        System.out.println("更新或者保存成功！"+o.getClass());
         return o;
     }
 

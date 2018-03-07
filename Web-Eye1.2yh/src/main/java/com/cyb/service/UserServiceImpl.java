@@ -53,6 +53,9 @@ public class UserServiceImpl {
 	public void jyUser(String userName,String zt){
 		userDao.jyUser(userName,zt);
 	}
+	public void jyUser2(String userName,String zt){
+		userDao.jyUser2(userName,zt);
+	}
 	public List<Map<String,Object>>  getUserList() {
 		return userDao.getUserList();
 	}

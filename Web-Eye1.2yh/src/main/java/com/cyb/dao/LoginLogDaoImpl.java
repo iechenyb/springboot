@@ -35,4 +35,8 @@ public class LoginLogDaoImpl extends HibernateBaseDao<UserLoginLog> {
 		String sql = "delete from  WEB_YH_JH ";
 		jdbcTemplate.execute(sql);
 	}
+	
+	public void updateMy(UserLoginLog o){
+		this.getSession().update(o);
+	}
 }

@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.cyb.h2.H2Manager;
 import com.cyb.log.LogRule;
@@ -36,7 +37,7 @@ import com.cyb.log.MyLog;
 @SpringBootApplication
 @RestController
 @EnableAsync
-public class MyBootStarter  {
+public class MyBootStarter extends WebMvcConfigurerAdapter {
 //extends SpringBootServletInitializer
 	
 	@Autowired

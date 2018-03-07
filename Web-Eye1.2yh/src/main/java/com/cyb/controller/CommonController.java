@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cyb.condition.ConditionService;
+import com.cyb.service.AsyncTaskService;
+import com.cyb.service.AwareService;
 import com.cyb.utils.SpringUtils;
 import com.google.common.collect.ImmutableMap;
 
@@ -48,7 +52,32 @@ public class CommonController {
 	@ResponseBody
 	@GetMapping("webPath")
 	public String getPath(){
+		service.outputInfo();
 		return SpringUtils.getWebPath();
+	}
+	@Autowired
+	 AsyncTaskService asyncTaskService;
+	@ResponseBody
+	@GetMapping("asyncTaskService")
+	public void asyncTaskService(){
+		for (int i=0;i<10;i++){
+            asyncTaskService.executeAsyncTask(i);
+            asyncTaskService.executeAsyncTaskPlus(i);
+        }
+	}
+	@Autowired
+	AwareService service;
+	@ResponseBody
+	@GetMapping("springcontain")
+	public void springcontain(){
+		service.outputInfo();
+	}
+	@Autowired
+	ConditionService conditionService;
+	@ResponseBody
+	@GetMapping("conditionService")
+	public String conditionService(){
+		return conditionService.show();
 	}
 	
 	@ResponseBody
