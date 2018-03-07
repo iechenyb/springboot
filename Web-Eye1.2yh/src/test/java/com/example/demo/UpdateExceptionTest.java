@@ -41,6 +41,7 @@ public class UpdateExceptionTest {
 
 	@Autowired
 	LoginLogServiceImpl service;
+	
 	@Autowired
 	private WebApplicationContext context;
 

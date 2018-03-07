@@ -193,5 +193,11 @@ public class CommonController {
 		}
 		return userDetails.getUsername() ;
 	}
-	
+	//==========mvc单元测试用例=====================
+	@GetMapping("name")
+	@ResponseBody
+	public String myName(String p1,String p2){
+		System.out.println(p1+","+p2);
+		return "cyb";
+	}
 }

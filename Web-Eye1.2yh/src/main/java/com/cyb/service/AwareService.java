@@ -32,7 +32,7 @@ public class AwareService implements BeanNameAware, ResourceLoaderAware {
 
     public void outputInfo() {
         System.out.println("bean在容器中的名称是："+beanName);
-        Resource resource = resourceLoader.getResource("classpath:aware/test.txt");
+        Resource resource = resourceLoader.getResource("classpath:aware/text.txt");
         try {
             System.out.println("资源文件的内容是："+new String(FileUtils.readInputStream(resource.getInputStream())));
         } catch (IOException e) {

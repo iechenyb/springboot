@@ -56,6 +56,14 @@ public class PlanServiceImpl {
     		"http://114.115.207.62:8080/ymh/static/img/girl8.jpg",
     		"http://114.115.207.62:8080/ymh/static/img/girl9.jpg",
     		"http://114.115.207.62:8080/ymh/static/img/girl10.jpg"};
+    /**
+     * 存在一个bug，当定时任务执行在servlet初始化之前时，存储路径为空值，需要处理！
+     * 思路 在定时任务创建之前，先执行初始化信息。
+     *作者 : iechenyb<br>
+     *方法描述: 说点啥<br>
+     *创建时间: 2017年7月15日hj12
+     *@param url
+     */
     public void savePlan(String url) {
 		List<PlanType> types = daoType.getAll();
 		// 将计划数据写入文件
