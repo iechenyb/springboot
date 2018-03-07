@@ -8,4 +8,5 @@ package com.cyb.log;
 public interface LogRule {
 	public void saveExceptionLog(MyLog log);
 	public void saveVistiorLog(MyLog log);
+	public void saveSessionLog(String msg);
 }

@@ -8,6 +8,9 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import com.cyb.contants.PlanContants;
+import com.cyb.date.DateUtil;
+import com.cyb.log.LogRule;
+import com.cyb.utils.SpringUtils;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
@@ -24,8 +27,9 @@ public class OnLineBroker implements HttpSessionListener {
         if (context.getAttribute("count")==null) {
         	context.setAttribute("count", new AtomicInteger(0));  
         }else {  
-        	AtomicInteger count = (AtomicInteger) context.getAttribute("count");  
-	        context.setAttribute("count",   count.getAndIncrement());  
+        	AtomicInteger count = (AtomicInteger) context.getAttribute("count");
+        	count.getAndIncrement();  
+	        context.setAttribute("count",   count);  
         }  
     }  
     @Override  
@@ -39,11 +43,20 @@ public class OnLineBroker implements HttpSessionListener {
         	AtomicInteger count = (AtomicInteger) context.getAttribute("count");  
         	if (count.get()<1) {  
         		count = new AtomicInteger(0);  
+        	} else{
+        		count.getAndDecrement();
         	}
-        }  
-        context.setAttribute("count", count.getAndDecrement());  
+        } 
+        LogRule logRule = (LogRule) 
+        		SpringUtils.getObjectFromApplication(arg0.getSession().getServletContext(), LogRule.class);  
+        context.setAttribute("count", count);  
         HttpSession session = arg0.getSession();  
-        String name = (String) session.getAttribute("userid");  
+        String name = "游客";
+        if( session.getAttribute("userid")!=null){
+         name = (String) session.getAttribute("userid");  
+        }
         PlanContants.onlineUser.remove(name);
+        logRule.saveSessionLog(DateUtil.timeToMilis()+"	"+arg0.getSession().getId()+" ["+name+"] 退出系统！");
     }  
+    
 }

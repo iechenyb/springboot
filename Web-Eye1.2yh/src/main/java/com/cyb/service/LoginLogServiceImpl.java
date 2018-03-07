@@ -48,7 +48,7 @@ public class LoginLogServiceImpl {
 			loginLog.setLastTime(loginLog.getLoginTime());
 			loginLog.setLoginTime(DateUtil.timeToMilis());
 			entityManager.merge(loginLog);
-			dao.update(null);
+			//dao.update(loginLog);
 		}
     	UserLoginLogHistory loginLogHis = new UserLoginLogHistory();
     	//loginLogHis.setId(0);
@@ -56,5 +56,12 @@ public class LoginLogServiceImpl {
     	loginLogHis.setUsername(user.getUsername());
     	loginLogHis.setLoginTime(DateUtil.timeToMilis());
         userLoginLogHistory.save(loginLogHis);
+	}
+	
+	public void updateTest(UserLoginLog log){
+		dao.update(log);
+	}
+	public UserLoginLog getLog(){
+		return dao.load(33);
 	}
 }

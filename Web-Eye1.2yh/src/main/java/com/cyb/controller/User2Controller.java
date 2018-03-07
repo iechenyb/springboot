@@ -24,10 +24,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cyb.aop.ResultBean;
+import com.cyb.config.SystemConfigSettings;
 import com.cyb.contants.PlanContants;
 import com.cyb.dao.MyUserRepository;
 import com.cyb.dao.PlanTypeRepository;
 import com.cyb.date.DateUtil;
+import com.cyb.log.LogRule;
 import com.cyb.po.MyUser;
 import com.cyb.po.UserLoginLog;
 import com.cyb.service.LoginLogServiceImpl;
@@ -70,7 +72,8 @@ public class User2Controller {
     
     @Autowired
     private  AuthenticationManager authenticationManager ;
-    
+    @Autowired
+	LogRule logRule;
     @SuppressWarnings("unchecked")
 	@PostMapping("/login1")
     @ResponseBody
@@ -84,6 +87,7 @@ public class User2Controller {
              req.getSession().setAttribute("userid", user.getUsername());
              PlanContants.onlineUser.put(user.getUsername(), user.getUsername());
              loginLogService.saveLoginLog(user, req);
+             logRule.saveSessionLog(DateUtil.timeToMilis()+"	"+req.getSession().getId()+" ["+user.getUsername()+"] 进入系统！");
          } catch (AuthenticationException e) {
              System.out.println("Authentication failed: " + e.getMessage());
              return new ResultBean<Object>().fail("Authentication failed: " +e.getMessage());

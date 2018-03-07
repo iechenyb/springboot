@@ -1,11 +1,14 @@
 package com.cyb.config;
 
 import java.sql.SQLException;
+import java.text.MessageFormat;
+import java.util.Locale;
 
 import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -74,13 +77,16 @@ public class DruidDBConfig {
 
 	@Value("{spring.datasource.connectionProperties}")
 	private String connectionProperties;
-
+	@Autowired
+	SystemConfigSettings setting;
 	@Bean // 声明其为Bean实例
 	@Primary // 在同样的DataSource中，首先使用被标注的DataSource
 	public DataSource dataSource() {
 		DruidDataSource datasource = new DruidDataSource();
-
-		datasource.setUrl(this.dbUrl);
+		MessageFormat mf = new MessageFormat(this.dbUrl, Locale.US);
+        Object arr[] = {setting.getDbFile()};
+         //格式化模式字符串，参数数组中指定占位符相应的替换对象
+		datasource.setUrl(mf.format(arr));
 		datasource.setUsername(username);
 		datasource.setPassword(password);
 		datasource.setDriverClassName(driverClassName);
