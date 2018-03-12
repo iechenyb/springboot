@@ -1,5 +1,6 @@
 package com.cyb.controller;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -18,11 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cyb.aop.ResultBean;
 import com.cyb.condition.ConditionService;
+import com.cyb.jiami.MD5Util;
 import com.cyb.service.AsyncTaskService;
 import com.cyb.service.AwareService;
+import com.cyb.utils.DESUtil;
 import com.cyb.utils.SpringUtils;
 import com.google.common.collect.ImmutableMap;
+
+import sun.security.provider.SHA;
 
 /**
  *作者 : iechenyb<br>
@@ -202,7 +208,7 @@ public class CommonController {
 		System.out.println(p1+","+p2);
 		return "cyb";
 	}
-	
+	//测试负载均衡时，会话一致性使用
 	@GetMapping(value="/getSessionId")  
     @ResponseBody  
     public String getSessionId(HttpServletRequest request){  
@@ -213,4 +219,38 @@ public class CommonController {
         }  
         return "端口=" + request.getLocalPort() +  " sessionId=" + request.getSession().getId() +"<br/>"+o;  
     }  
+	//测试负载均衡使用
+	@GetMapping(value="/getServerInfor")  
+    @ResponseBody  
+    public String getServerInfor(HttpServletRequest request){  
+		String str =  " sessionId=" + request.getSession().getId() +",localaddr="+request.getLocalAddr()+",localport="+request.getLocalPort()+",remotehost="+request.getRemoteHost()+",remoteport="+request.getRemotePort()+",remoteaddr="+request.getRemoteAddr();
+		System.out.println(str);
+        return "端口=" + request.getServerPort() +  " ip=" + request.getServerName()+" username="+request.getSession().getAttribute("userid")+"---->"+str;  
+    }  
+	//登录加密使用
+	@SuppressWarnings("unchecked")
+	@GetMapping(value="/getDesString")
+    @ResponseBody  
+	public ResultBean<Map<String,String>> getDesString(HttpServletRequest req) throws Exception{
+        String key1 = DESUtil.jdkSHA1(String.valueOf(System.currentTimeMillis()));
+        String key2 = DESUtil.jdkBase64(key1+"chenyuanbao");
+        String key3 =MD5Util.md5Encode(key2+"iechenyb");
+        System.out.println(key1+","+key2+","+key3);
+        req.getSession().setAttribute("k1", key1);
+        req.getSession().setAttribute("k2", key2);
+        req.getSession().setAttribute("k3", key3);
+        Map<String,String> tmp = new HashMap<String,String>();
+        tmp.put("a", key1);  tmp.put("b", key2);  tmp.put("c", key3);
+        return new ResultBean<Map<String,String>>().data(tmp).success();
+	}
+	@SuppressWarnings("unchecked")
+	@GetMapping(value="/getDesStringFromReq")
+    @ResponseBody  
+	public ResultBean<Map<String,Object>> getDesStringFromReq(HttpServletRequest req) throws Exception{
+        Map<String,Object> tmp = new HashMap<String,Object>();
+        tmp.put("a",   req.getSession().getAttribute("k1")); 
+        tmp.put("b",  req.getSession().getAttribute("k2")); 
+        tmp.put("c",  req.getSession().getAttribute("k3"));
+        return new ResultBean<Map<String,Object>>().data(tmp).success();
+	}
 }

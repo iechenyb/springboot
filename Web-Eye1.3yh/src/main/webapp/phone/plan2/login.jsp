@@ -31,21 +31,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	  <fieldset class="myapp-login-form am-form-set">
 		<div class="am-form-group am-form-icon">
 			<i class="am-icon-user"></i>
-			<input type="text"  name="username"  ng-model="user.username"  value='cyb' class="myapp-login-input-text am-form-field" placeholder="请输入您的账号">
+			<input type="text"  name="username"  ng-model="user.username"  value='' class="myapp-login-input-text am-form-field" placeholder="请输入您的账号">
 		</div>
 	    <div class="am-form-group am-form-icon">
 			<i class="am-icon-lock"></i>
-			<input type="password" name="password"  ng-model="user.password"  value='cyb' class="myapp-login-input-text am-form-field" placeholder="至少6个字符">
+			<input type="password" name="password"  id='password' value='' class="myapp-login-input-text am-form-field" placeholder="至少6个字符">
 		</div>
 	  </fieldset>
-	  {{msg}}
+	  <font color="red"> {{error}}</font>
+	  <font color="red"> {{tip}}</font>
 	  <button ng-click="submit()" class="am-btn am-btn-primary am-btn-block ">登 陆</button>
 	</div>
 </div>
-
 <script src="<%=basePath%>static/js/jquery.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>static/js/angular.min.js"></script>
 <script src="<%=basePath%>/phone/plan2/login.js"></script>
 <script type="text/javascript" src="<%=basePath%>static/js/amazeui.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>phone/plan2/des.js"></script>
 </body>
 </html>

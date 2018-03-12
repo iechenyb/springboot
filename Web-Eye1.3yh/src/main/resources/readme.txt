@@ -38,6 +38,6 @@ http://localhost/common/toPage3  需要other权限无
 hibernate 的更新操作和更新或者保存操作不能显示sql并提交事务。
 druid数据连接池有不释放的连接，知道具体的类，但是不知道产生原因。
 
-
-
 与1.2的主要区别：新增分布式session共享！
+nginx做负载均衡和反向代理
+登录密码安全加密

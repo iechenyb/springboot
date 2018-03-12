@@ -10,9 +10,8 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.web.servlet.ErrorPage;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.orm.jpa.vendor.HibernateJpaSessionFactoryBean;
@@ -31,12 +30,14 @@ import com.cyb.log.MyLog;
  *类描述: 说点啥<br>
  *创建时间: 2017年12月13日
  */
+@SuppressWarnings("deprecation")
 //// 开启注解事务管理，等同于xml配置文件中的 <tx:annotation-driven />
 @ServletComponentScan
 @EnableTransactionManagement
 @SpringBootApplication
 @RestController
 @EnableAsync
+@EnableDiscoveryClient
 public class MyBootStarter extends WebMvcConfigurerAdapter {
 //extends SpringBootServletInitializer
 	

@@ -110,7 +110,7 @@ Object username=request.getSession().getAttribute("userid");
 		}
 </script> 
 </head>
-<body ng-controller="contentController" oncontextmenu='return false;' >
+<body ng-controller="contentController" oncontextmenu='return false' >
 <!--  oncontextmenu='return false;'  
 onselectstart="return false;"  
 ondragstart="return false;" 
@@ -171,12 +171,25 @@ onmouseup='document.selection.empty()' -->
 			    </div><!-- class="am-panel-collapse am-collapse am-in" -->
 			    <div id="do-not-say-{{$index}}"  ng-class="{'am-panel-collapse am-collapse am-in':curid==$index,'am-panel-collapse am-collapse' :curid!=$index}">
 			      <div class="am-panel-bd">
-			        	<p ng-bind-html="t.content | to_trusted"></p>
+			            <div class="am-g" style="border:0px solid red;">
+							  <div class="am-u-sm-12"><p ng-bind-html="t.content | to_trusted"  id="cn-{{$index}}" ></p></div>
+				        	  <div class="am-u-sm-9" style="border:0px solid green;">&nbsp;</div>
+							  <div class="am-u-sm-3" style="border:0px solid green;"><button type="button" data-am-modal="{target: '#my-alert'}" class="am-btn am-btn-warning am-round" ng-click="copyArticle($index)">复制</button></div>
+			        	</div>
+			        	<!-- <div class="am-g-fixed" style="border:1px solid red;">
+						  <div class="am-u-sm-10" style="border:1px solid green;">11111111111</div>
+						  <div class="am-u-sm-2" style="border:1px solid green;"><button type="button" data-am-modal="{target: '#my-alert'}" class="am-btn am-btn-warning am-round" ng-click="copyArticle($index)">复制</button></div>
+						</div> -->
 			      </div>
 			    </div>
 		  </div>
 	</div>
 </section> 
+ <div data-am-widget="gotop" class="am-gotop am-gotop-fixed" >
+    <a href="#top" title="">
+        <img class="am-gotop-icon-custom" src="http://amazeui.b0.upaiyun.com/assets/i/cpts/gotop/goTop.gif" />
+    </a>
+  </div>
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "
      id="">
     <ul class="am-navbar-nav am-cf am-avg-sm-4">
@@ -199,6 +212,17 @@ onmouseup='document.selection.empty()' -->
             </a>
         </li>
     </ul>
+</div>
+<div class="am-modal am-modal-alert" tabindex="-1" id="my-alert">
+  <div class="am-modal-dialog">
+    <div class="am-modal-hd">系统提示</div>
+    <div class="am-modal-bd">
+      计划内容复制成功！
+    </div>
+    <div class="am-modal-footer">
+      <span class="am-modal-btn">确定</span>
+    </div>
+  </div>
 </div>
 </body>
 <script src="<%=basePath %>static/js/jquery.min.js"></script>

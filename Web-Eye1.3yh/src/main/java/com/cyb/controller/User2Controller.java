@@ -35,6 +35,7 @@ import com.cyb.po.MyUser;
 import com.cyb.po.UserLoginLog;
 import com.cyb.service.LoginLogServiceImpl;
 import com.cyb.service.UserServiceImpl;
+import com.cyb.utils.DESUtil;
 
 /**
  *作者 : iechenyb<br>
@@ -88,7 +89,8 @@ public class User2Controller {
     @ResponseBody
     public ResultBean<Object> login1(@RequestBody MyUser user,HttpServletRequest req) {
     	 try {
-             Authentication request = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+    		 String originPassword = new DESUtil().strDec(user.getPassword(), req.getSession().getAttribute("k1").toString(), req.getSession().getAttribute("k2").toString(), req.getSession().getAttribute("k3").toString());
+             Authentication request = new UsernamePasswordAuthenticationToken(user.getUsername(), originPassword);
              System.out.println("before:" + request);
              Authentication result = authenticationManager.authenticate(request);
              System.out.println("after:" + result);
@@ -97,7 +99,10 @@ public class User2Controller {
              PlanContants.onlineUser.put(user.getUsername(), user.getUsername());
              loginLogService.saveLoginLog(user, req);
              logRule.saveSessionLog(DateUtil.timeToMilis()+"	"+req.getSession().getId()+" ["+user.getUsername()+"] 进入系统！");
-         } catch (AuthenticationException e) {
+             req.getSession().removeAttribute("k1");
+             req.getSession().removeAttribute("k2");
+             req.getSession().removeAttribute("k3");
+    	 } catch (AuthenticationException e) {
              System.out.println("Authentication failed: " + e.getMessage());
              return new ResultBean<Object>().fail("Authentication failed: " +e.getMessage());
          }

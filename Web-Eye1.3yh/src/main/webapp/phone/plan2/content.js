@@ -36,12 +36,23 @@ function showPanel() {
 	console.log("open ..." + '#' + curid);
 	$('#do-not-say-' + curid).collapse('open');
 }
+function copyArticle(id) {
+    const range = document.createRange();
+    range.selectNode(document.getElementById('cn-'+id));
+    const selection = window.getSelection();
+    if(selection.rangeCount > 0) selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand('copy');
+    if(selection.rangeCount > 0) selection.removeAllRanges();
+   // alert("内容复制成功！");
+  }
 app.controller('contentController', function($scope, $http, $interval) {
 	$scope.basePath = $("#path").val();
 	basePath = $scope.basePath;
 	page = $scope;
 	$scope.curid = 0;
 	$scope.count = 0;// $scope.opidx
+	$scope.copyArticle=copyArticle;
 	$http.get($scope.basePath + '/users2/getUserName').then(
 			function(data){
 				$scope.username=data.data.data;
