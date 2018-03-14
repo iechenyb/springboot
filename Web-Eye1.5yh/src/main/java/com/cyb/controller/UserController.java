@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cyb.aop.ResultBean;
+import com.cyb.config.cas.AcmCasProperties;
 import com.cyb.contants.PlanContants;
 import com.cyb.dao.MyUserRepository;
 import com.cyb.dao.PlanTypeRepository;
@@ -158,11 +159,15 @@ public class UserController {
     	 System.out.println("用户退出！");
 		return new ResultBean<Object>("退出成功");
     }
+    @Autowired
+    AcmCasProperties acm;
+    
 	@GetMapping("exit")
 	public String logout(HttpSession session) {
 		System.out.println("用户执行退出...");
 		session.invalidate();
-		return "redirect:http://192.168.16.211:8088/cas/logout?service=http://192.168.16.211:8080/ymh/phone/plan2/index.jsp";
+		return "redirect:"+acm.getCasServerPrefix()+acm.getCasServerLogoutUrl()+"?"+acm.getAppServicePrefix()+acm.getAppWelcomeUrl();
+		//return "redirect:http://192.168.16.211:8088/cas/logout?service=http://192.168.16.211:8080/ymh/phone/plan2/index.jsp";
 	}
     @GetMapping("/logout")
     @ResponseBody

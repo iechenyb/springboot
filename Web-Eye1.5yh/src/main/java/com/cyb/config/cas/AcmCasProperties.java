@@ -29,6 +29,9 @@ public class AcmCasProperties {
 
 	@Value("${app.logout.url}")
 	private String appServiceLogoutUrl;
+	
+	@Value("${app.welcome.url}")
+	private String appWelcomeUrl;
 
 	public String getCasServerPrefix() {
 	    return casServerPrefix;
@@ -77,4 +80,13 @@ public class AcmCasProperties {
 	public void setAppServiceLogoutUrl(String appServiceLogoutUrl) {
 	    this.appServiceLogoutUrl = appServiceLogoutUrl;
 	}
+
+	public String getAppWelcomeUrl() {
+		return appWelcomeUrl;
+	}
+
+	public void setAppWelcomeUrl(String appWelcomeUrl) {
+		this.appWelcomeUrl = appWelcomeUrl;
+	}
+	
 }
