@@ -17,3 +17,4 @@ dist/
 nbdist/
 .nb-gradle/
 /.apt_generated/
+/bin/
