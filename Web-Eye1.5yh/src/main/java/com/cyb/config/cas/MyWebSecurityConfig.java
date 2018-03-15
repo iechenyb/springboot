@@ -86,7 +86,24 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter { /**
     public void configure(WebSecurity web) throws Exception {
         // 静态文静过滤
         //String[] filter = filterStatic.getStaticFilters().toArray(new String[0]);
-        web.ignoring().antMatchers("/lhmj/**");
+      //解决静态资源被拦截的问题
+        web.ignoring()
+        .antMatchers("/lhmj/**").antMatchers("/static/**")
+        .antMatchers("/css/**")
+        //版本1的所有页面都打开！
+        .antMatchers("/phone/plan/**")
+        //版本二的登录页面打开
+        .antMatchers("/phone/plan2/*.js","/phone/plan2/login.jsp")
+        .antMatchers("/js/**").antMatchers("/exception/**")
+        .antMatchers("/img/**")
+        .antMatchers("/css/**")
+        .antMatchers("/login.jsp")
+        .antMatchers("/druid/**","/druid/index.html")
+        .antMatchers("/v2/api-docs", "/configuration/ui",
+                "/swagger-resources", "/configuration/security",
+                "/swagger-ui.html","/webjars/**",
+                "/swagger-resources/configuration/ui")
+        ;
     }
 
     /**

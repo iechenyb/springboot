@@ -50,6 +50,7 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers( "/login.jsp").permitAll()
                 .antMatchers( "/users/exit").permitAll()
                 .antMatchers("/sw/**").permitAll()
+                .antMatchers("/vip/**").permitAll()
                 .antMatchers("/plan/**").hasAnyRole("USER","ADMIN")//.permitAll()
                 .antMatchers("/net/**").permitAll()
                 .antMatchers("/common/**").permitAll()
