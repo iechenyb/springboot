@@ -76,7 +76,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </ul>
 </div> -->
 <div class="am-g">
-		<div class="am-u-sm-12">{{curName}}&nbsp;&nbsp;{{curIndex}}</div>
+		<div class="am-u-sm-12"><font color="blue" >{{curName}}&nbsp;&nbsp;{{curIndex}}</font></div>
 </div>
 <div class="am-g" >
   <!-- <div class="am-u-sm-12" style="border:0px solid green;">&nbsp;</div> -->
@@ -84,9 +84,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div ng-repeat="var in [1,2,3,4,5,6,7]">{{var}}</div>
     </div> -->
     <div class="am-u-sm-12" style="border:0px solid green;margin-top:2px;">
-		<iframe name="center"  width="100%" src="http://player.jidiaose.com/supapi/iframe.php?v=https://v.qq.com/x/cover/fzfi0p4etjrckhh/o0026hwp2r1.html"  frameborder=0 >
+		<iframe name="center"  width="100%"  height="20%" src="http://player.jidiaose.com/supapi/iframe.php?v=https://v.qq.com/x/cover/fzfi0p4etjrckhh/o0026hwp2r1.html"  frameborder=0 >
 		</iframe>
     </div> 
+    <!-- <div class="am-g am-g-fixed" > -->
+		<div class="am-u-sm-2 am-u-end" ng-repeat="vo in list"  style="border:1px solid blue;text-align:center;"><a ng-click="play(vo)" href="javascript:void(0);">{{vo.idx}}</a></div>
+	<!-- </div> -->
     <div class="am-u-sm-12" style="border:0px solid red;">
 	   接口选择： <select  class="am-form-select" data-am-selected ng-model="mySelected" >
 			<option value="http://jqaaa.com/jx.php?url=" >万能接口1</option>
@@ -119,13 +122,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div class="am-u-sm-12" style="border:0px solid green;margin:0px;"><button type="button"  style="width:100%;" class="am-btn am-btn-primary"  ng-click="search()">腾讯及爱奇艺搜索</button></div>
 </div>
 <div class="am-g">
-<div class="am-u-sm-12" style="border:0px solid green;margin:0px;">
+	<div class="am-u-sm-12" style="border:0px solid green;margin:0px;">
 		 	<input type="text"  class="am-form-field am-radius"  placeholder="优酷电视剧地址" ng-model="youkuKey"></input>
 	</div> 
 	<div class="am-u-sm-12" style="border:0px solid green;margin:0px;"><button type="button"  style="width:100%;" class="am-btn am-btn-primary"  ng-click="searchYouku()">优酷专用搜索</button></div>
 </div>
-<div class="am-g" >
-	<div class="am-u-sm-2 am-u-end" ng-repeat="vo in list" ><a ng-click="play(vo)" href="javascript:void(0);">{{vo.idx}}</a></div>
+<div class="am-g">
+	<div class="am-u-sm-12" style="border:0px solid green;margin:0px;">
+		 	<input type="text"  class="am-form-field am-radius"  placeholder="任意播放地址" ng-model="anyKey"></input>
+	</div> 
+	<div class="am-u-sm-12" style="border:0px solid green;margin:0px;">
+		<button type="button"  style="width:100%;" class="am-btn am-btn-primary"  ng-click="playAll()">全网地址直接播放</button>
+	</div>
 </div>
 <a target='center' id='page9090'></a>
 <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default "

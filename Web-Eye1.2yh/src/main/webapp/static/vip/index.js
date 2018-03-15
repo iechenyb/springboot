@@ -42,11 +42,19 @@ app.controller('indexController', function($scope,$http) {
 				}
 		);
     }
+    //剧集播放
     page.play=function(vedio){
     	  var url =page.mySelected+vedio.url;
     	  document.getElementById('page9090').href=url;
     	  document.getElementById('page9090').click();
-    	  page.curIndex=" 正在播出&nbsp;&nbsp;第"+vedio.idx+"集";
+    	  page.curIndex=" 正在播出 第"+vedio.idx+"集";
+    }
+    //任意视频地址播放
+    page.playAll=function(){
+       var url =page.mySelected+page.anyKey;
+  	  document.getElementById('page9090').href=url;
+  	  document.getElementById('page9090').click();
+  	  page.curIndex=" 地址 "+page.anyKey+"";
     }
     /*
     $http.get($scope.basePath+'plan2/cq').then(successCallback1, errorCallback1);
