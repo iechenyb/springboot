@@ -19,6 +19,7 @@ import com.cyb.dao.PlanRepository;
 import com.cyb.dao.PlanTypeDaoImpl;
 import com.cyb.dao.PlanTypeRepository;
 import com.cyb.file.ObjectFileUtils;
+import com.cyb.po.Plan;
 import com.cyb.po.PlanType;
 
 /**
@@ -64,12 +65,39 @@ public class Plan2Controller {
 		return new ResultBean<String>(req.getSession().getAttribute("userid").toString());
 	}
 	
+	
+	public static void main(String[] args) {
+		@SuppressWarnings("unchecked")
+		List<Plan> list=(List<Plan>) ObjectFileUtils.readObjectFromFile( "c:/data/plan/01-cq.obj");
+		for(Plan p:list){
+			/*if(p.getJhlx().equals("01")||p.getJhlx().equals("02")||p.getJhlx().equals("11")){
+				if(p.getJhbh().equals("cq")){
+					if(p.getContent().split("<br><br>").length>3){
+						p.setContentHidden(p.getContent().split("<br><br>")[1]);
+					}
+				}
+			}
+			p.setContentHidden(p.getContent());*/
+			if(p.getContent().split("<br><br>").length==4)
+			System.out.println(p.getContent().split("<br><br>")[1]);
+		}
+	} 
 	@GetMapping("/getPlan")
 	@ResponseBody
 	public ResultBean<Object> getPlans(String jhbh,String jhlx,HttpServletRequest req) {
 		log.info("获取计划信息...");
-		Object  obj = ObjectFileUtils.readObjectFromFile(PlanContants.context + "" + jhbh + "-" + jhlx + ".obj");
-		return new ResultBean<Object>(obj);
+		Object  list =  ObjectFileUtils.readObjectFromFile(PlanContants.context + "" + jhbh + "-" + jhlx + ".obj");
+		/*for(Plan p:list){
+			if(p.getJhlx().equals("01")||p.getJhlx().equals("02")||p.getJhlx().equals("11")){
+				if(p.getJhbh().equals("cq")){
+					if(p.getContent().split("<br><br>").length>3){
+						p.setContentHidden(p.getContent().split("<br><br>")[1]);
+					}
+				}
+			}
+			p.setContentHidden(p.getContent());
+		}*/
+		return new ResultBean<Object>(list);
 	}
 
 	@SuppressWarnings("unchecked")

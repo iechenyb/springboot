@@ -38,7 +38,7 @@ public class Plan implements Serializable{
 	
 	public String pic;
 	public String name;
-
+    public String contentHidden="";//复制的内容
 	public String getJhlx() {
 		return jhlx;
 	}
@@ -93,6 +93,14 @@ public class Plan implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getContentHidden() {
+		return contentHidden;
+	}
+
+	public void setContentHidden(String contentHidden) {
+		this.contentHidden = contentHidden;
 	}
 
 }

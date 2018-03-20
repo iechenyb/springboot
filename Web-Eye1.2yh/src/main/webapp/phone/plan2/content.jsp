@@ -172,9 +172,19 @@ onmouseup='document.selection.empty()' -->
 			    <div id="do-not-say-{{$index}}"  ng-class="{'am-panel-collapse am-collapse am-in':curid==$index,'am-panel-collapse am-collapse' :curid!=$index}">
 			      <div class="am-panel-bd">
 			            <div class="am-g" style="border:0px solid red;">
-							  <div class="am-u-sm-12"><p ng-bind-html="t.content | to_trusted"  id="cn-{{$index}}" ></p></div>
+							  <div class="am-u-sm-12">
+								  <p ng-bind-html="t.content | to_trusted"  id="cn-{{$index}}" ></p>
+								  <input type="text"  value="{{t.contentHidden}}"  style="width:5px;" id="cnn-{{$index}}" ></input>
+							  </div>
 				        	  <div class="am-u-sm-9" style="border:0px solid green;">&nbsp;</div>
-							  <div class="am-u-sm-3" style="border:0px solid green;"><button type="button" data-am-modal="{target: '#my-alert'}" class="am-btn am-btn-warning am-round" ng-click="copyArticle($index)">复制</button></div>
+							  <div class="am-u-sm-3" style="border:0px solid green;">
+								  <button type="button" data-am-modal="{target: '#my-alert'}" class="am-btn am-btn-warning am-round" ng-click="copyArticle($index)">
+								 	复制
+								 	<!-- <p ng-if="(t.jhbh=='01'||t.jhbh=='02'||t.jhbh=='11') && t.jhlx=='cq'"> 复制纯号码</p>
+								 	<p ng-if="t.jhlx!='cq'||(t.jhbh!='01'&&t.jhlx=='cq')||(t.jhbh!='02'&&t.jhlx=='cq')||(t.jhbh!='11'&&t.jhlx=='cq')"> 复制</p>
+								    --> 
+								  </button>
+							  </div>
 			        	</div>
 			        	<!-- <div class="am-g-fixed" style="border:1px solid red;">
 						  <div class="am-u-sm-10" style="border:1px solid green;">11111111111</div>

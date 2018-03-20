@@ -38,7 +38,7 @@ function showPanel() {
 }
 function copyArticle(id) {
     const range = document.createRange();
-    range.selectNode(document.getElementById('cn-'+id));
+    range.selectNode(document.getElementById('cnn-'+id));
     const selection = window.getSelection();
     if(selection.rangeCount > 0) selection.removeAllRanges();
     selection.addRange(range);

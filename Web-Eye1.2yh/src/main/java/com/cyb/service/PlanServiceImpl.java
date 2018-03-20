@@ -71,7 +71,7 @@ public class PlanServiceImpl {
 		for (PlanType type : types) {
 			try {
 				log.info(type.getJhmc() + "," + type.getUrl());
-				if (!type.getJhbh().equals("12")) {
+				if (!type.getJhbh().equals("12")) {//非其他
 					url = type.getUrl();
 					Map<String, StringBuffer> jhs = HttpRequest.sendGetJh(url, null);
 					List<Plan> list = new ArrayList<Plan>();
@@ -86,6 +86,15 @@ public class PlanServiceImpl {
 						p.setName(names[Integer.valueOf(cur)]);
 						p.setTime(DateUtil.timeToSec());
 						p.setContent(jhs.get(cur).toString().replace("28码", ""));
+						if(p.getJhbh().equals("01")||p.getJhbh().equals("02")||p.getJhbh().equals("11")){
+							if(p.getJhlx().equals("cq")){
+								if(p.getContent().split("<br><br>").length==4){
+									p.setContentHidden(p.getContent().split("<br><br>")[1]);
+								}
+							}
+						}else{
+							p.setContentHidden(p.getContent());
+						}
 						list.add(p);
 					}
 					ObjectFileUtils.writeObjectToFile(list,
