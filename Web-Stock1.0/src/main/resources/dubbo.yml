@@ -1,0 +1,14 @@
+dubbo :  
+  protocol :   
+    port : -1  
+    name  : dubbo  
+  application :   
+    name : hello-world-app  
+  registry :  
+    address : zookeeper://127.0.0.1:2181  
+  packageName : com.cyb.dubbo.test
+
+#dubbo
+#spring.dubbo.application.name=consumer-1
+#spring.dubbo.registry.address=zookeeper://localhost:2181
+#spring.dubbo.scan=com.cyb.dubbo.test

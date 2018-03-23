@@ -1,0 +1,9 @@
+<div style="text-align: right;margin-right: 50px;">
+    <span ng-repeat="menu in myheader.links">
+       <!-- ng-if="menu.uisref"  <a ng-if="menu.href" href="{{menu.href}}" target="_blank">{{menu.name}}</a>&nbsp;&nbsp;</span>-->
+          <a  ui-sref="{{menu.uisref}}">{{menu.name}}</a>&nbsp;&nbsp;</span>
+    </span>
+    <span ng-repeat="menu in menus">
+        <a ng-if="menu.href" href="{{menu.href}}" target="_self">{{menu.name}}</a>&nbsp;&nbsp;</span>
+       <a ng-if="menu.uisref" ui-sref="{{menu.uisref}}">{{menu.name}}</a>&nbsp;&nbsp;</span>
+</div>

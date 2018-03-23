@@ -88,7 +88,8 @@ public class MyWebSecurityConfig extends WebSecurityConfigurerAdapter { /**
         //String[] filter = filterStatic.getStaticFilters().toArray(new String[0]);
       //解决静态资源被拦截的问题
         web.ignoring()
-        .antMatchers("/lhmj/**").antMatchers("/static/**")
+        .antMatchers("/lhmj/**")
+        .antMatchers("/static/**")
         .antMatchers("/css/**")
         //版本1的所有页面都打开！
         .antMatchers("/phone/plan/**")

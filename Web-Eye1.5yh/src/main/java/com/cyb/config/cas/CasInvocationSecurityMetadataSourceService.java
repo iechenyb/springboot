@@ -57,7 +57,7 @@ public class CasInvocationSecurityMetadataSourceService implements FilterInvocat
 	     *创建时间: 2017年7月15日hj12
 	     *@return
 	     */
-	    public Map<String,ConfigAttribute> roleResources2(){
+	    public Map<String,ConfigAttribute> roleResources(){
 	    	String[] roles = new String[]{"ROLE_ADMIN","ROLE_USER"};
 	    	Map<String,ConfigAttribute> auths = new HashMap<String,ConfigAttribute>();
 	    	for(int i=0;i<roles.length;i++){
@@ -66,7 +66,7 @@ public class CasInvocationSecurityMetadataSourceService implements FilterInvocat
 	    	}
 	    	return auths;
 	    }
-	    public Map<String,String> roleResources(){
+	    public Map<String,String> roleResourcesMenus(){
 	    	Map<String,String> auths = new HashMap<String,String>();
 	    	//管理员权限
 	    	//管理员权限
@@ -111,14 +111,14 @@ public class CasInvocationSecurityMetadataSourceService implements FilterInvocat
 		}*/
 		 if (resourceMap == null) {
 	            resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
-	            Map<String,String> auths = roleResources();
+	            Map<String,String> auths = roleResourcesMenus();
 	            /*for(String url:auths.keySet()){
 	            	  Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
 	                  ConfigAttribute configAttribute = new SecurityConfig(auths.get(url));// 资源标识
 	                  configAttributes.add(configAttribute);//创建个数为uri的个数，浪费内存
 	                  resourceMap.put(url, configAttributes);
 	            }*/
-	            Map<String,ConfigAttribute> auths2 = roleResources2();
+	            Map<String,ConfigAttribute> auths2 = roleResources();//重新获得人员角色信息
 	            for(String url:auths.keySet()){
 	          	  	Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
 	                configAttributes.add(auths2.get(auths.get(url)));//只用一个地址
