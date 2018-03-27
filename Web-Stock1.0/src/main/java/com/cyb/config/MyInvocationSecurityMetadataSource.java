@@ -35,7 +35,7 @@ implements FilterInvocationSecurityMetadataSource {
     	auths.put("/users2/getAllUser", "ROLE_ADMIN");
     	auths.put("/users/hiberSave", "ROLE_ADMIN");
     	auths.put("/users/getUserLoginInfor", "ROLE_ADMIN");
-    	//auths.put("/swagger-ui.html", "ROLE_ADMIN");
+    	//auths.put("/swagger-ui.html", "ROLE_ADMIN"); 
     	//普通用户权限
     	auths.put("/plan/getPlan", "ROLE_USER");
     	auths.put("/plan/index", "ROLE_USER");
