@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cyb.condition.ConditionService;
+import com.cyb.service.UserServiceImpl;
 import com.google.common.collect.ImmutableMap;
 
 /**
@@ -113,5 +114,14 @@ public class CommonController {
 	public String myName(String p1, String p2) {
 		System.out.println(p1 + "," + p2);
 		return "cyb";
+	}
+	@Autowired
+	UserServiceImpl userService;
+	//jpa事务测试
+	@GetMapping("jpa")
+	@ResponseBody
+	public String jpaTest(){
+		userService.update("iechenyb",33l);
+		return "success";
 	}
 }

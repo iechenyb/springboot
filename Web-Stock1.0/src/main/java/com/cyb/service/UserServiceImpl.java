@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,8 @@ public class UserServiceImpl {
 	@PersistenceContext
 	private EntityManager entityManager;
 	
-	public void updateTX(int hasException,String newName,int type){
-		userDao.updateTx(hasException,newName,type);
+	public void updateTX(int hasException,String newName,Long id,int type){
+		userDao.updateTx(hasException,newName,id,type);
 	}
 	
 	public MyUser getUserByName(String userName){
@@ -61,5 +62,10 @@ public class UserServiceImpl {
 	}
 	public List<Map<String,Object>>  getUserLoginInfor() {
 		return userDao.getUserLoginInfor();
+	}
+	@Transactional
+	public void update(String name,Long id){
+		myUserRep.updateUserName(name, id);
+		System.out.println(myUserRep.getOne(33L).getUsername());
 	}
 }

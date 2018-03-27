@@ -101,17 +101,17 @@ public class UserDaoImpl {
 			return new ArrayList<Map<String,Object>>();
 		}
 	}
-	public void updateTx(int has, String newName,int type) {
+	public void updateTx(int has, String newName,Long id,int type) {
 		if(type==1){
-			updateJdbcTx(has,newName);
+			updateJdbcTx(has,newName,id);//不需要id值，否则报错
 		}else if(type==2){
-			updateHibernateTx(has,newName);
+			updateHibernateTx(has,newName,id);//不需要设置id值，设置后也没关系
 		}else{
 			
 		}
 	}
 	
-	public void updateJdbcTx(int has, String newName) {
+	public void updateJdbcTx(int has, String newName,Long id) {
 		try {
 			String updateSql1 = "update ms_security_user set username='cyb' where user_id=1 ";
 			String updateSql2 = "update ms_security_user set username='" + newName + "'  where user_id=1";
@@ -125,9 +125,9 @@ public class UserDaoImpl {
 
 		}
 	}
-	public void updateHibernateTx(int has, String newName) {
+	public void updateHibernateTx(int has, String newName,Long id) {
 		try {
-			MyUser user = this.entityManager.find(MyUser.class, 1l);
+			MyUser user = this.entityManager.find(MyUser.class, id);
 			user.setUsername("cyb");
 			this.entityManager.merge(user);
 			if (has == 1) {

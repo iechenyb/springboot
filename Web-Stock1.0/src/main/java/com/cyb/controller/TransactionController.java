@@ -24,15 +24,15 @@ public class TransactionController {
     //http://localhost:8080//sw/testSW?has=1&name=qw
     @GetMapping("/testJdbcSW")
     @ResponseBody
-    public String jdbc(int has,String name){
-    	userService.updateTX(has,name,1);
+    public String jdbc(int has,String name,Long id){
+    	userService.updateTX(has,name,id,1);
     	return "测试结束！";
     }
     
     @GetMapping("/testHibernateSW")
     @ResponseBody
-    public String hibernate(int has,String name){
-    	userService.updateTX(has,name,2);
+    public String hibernate(int has,String name,Long id){
+    	userService.updateTX(has,name,id,2);
     	return "测试结束！";
     }
     

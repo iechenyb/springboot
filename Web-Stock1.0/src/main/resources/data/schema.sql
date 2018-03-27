@@ -1,0 +1,1 @@
+--create table h2Test(name varchar(20));

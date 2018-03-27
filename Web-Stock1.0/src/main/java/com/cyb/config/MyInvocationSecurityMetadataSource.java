@@ -25,7 +25,8 @@ implements FilterInvocationSecurityMetadataSource {
     public Map<String,String> roleResources(){
     	Map<String,String> auths = new HashMap<String,String>();
     	//管理员权限
-    	auths.put("/users/signup", "ROLE_ADMIN");
+    	auths.put("/users/getAllUser", "ROLE_ADMIN");
+    	/*auths.put("/users/signup", "ROLE_ADMIN");
     	auths.put("/users/register", "ROLE_ADMIN");
     	auths.put("/users/tick", "ROLE_ADMIN");
     	auths.put("/users/getUser", "ROLE_ADMIN");
@@ -43,7 +44,7 @@ implements FilterInvocationSecurityMetadataSource {
     	auths.put("/plan2/pk10", "ROLE_USER");
     	//auths.put("/plan/index", "ROLE_USER");
     	auths.put("/phone/plan2/index.jsp", "ROLE_USER");
-    	auths.put("/phone/plan2/content.jsp", "ROLE_USER");
+    	auths.put("/phone/plan2/content.jsp", "ROLE_USER");*/
     	return auths;
     }
     /**

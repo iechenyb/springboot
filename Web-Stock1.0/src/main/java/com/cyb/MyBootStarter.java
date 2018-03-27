@@ -68,11 +68,11 @@ public class MyBootStarter extends WebMvcConfigurerAdapter {
 		SpringApplication.run(MyBootStarter.class, args);
 	}
 
-	 //其中 dataSource 框架会自动为我们注入
-    @Bean
+	 //其中 dataSource 框架会自动为我们注入 与配置文件定义的事务管理器冲突
+    /*@Bean
     public PlatformTransactionManager txManagerDataSource(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
-    }
+    }*/
     
     /**
      * 注入sessionfatory
@@ -83,7 +83,12 @@ public class MyBootStarter extends WebMvcConfigurerAdapter {
     public HibernateJpaSessionFactoryBean sessionFactory() {
         return new HibernateJpaSessionFactoryBean();
     }
-
+	/**
+	 * 动态切换数据库
+	 * https://blog.csdn.net/neosmith/article/details/61202084
+	 * http://412887952-qq-com.iteye.com/blog/2303075
+	 * https://www.cnblogs.com/chen-msg/p/7485701.html
+	 */
 	/*@Override
 	public void run(String... arg0) throws Exception {
 		System.err.println("服务调用者------>>启动完毕");
