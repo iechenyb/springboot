@@ -1,5 +1,7 @@
 package com.cyb.po;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,9 +14,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="ms_security_user")
-public class MyUser {
+public class MyUser  implements Serializable{
 	
-    @Id
+	private static final long serialVersionUID = 1L;
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long user_id;//自增长字段
     private String username;

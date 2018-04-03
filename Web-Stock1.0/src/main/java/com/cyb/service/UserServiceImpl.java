@@ -66,6 +66,6 @@ public class UserServiceImpl {
 	@Transactional
 	public void update(String name,Long id){
 		myUserRep.updateUserName(name, id);
-		System.out.println(myUserRep.getOne(33L).getUsername());
+		System.out.println(myUserRep.getOne(id).getUsername());
 	}
 }

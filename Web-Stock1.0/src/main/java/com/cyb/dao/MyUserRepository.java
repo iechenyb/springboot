@@ -26,7 +26,7 @@ public interface MyUserRepository extends JpaRepository<MyUser, Long> {
     List<MyUser> findByUsername2(@Param("val") String name);
     
     @Modifying
-    //@Transactional
+    @Transactional
     @Query("update MyUser p set p.username=?1 where p.user_id=?2 ")
     int updateUserName(String name,Long id);
     

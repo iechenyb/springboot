@@ -77,7 +77,7 @@ public class UserDaoImpl {
 	}
 	public List<Map<String,Object>>  getUserList() {
 		try {
-			List<Map<String,Object>> list = this.jdbcTemplate.queryForList("select username,zt from ms_security_user");
+			List<Map<String,Object>> list = this.jdbcTemplate.queryForList("select user_id id,username,zt from ms_security_user");
 			if(CollectionUtils.isEmpty(list)){
 				return new ArrayList<Map<String,Object>>();
 			}else{
@@ -110,11 +110,19 @@ public class UserDaoImpl {
 			
 		}
 	}
-	
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 先将名称更新成cyb，然后更新成新名称<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param has
+	 *@param newName
+	 *@param id
+	 */
 	public void updateJdbcTx(int has, String newName,Long id) {
 		try {
-			String updateSql1 = "update ms_security_user set username='cyb' where user_id=1 ";
-			String updateSql2 = "update ms_security_user set username='" + newName + "'  where user_id=1";
+			String updateSql1 = "update ms_security_user set username='cyb' where user_id="+id;
+			String updateSql2 = "update ms_security_user set username='" + newName + "'  where user_id="+id;
 			this.jdbcTemplate.execute(updateSql1);
 			if (has == 1) {
 				System.out.println(1 / 0);
@@ -125,6 +133,15 @@ public class UserDaoImpl {
 
 		}
 	}
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 先将名称更新成cyb，然后更新成新名称<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param has
+	 *@param newName
+	 *@param id
+	 */
 	public void updateHibernateTx(int has, String newName,Long id) {
 		try {
 			MyUser user = this.entityManager.find(MyUser.class, id);

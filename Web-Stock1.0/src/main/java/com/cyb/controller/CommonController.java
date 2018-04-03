@@ -71,7 +71,7 @@ public class CommonController {
 		return "index";
 	}
 
-	@GetMapping("toPage1")
+	/*@GetMapping("toPage1")
 	public ModelAndView toPage1() {
 		ModelAndView view = new ModelAndView();
 		view.addObject("name", "chenyb1");
@@ -93,7 +93,7 @@ public class CommonController {
 		view.addObject("name", "chenyb3");
 		view.setViewName("index");
 		return view;
-	}
+	}*/
 
 	@SuppressWarnings("unchecked")
 	@GetMapping("userinfor")
@@ -113,15 +113,7 @@ public class CommonController {
 	@ResponseBody
 	public String myName(String p1, String p2) {
 		System.out.println(p1 + "," + p2);
-		return "cyb";
+		return "mvc测试接口";
 	}
-	@Autowired
-	UserServiceImpl userService;
-	//jpa事务测试
-	@GetMapping("jpa")
-	@ResponseBody
-	public String jpaTest(){
-		userService.update("iechenyb",33l);
-		return "success";
-	}
+	
 }

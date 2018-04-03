@@ -25,8 +25,8 @@ implements FilterInvocationSecurityMetadataSource {
     public Map<String,String> roleResources(){
     	Map<String,String> auths = new HashMap<String,String>();
     	//管理员权限
-    	auths.put("/users/getAllUser", "ROLE_ADMIN");
-    	/*auths.put("/users/signup", "ROLE_ADMIN");
+    	/*auths.put("/users/getAllUser", "ROLE_ADMIN");
+    	auths.put("/users/signup", "ROLE_ADMIN");
     	auths.put("/users/register", "ROLE_ADMIN");
     	auths.put("/users/tick", "ROLE_ADMIN");
     	auths.put("/users/getUser", "ROLE_ADMIN");

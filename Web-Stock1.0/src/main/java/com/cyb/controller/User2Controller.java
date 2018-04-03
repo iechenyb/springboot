@@ -73,8 +73,18 @@ public class User2Controller {
     
     @Autowired
     private  AuthenticationManager authenticationManager ;
+    
     @Autowired
 	LogRule logRule;
+    /**
+     * 
+     *作者 : iechenyb<br>
+     *方法描述: json请求参数<br>
+     *创建时间: 2017年7月15日hj12
+     *@param user
+     *@param req
+     *@return
+     */
     @SuppressWarnings("unchecked")
 	@PostMapping("/login1")
     @ResponseBody
@@ -95,7 +105,15 @@ public class User2Controller {
          }
 		return new ResultBean<Object>().success("登录成功！");
     }
-    
+    /**
+     * 
+     *作者 : iechenyb<br>
+     *方法描述: 普通请求参数<br>
+     *创建时间: 2017年7月15日hj12
+     *@param user
+     *@param req
+     *@return
+     */
     @SuppressWarnings("unchecked")
 	@PostMapping("/login2")
     @ResponseBody

@@ -76,7 +76,7 @@ public class MyBootStarter extends WebMvcConfigurerAdapter {
     
     /**
      * 注入sessionfatory
-     * @return
+     * @return org.hibernate.SessionFactory'
      */
 	@SuppressWarnings("deprecation")
 	@Bean

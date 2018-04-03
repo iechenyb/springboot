@@ -43,11 +43,11 @@ public class MailSendTest {
         message.setFrom(from);
         message.setTo(to);
         
-        message.setSubject("主题：简单邮件");
-        message.setText("测试邮件内容");
-        //sender.send(message);
+        message.setSubject(subject);
+        message.setText(content);
+        sender.send(message);
         
-        sendAttachmentsMail(subject,content,"d:/data/mail.txt");
+       // sendAttachmentsMail(subject,content,"d:/data/mail.txt");
     }
     /** 
      * 发送纯文本的简单邮件 

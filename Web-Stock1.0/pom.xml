@@ -199,6 +199,11 @@
 		    <artifactId>httpclient</artifactId>
 		    <version>4.5.5</version>
 		</dependency>
+		<!-- cacheable import -->
+		<dependency>  
+		    <groupId>org.springframework.boot</groupId>  
+		    <artifactId>spring-boot-starter-cache</artifactId>  
+	   </dependency>  
 	</dependencies>
 	<build>
 		<plugins>

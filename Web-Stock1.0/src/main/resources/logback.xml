@@ -71,8 +71,8 @@
         </encoder>      
     </appender>
 	<!-- 日志输出级别INFO ERROR WARN -->
-	<root level="INFO">
-	    <appender-ref ref="STDOUT" />
+	<root level="DEBUG">
+	    <!-- <appender-ref ref="STDOUT" /> -->
 		<appender-ref ref="syslog" />
 	</root>
 	   <!--输出sql语句-->

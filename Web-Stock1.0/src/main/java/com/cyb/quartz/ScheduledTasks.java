@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.cyb.config.SystemConfigSettings;
+import com.cyb.utils.CashUtils;
 
 /**
  * 作者 : iechenyb<br>
@@ -22,23 +22,21 @@ public class ScheduledTasks {
 	Log log = LogFactory.getLog(ScheduledTasks.class);
 
 	@Autowired
-	SystemConfigSettings setting;
-
+	CashUtils cashUtils;
 	// 防止定时任务执行优先servlet容器时，存储路径出现空！
 	public void init() {
 
 	}
 
-	// 好像service使用的sessin并没有关闭？？？？！！！
-	@Scheduled(cron = "0 * *  * * * ")
+	/*好像service使用的sessin并没有关闭？？？？！！！
+	 * 每五分钟执行一次
+	 * */
+	@Scheduled(cron = "0  1-30/5 21 * *  *")
 	// @Scheduled(fixedRate = 1000 * 60*5)
 	public void reportCurrentTime() {
-		// 默认测试
-		log.info("执行默认的检测信息!");
-
+		cashUtils.checkCashInterface();
 	}
 
-	// 每1分钟执行一次
 	@Scheduled(cron = "0 0 *  * * * ")
 	public void reportCurrentByCron() {
 		log.info("Scheduling Tasks Examples By Cron ");
