@@ -120,4 +120,11 @@ public class ResisStudyTest {
     	System.out.println("shardNormal执行耗时" + (e - s) / 1000+"s"+ (e - s) % 1000 + "ms");//301ms
        //270ms
 	}
+	
+	@Test
+	public void testLogin(){
+		Jedis jedis = jedisPool.getResource();
+		jedis.set("ip", "localhost");
+		jedis.expire("ip", 60);//60秒内过期
+	}
 }
