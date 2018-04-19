@@ -41,18 +41,21 @@ public class TransactionSeviceImpl {
 		//flightDao.save(f);
 		//flightDao.saveAndFlush(f);
 		entityManager.persist(f);
+		log.info("threadname="+Thread.currentThread().getName());
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void saveMessage( Message msg){
 		//msgDao.save(msg);
 		entityManager.persist(msg);
+		log.info("threadname="+Thread.currentThread().getName());
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void saveMessageAtWrong( Message msg) throws Exception{
 		//msgDao.save(msg);
 		entityManager.persist(msg);
+		log.info("threadname="+Thread.currentThread().getName());
 		System.out.println(1/0);
 		//throw new ArrayIndexOutOfBoundsException("短信发送失败");
 	}
@@ -117,6 +120,7 @@ public class TransactionSeviceImpl {
 	//save* 没有声明式事务，看配置文件，所以加事务注解 添加事务，如下方法在同一个事务里
 	@Transactional
 	public void saveInOneMethodCommon1(Flight f,int hasException ) throws Exception{
+		log.info("threadname="+Thread.currentThread().getName());//http-nio-8080-exec-2
 		saveFlight(f);
 		Message m = new Message();
 		m.setMsg("009 ordered success！");

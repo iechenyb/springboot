@@ -15,7 +15,7 @@ import com.cyb.po.Message;
 import com.cyb.service.TransactionSeviceImpl;
 /**
  *作者 : iechenyb<br>
- *类描述:注解失效测试<br>
+ *类描述:单元测试 事务控制存在问题，不可以测试事务处理机制<br>
  *创建时间: 2018年4月3日
  */
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -3,12 +3,16 @@ package com.cyb.controller;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,7 +20,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cyb.condition.ConditionService;
 import com.cyb.service.UserServiceImpl;
+import com.cyb.validate.bean.ValidBean;
 import com.google.common.collect.ImmutableMap;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
 
 /**
  * 作者 : iechenyb<br>
@@ -115,5 +122,35 @@ public class CommonController {
 		System.out.println(p1 + "," + p2);
 		return "mvc测试接口";
 	}
+	/**
+	 * http://localhost:8080/stock/common/validateBeanCommon?name=123&age=13
+	 * swagger 编程json请求有误
+	 *作者 : iechenyb<br>
+	 *方法描述: 说点啥<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param bean
+	 *@param bindingResult
+	 *@return
+	 */
+	@GetMapping("validateBean")
+    @ResponseBody
+    public String say1(@Valid ValidBean bean, BindingResult bindingResult){      
+		System.out.println("value    "+bean);
+		System.out.println(bindingResult.getFieldError());
+		for(FieldError error : bindingResult.getFieldErrors()){
+		    System.out.println(error.getField()+"=="+error.getDefaultMessage()+"==="+error.getCode());
+	     }
+        return bindingResult.hasErrors() ? 
+		bindingResult.getFieldError().getDefaultMessage() : "right";
+    }
+	
+	@GetMapping("validateBeanCommon")
+    @ResponseBody
+    public String say2( ValidBean bean, BindingResult bindingResult){      
+		System.out.println("value    "+bean);
+		System.out.println(bindingResult.getFieldError());
+        return bindingResult.hasErrors() ? 
+		bindingResult.getFieldError().getDefaultMessage() : "right";
+    }
 	
 }

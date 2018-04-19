@@ -127,10 +127,17 @@ public class TransactionController {
 		f.setTime(DateUtil.descTimeToSec());
 		try {
 			service.saveInOneMethodCommon1(f,hasException);
+			System.out.println("threadname="+Thread.currentThread().getName());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return e.toString();
 		}
+		return "success";
+	}
+	@GetMapping("showThreadName")
+	@ResponseBody
+	public String showThreadName(){
+		System.out.println("threadname="+Thread.currentThread().getName());
 		return "success";
 	}
 }
