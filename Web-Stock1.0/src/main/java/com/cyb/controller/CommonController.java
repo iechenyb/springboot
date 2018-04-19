@@ -3,6 +3,7 @@ package com.cyb.controller;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.cyb.access.UserContext;
 import com.cyb.condition.ConditionService;
-import com.cyb.service.UserServiceImpl;
 import com.cyb.validate.bean.ValidBean;
 import com.google.common.collect.ImmutableMap;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 /**
  * 作者 : iechenyb<br>
@@ -151,6 +149,27 @@ public class CommonController {
 		System.out.println(bindingResult.getFieldError());
         return bindingResult.hasErrors() ? 
 		bindingResult.getFieldError().getDefaultMessage() : "right";
+    }
+	
+	@GetMapping("access")
+    @ResponseBody
+    public String access( ){
+		return "userid is "+UserContext.getUserBean().getName();
+    }
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 简单登录测试 <br>
+	 *创建时间: 2017年7月15日hj12
+	 *@return
+	 */
+	@GetMapping("login")
+    @ResponseBody
+    public String login(ValidBean user,HttpServletRequest req){
+		//user.setUser_id(new Random().nextLong());
+		///UserContext.setUser(user);
+		req.getSession().setAttribute("user", user);
+		return "userid is "+user.getName();
     }
 	
 }

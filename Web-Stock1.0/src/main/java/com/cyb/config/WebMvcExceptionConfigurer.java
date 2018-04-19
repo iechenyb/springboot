@@ -22,7 +22,7 @@ import net.sf.json.JSONObject;
  *类描述: 说点啥<br>
  *创建时间: 2018年3月8日
  */
-@Configuration
+//@Configuration
 public class WebMvcExceptionConfigurer extends WebMvcConfigurerAdapter {
 	Log logger = LogFactory.getLog(WebMvcExceptionConfigurer.class);
     //统一异常处理

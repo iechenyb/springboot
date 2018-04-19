@@ -23,7 +23,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = { IsMobileValidator.class})
 public @interface IsMobile {
 	boolean required() default true;
-	String message() default "手机号码格式错误,长度2-20";
+	String message() default "手机号码格式错误,长度2-20要在2和20之间";
 
 	Class<?>[] groups() default { };
 
