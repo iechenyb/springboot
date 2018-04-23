@@ -66,7 +66,7 @@ public class RedisClient {
 
     public Jedis getRedis() {
         Jedis jedis = pool.getResource();
-        jedis.select(0);
+        jedis.select(3);
         return jedis;
     }
 

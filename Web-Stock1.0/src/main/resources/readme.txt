@@ -38,7 +38,7 @@ http://localhost/common/toPage3  需要other权限无
 hibernate 的更新操作和更新或者保存操作不能显示sql并提交事务。
 druid数据连接池有不释放的连接，知道具体的类，但是不知道产生原因。
 
-新增jsr303校验
+***********新增jsr303校验******
 <dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-validation</artifactId>
@@ -46,10 +46,11 @@ druid数据连接池有不释放的连接，知道具体的类，但是不知道
 
 自定义 endpoint
 
-开启h2-console
+********开启h2-console
 http://localhost:8080/stock/h2-console
-接口管理
+*******接口管理
 http://localhost:8080/stock/swagger-ui.html
-登录日志 在线人数统计
+*******登录日志 在线人数统计
 
-添加访问限制    ！！！
+*******添加访问限制    ！！！ redis+expire
+*******新增MyResponseBodyAdvice  进行时间统计

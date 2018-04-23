@@ -1,6 +1,9 @@
 package com.cyb.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,10 +18,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.cyb.access.UserContext;
+import com.cyb.aop.ResultBean;
 import com.cyb.condition.ConditionService;
 import com.cyb.validate.bean.ValidBean;
 import com.google.common.collect.ImmutableMap;
@@ -51,7 +58,7 @@ public class CommonController {
 	@ResponseBody
 	@GetMapping("ImmutableMap")
 	public Map<String, String> ImmutableMap() {
-		return ImmutableMap.of("key", "value");
+		return ImmutableMap.of("key", "value"); 
 	}
 
 
@@ -171,5 +178,64 @@ public class CommonController {
 		req.getSession().setAttribute("user", user);
 		return "userid is "+user.getName();
     }
+	@ResponseBody
+	@GetMapping("String/{name}")
+	public String hello(@PathVariable String name){
+		System.out.println(" threadname "+Thread.currentThread().getName());
+		return "Hello "+name+"!";
+	}
 	
+	@ResponseBody
+	@GetMapping("list")
+	public List<String> list( String name){
+		System.out.println(" threadname "+Thread.currentThread().getName());
+		ArrayList<String> arr = new ArrayList<String>(); 
+		arr.add(name);
+		return arr;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@GetMapping("ResultBean")
+	public ResultBean<String> ResultBean(String name){
+		System.out.println(" threadname "+Thread.currentThread().getName());
+		return new ResultBean<String>().data(name).success().msg("统一返回值定义测试");
+	}
+	
+	@ResponseBody
+	@GetMapping("user/{name}")
+	public User user(@PathVariable String name){
+		System.out.println(" threadname "+Thread.currentThread().getName());
+		return new User(name);
+	}
+	
+	@GetMapping("page")
+	public ModelAndView page(){
+		ModelAndView view = new ModelAndView();
+		view.setViewName("index");
+		return view;
+	}
+	
+	@ResponseBody
+	@GetMapping("map/{name}")
+	public Map<String,Object> map(@PathVariable String name){
+		System.out.println(" threadname "+Thread.currentThread().getName());
+		Map<String,Object> ret = new HashMap<String, Object>();
+		ret.put("name", name);
+		return ret;
+	}
+}
+
+class User{
+	private String name;
+    public User(String name){
+    	this.name = name;
+    }
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

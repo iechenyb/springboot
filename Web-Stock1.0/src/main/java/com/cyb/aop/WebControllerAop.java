@@ -29,6 +29,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cyb.context.TimeContext;
 import com.cyb.date.DateUtil;
 import com.cyb.log.LogRule;
 import com.cyb.log.MyLog;
@@ -188,8 +189,12 @@ public class WebControllerAop {
 		// System.out.println(retCls.getSimpleName()+"方法的返回值类型"+returnType.getClass());
 		try {// obj之前可以写目标方法执行前的逻辑
 			log_.info(curMethod.getName() + "执行开始");
+			long s =System.currentTimeMillis();
 			obj = proceedingJoinPoint.proceed();// 调用执行目标方法
 			log_.info(curMethod.getName() + "执行结束");
+			long e =System.currentTimeMillis();
+			TimeContext.setTime(e-s);
+			System.out.println(Thread.currentThread().getName()+" 执行时间："+(e-s));
 			return obj;
 		} catch (Exception throwable) {
 			StringBuilder sb = new StringBuilder();

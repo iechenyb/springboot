@@ -86,6 +86,10 @@ public class ResultBean<T> implements Serializable {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
+	public  ResultBean<T> msg(String msg) {
+		this.msg = msg;
+		return this;
+	}
 
 	public int getCode() {
 		return code;

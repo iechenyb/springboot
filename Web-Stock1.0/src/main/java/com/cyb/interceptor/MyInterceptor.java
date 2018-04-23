@@ -1,21 +1,16 @@
 package com.cyb.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.cyb.access.UserContext;
-import com.cyb.validate.bean.ValidBean;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
  *创建时间: 2017年12月28日
  */
-
 public class MyInterceptor implements HandlerInterceptor {
 	Log logger = LogFactory.getLog(MyInterceptor.class);
 	 /**
@@ -25,10 +20,10 @@ public class MyInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         logger.info("preHandle "+request.getRequestURL());
-        if(request.getSession().getAttribute("user")!=null){
+       /* if(request.getSession().getAttribute("user")!=null){
 			UserContext.setUser((ValidBean)request.getSession().getAttribute("user"));
 			System.out.println("进入前置处理器 name="+UserContext.getUserBean().getName()+" age="+UserContext.getUserBean().getAge());
-		}
+		}*/
     	//System.out.println("进入前置处理器 name="+UserContext.getUserBean().getName()+" age="+UserContext.getUserBean().getAge());
         //获取session
         /* HttpSession session = request.getSession(true);

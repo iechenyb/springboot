@@ -35,7 +35,7 @@ public class RedisTempalte {
 			} else {
 				jedis = client.getRedis();
 			}
-			return callback.call(jedis, args);
+			return callback.call(jedis, args);//统一进行回调，并赋值
 		} catch (JedisConnectionException e) {
 			if (jedis != null)
 				client.returnBrokeRedis(jedis);
