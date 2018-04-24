@@ -81,9 +81,18 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //拦截规则：除了excludePathPatterns，其他都拦截判断
-        registry.addInterceptor(new MyInterceptor());
+        registry.addInterceptor(new MyInterceptor())
+        .excludePathPatterns("/users/login")
+        .excludePathPatterns("/users/logout")
+        .excludePathPatterns("users/register")
+        .excludePathPatterns("/img/**","/js/**","/css/**","/v2/api-docs", "/configuration/ui",
+                "/swagger-resources", "/configuration/security",
+                "/swagger-ui.html","/webjars/**",
+                "/swagger-resources/configuration/ui","/login.jsp","/exception/**"
+                ,"/phone/plan2/*.js","/phone/plan2/login.jsp","/static/**");
+        ;
         registry.addInterceptor(accessInterceptor)//
-        .addPathPatterns("/**")
+        //.addPathPatterns("/**")
         .excludePathPatterns("/users/login")
         .excludePathPatterns("/users/logout")
         .excludePathPatterns("users/register")
@@ -118,7 +127,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
                         result.setCode(0);
                         result.setMsg(e.getMessage());
                         logger.error(e.getMessage());
-                    } else {
+                    } else {//AccessRejectException
                         result.setCode(0);
                         result.setMsg("接口 [" + request.getRequestURI() + "] 内部错误，请联系管理员!"+e.getMessage());
                         String message = String.format("接口 [%s] 出现异常，方法：%s.%s，异常摘要：%s",
@@ -136,7 +145,6 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
                         result.setCode(0);
                         result.setMsg(e.getMessage());
                         logger.error(e.getMessage(), e);
-
                     }
                 }
                 responseResult(response, result);

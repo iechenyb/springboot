@@ -205,6 +205,7 @@ public class RedisTempalte {
 		}, index, key, value);
 	}
 
+
 	public void set(int index, String key, byte[] value) {
 		execute(new RedisCallback<String>() {
 			public String call(Jedis jedis, Object parms) {

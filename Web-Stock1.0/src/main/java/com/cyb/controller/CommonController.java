@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cyb.access.AccessLimit;
+import com.cyb.access.AccessLimitEl;
 import com.cyb.access.UserContext;
 import com.cyb.aop.ResultBean;
 import com.cyb.condition.ConditionService;
@@ -158,10 +161,31 @@ public class CommonController {
 		bindingResult.getFieldError().getDefaultMessage() : "right";
     }
 	
-	@GetMapping("access")
+	@GetMapping("accessNeedLogin")
     @ResponseBody
-    public String access( ){
-		return "userid is "+UserContext.getUserBean().getName();
+    @AccessLimit(maxCount=3,needLogin=true,seconds=60)
+    public String accessNeedLogin( ){
+		return "accessNeedLogin ";
+    }
+	/**
+	 * ddos访问限制
+	 *作者 : iechenyb<br>
+	 *方法描述: 说点啥<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@return
+	 */
+	@GetMapping("accessNoLogin")
+    @ResponseBody
+    @AccessLimit(maxCount=3,needLogin=false,seconds=60)
+    public String accessNoLogin( ){
+		return "accessNoLogin ";
+    }
+	
+	@GetMapping("accessNoLoginEl")
+    @ResponseBody
+    @AccessLimitEl(maxCount="ddos.test.maxCount",needLogin="ddos.test.needLogin",seconds="ddos.test.seconds")
+    public String accessNoLoginEL( ){
+		return "accessNoLogin ";
     }
 	/**
 	 * 
@@ -223,6 +247,16 @@ public class CommonController {
 		Map<String,Object> ret = new HashMap<String, Object>();
 		ret.put("name", name);
 		return ret;
+	}
+	
+	@Autowired
+	Environment env;
+	@ResponseBody
+	@GetMapping("environment")
+	public String readProperties(String path){
+		System.out.println(" threadname "+Thread.currentThread().getName());
+		System.out.println("====="+env.getProperty("${a.b.c}"));
+		return env.getProperty("a.b.c");
 	}
 }
 

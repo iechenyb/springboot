@@ -11,11 +11,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.cyb.po.MyUser;
 import com.cyb.redis.RedisTempalte;
 /**
  *作者 : iechenyb<br>
@@ -25,67 +27,70 @@ import com.cyb.redis.RedisTempalte;
 @Component
 public class AccessInterceptor extends HandlerInterceptorAdapter{
 	Log log = LogFactory.getLog(AccessInterceptor.class);
+	
 	@Autowired
 	RedisTempalte redisTempalte;
 	
+	@Autowired
+	Environment env;
+	
+	int index=3;
+	
+	@SuppressWarnings("unused")
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		log.info("preHandle "+request.getRequestURL());
 		HttpSession session = request.getSession();
 		String url_key = "DDOS:"+session.getId()+":"+request.getRequestURI();
-		int index=3;
+		
 		/*if(request.getSession().getAttribute("user")!=null){
 			UserContext.setUser((ValidBean)request.getSession().getAttribute("user"));
 			System.out.println("进入前置处理器 name="+UserContext.getUserBean().getName()+" age="+UserContext.getUserBean().getAge());
 		}*/
+		MyUser user = null;//登录用户，测试环境默认不登录
 		if(handler instanceof HandlerMethod){
-			if(redisTempalte.exists(index,url_key)){
-				int times = Integer.valueOf(redisTempalte.get(index, url_key));
-				if(times>5){//一分钟之内达到6次即拒绝访问
-					//访问次数过于频繁，异常提示
-					throw new Exception("访问过于频繁！");//抛出异常，统一处理
-				}else{
-					redisTempalte.incr(index, url_key);
-				}
+			HandlerMethod method = (HandlerMethod) handler;
+			if(method.hasMethodAnnotation(AccessLimit.class)){//普通注解
+				//获取访问限制注解
+				AccessLimit accessLimit = method.getMethodAnnotation(AccessLimit.class);
+				int seconds  = accessLimit.seconds();
+				int maxCount = accessLimit.maxCount();
+				boolean needLogin = accessLimit.needLogin();
+				accessCheck(seconds,maxCount,needLogin,url_key);
+			}else if(method.hasMethodAnnotation(AccessLimitEl.class)){//读取el
+				AccessLimitEl accessLimit = method.getMethodAnnotation(AccessLimitEl.class);
+				int seconds  = Integer.valueOf(env.getProperty(accessLimit.seconds()));
+				int maxCount = Integer.valueOf(env.getProperty(accessLimit.maxCount()));
+				boolean needLogin = Boolean.valueOf(env.getProperty(accessLimit.needLogin()));
+				accessCheck(seconds,maxCount,needLogin,url_key);
 			}else{
-				redisTempalte.set(index, url_key,"0");//默认有效期1分钟
+				 return true;//没有访问限制注解，则放行
 			}
-			/*HandlerMethod hm = (HandlerMethod) handler;
-			AccessLimit al = hm.getMethodAnnotation(AccessLimit.class);
-			if(al==null){
-				return true;
-			}*/
-			/*if(request.getRequestURI().contains("common/login")){//登录直接过
-				return true;
-			}
-			Object obj = request.getSession().getAttribute("user");
-			MyUser user = null;
-			if(obj != null){
-				user = (MyUser) obj;
-			}
-			System.out.println("设置的模拟用户信息"+user.getUser_id());
-			//获取用户并保存
-			UserContext.setUser(user);//后续方法都能获取当前对象
-			 */			/*
-			 * 
-			设置用户某请求的访问量，进行访问限制
-			int seconds  = al.seconds();
-			int maxCount = al.maxCount();
-			boolean needLogin = al.needLogin();
-			
-			String key = user.getUser_id()+"_"+request.getRequestURI();		
-			if(needLogin){
-				if(user==null){
-					render(response);
-				}else{
-					
-				}
-			}*/
 		}
 		return true;
 	}
 	
+	//设置用户某请求的访问量，进行访问限制
+	private boolean accessCheck(int seconds,int maxCount,boolean needLogin,String url_key) throws Exception{
+		if(needLogin){
+			throw new Exception("你尚未登录，请登录！");
+		}else{//次数限制测试
+			if(redisTempalte.exists(index,url_key)){
+				int times = Integer.valueOf(redisTempalte.get(index, url_key));
+				if(times>=maxCount){//一分钟之内达到6次即拒绝访问
+					//访问次数过于频繁，异常提示
+					throw new AccessRejectException("访问过于频繁！");//抛出异常，统一处理
+				}else{
+					redisTempalte.incr(index, url_key);
+					return true;
+				}
+			}else{
+				redisTempalte.set(index, url_key,"0",seconds);//默认有效期1分钟
+				return true;
+			}
+		}
+	}
 	@SuppressWarnings("unused")
 	private static boolean isStaticResources(String uri) {
 	    Pattern pattern = Pattern.compile("http://(?!(\\.jpg|\\.png)).+?(\\.jpg|\\.png)");

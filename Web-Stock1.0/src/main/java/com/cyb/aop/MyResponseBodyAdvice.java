@@ -23,10 +23,17 @@ import net.sf.json.JSONObject;
  */
 @ControllerAdvice
 public class MyResponseBodyAdvice implements ResponseBodyAdvice<Object> {
-
+    
 	@Override
 	public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
-		return true;
+		//获取当前处理请求的controller的方法
+        String methodName=methodParameter.getMethod().getName();
+        //方法的名称和返回值类型
+        System.out.println(methodName+"===="+methodParameter.getParameterType());
+        // 不拦截/不需要处理返回值 的方法
+        String type= "List"; //如登录
+        //不拦截包含list的返回值和登录请求
+        return !methodName.contains("login")&&!methodParameter.getParameterType().getSimpleName().contains(type);
 	}
 
 	@Override
@@ -40,16 +47,17 @@ public class MyResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 		// 增加内容不影响解析
 		if (a == null) {
 			return o;//非json请求放行
-		} else {
-			return customerReturnObject(o);
+		} else { 
+			return customerReturnObject(o) ;//customerReturnObject(o)
 		}
 	}
 	
 	public  Object customerReturnObject(Object o){
-		if (o.getClass().getSimpleName().contains("List")) {
+		System.out.println("返回值类型简单名称："+o.getClass().getSimpleName());
+		if (o.getClass().getSimpleName().equals("List")) {
 			JSONArray object = JSONArray.fromObject(o);
 			object.add("执行时间:"+TimeContext.getTime());
-			return object;
+			return o;//可以新增，但是对前台解析有影响， 元素类型不定
 		}else	 if (o.getClass().getSimpleName().contains("Map")) {// 集合对象直接添加值  
 			@SuppressWarnings("unchecked")
 			Map<Object, Object> ret = (Map<Object, Object>) o;
