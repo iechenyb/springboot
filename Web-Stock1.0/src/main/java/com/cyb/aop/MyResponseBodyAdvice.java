@@ -58,7 +58,7 @@ public class MyResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 			JSONArray object = JSONArray.fromObject(o);
 			object.add("执行时间:"+TimeContext.getTime());
 			return o;//可以新增，但是对前台解析有影响， 元素类型不定
-		}else	 if (o.getClass().getSimpleName().contains("Map")) {// 集合对象直接添加值  
+		}else	 if (o.getClass().getSimpleName().equals("Map")) {// 集合对象直接添加值  
 			@SuppressWarnings("unchecked")
 			Map<Object, Object> ret = (Map<Object, Object>) o;
 			ret.put("new", "value");

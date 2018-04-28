@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,11 +34,14 @@ import com.cyb.condition.ConditionService;
 import com.cyb.validate.bean.ValidBean;
 import com.google.common.collect.ImmutableMap;
 
+import io.swagger.annotations.Api;
+
 /**
  * 作者 : iechenyb<br>
  * 类描述: 说点啥<br>
  * 创建时间: 2017年12月7日
  */
+@Api("测试metrics")
 @RequestMapping("common")
 @Controller
 public class CommonController {
@@ -257,6 +261,21 @@ public class CommonController {
 		System.out.println(" threadname "+Thread.currentThread().getName());
 		System.out.println("====="+env.getProperty("${a.b.c}"));
 		return env.getProperty("a.b.c");
+	}
+	//=========================jmeter=================
+	@ResponseBody
+	@GetMapping("jemeter/get")
+	public String getJemeter(String id,String name){
+		System.out.println(" threadname "+Thread.currentThread().getName());
+		System.out.println("id="+id+",name"+name);
+		return "id="+id+",name="+name;
+	}
+	@ResponseBody
+	@PostMapping("jemeter/post")
+	public String postJmeter(String id,String name){
+		System.out.println(" threadname "+Thread.currentThread().getName());
+		System.out.println("====="+id+"====="+name);
+		return "id="+id+",name="+name;
 	}
 }
 

@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cyb.app.redis.RedisTempalte;
-import com.cyb.app.sk.dao.GoodsRepository;
 import com.cyb.app.sk.service.GoodsService;
 /**
  *作者 : iechenyb<br>
@@ -37,7 +36,7 @@ public class RedisGoodsServiceImpl implements GoodsService{
 		}
 		
 	}
-
+   
 	public int queryStock(String goodsName) {
 		Object stock =  redis.get(3,goodsName);
 		if(stock==null){

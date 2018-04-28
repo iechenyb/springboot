@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Pipeline;
+import redis.clients.jedis.Transaction;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 /**
@@ -199,7 +200,35 @@ public class RedisTempalte {
 			}
 		}, index, key, value);
 	}
+	
+	public String decrBy(int index, String key, Long value) {
+		return execute(new RedisCallback<String>() {
+			public String call(Jedis jedis, Object parms) {
+				String key = ((Object[]) parms)[1].toString();
+				Long value =Long.valueOf(((Object[]) parms)[2].toString());
+				return jedis.decrBy(key, value).toString();
+			}
+		}, index, key, value);
+	}
 
+	public String decrByCas(int index, final String key, Long value) {
+		return execute(new RedisCallback<String>() {
+			public String call(Jedis jedis, Object parms) {
+				jedis.watch(key);
+				Transaction transaction = jedis.multi();  
+				String key = ((Object[]) parms)[1].toString();
+				long value =Long.valueOf(((Object[]) parms)[2].toString());
+				long re = Long.valueOf(transaction.decrBy(key, value).toString());
+				List<Object> object = transaction.exec();
+				System.out.println("执行结果 "+re+", rs:"+object);
+				if(object==null){
+					return "0";
+				}else{
+					return "1";
+				}
+			}
+		}, index, key, value);
+	}
 
 	public void set(int index, String key, byte[] value) {
 		execute(new RedisCallback<String>() {
@@ -230,7 +259,8 @@ public class RedisTempalte {
 				String key = ((Object[]) parms)[1].toString();
 				String value = ((Object[]) parms)[2].toString();
 				String seconds = ((Object[]) parms)[3].toString();
-				jedis.setex(key, Integer.parseInt(seconds), value);
+				jedis.set(key, value);
+				jedis.expire(key, Integer.parseInt(seconds));
 				return null;
 			}
 		}, index, key, value, seconds);
@@ -347,6 +377,9 @@ public class RedisTempalte {
 			}
 		}, index, key);
 	}
+	
+	
+	
 
 	public void sadd(int index, String key, String value) {
 		execute(new RedisCallback<String>() {

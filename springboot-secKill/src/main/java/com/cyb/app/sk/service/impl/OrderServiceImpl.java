@@ -13,7 +13,7 @@ import com.cyb.app.sk.service.OrderService;
  *类描述: 说点啥<br>
  *创建时间: 2018年4月26日
  */
-@Service
+@Service("orderServiceImpl")
 public class OrderServiceImpl implements OrderService{
 	Log log = LogFactory.getLog(OrderServiceImpl.class);
 	

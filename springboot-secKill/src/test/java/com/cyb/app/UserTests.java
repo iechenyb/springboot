@@ -39,7 +39,8 @@ public class UserTests {
 	@Resource(name="redisGoodsServiceImpl")
 	private GoodsService goodsService;
 	
-	@Autowired
+	//@Autowired
+	@Resource(name="redisOrderServiceImpl")
 	private OrderService orderService;
 	
 	
@@ -68,7 +69,7 @@ public class UserTests {
 			user_.setPassword("123456");
 			user_.setToken(UUIDUtils.getUUID());
 			FileUtils.appendString2File(user_.getToken()+","+user_.getUsername()+"\n", file.getAbsolutePath());
-			userRepository.save(user_);
+			//userRepository.save(user_);
 		}
 	}
 	

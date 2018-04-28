@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
  *类描述: 说点啥<br>
  *创建时间: 2018年4月19日
  */
+import org.springframework.web.client.RestTemplate;
 
 import com.cyb.po.MyUser;
 import com.cyb.validate.bean.ValidBean;
@@ -16,7 +17,6 @@ public class UserContext {
 	public static void setUser(MyUser user){
 		userHolder.set(user);
 	}
-	
 	public static MyUser getUser(){
 		return userHolder.get();
 	}
