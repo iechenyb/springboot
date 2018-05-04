@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -216,6 +217,26 @@ public class CommonController {
 	@ResponseBody
 	@GetMapping("list")
 	public List<String> list( String name){
+		System.out.println(" threadname "+Thread.currentThread().getName());
+		ArrayList<String> arr = new ArrayList<String>(); 
+		arr.add(name);
+		return arr;
+	}
+	
+	@ResponseBody
+	@GetMapping("corGet")
+	@CrossOrigin
+	public List<String> crossO1( String name){
+		System.out.println(" threadname "+Thread.currentThread().getName());
+		ArrayList<String> arr = new ArrayList<String>(); 
+		arr.add(name);
+		return arr;
+	}
+	
+	@ResponseBody
+	@PostMapping("corPost")
+	@CrossOrigin
+	public List<String> crossO2( String name){
 		System.out.println(" threadname "+Thread.currentThread().getName());
 		ArrayList<String> arr = new ArrayList<String>(); 
 		arr.add(name);
