@@ -181,6 +181,9 @@ public class WebControllerAop {
 		 * =(MethodSignature) proceedingJoinPoint.getSignature(); retCls =
 		 * methodSignature.getReturnType(); }
 		 */
+		//获取request
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        System.out.println("request uri  "+request.getRequestURI());
 		Method curMethod = AopUtils.getMethod(proceedingJoinPoint);
 		curMethod.isAnnotationPresent(RequestMapping.class);// 判断
 		Log log_ = AopUtils.getLog(proceedingJoinPoint);// 获取目标类curMethod.getDeclaringClass()

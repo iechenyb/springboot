@@ -7,21 +7,31 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.cyb.rule.ResultBean;
+import com.cyb.rule.UserVO;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 /**
  * 
  * @author iechenyb
  * 根据实际环境选择最佳的服务方
  * http://localhost:8884/service-ribbon/m1?a=3&b=2 通过路由进行负载均衡
  * http://localhost:8884/service-ribbon/m2?a=3&b=2 手动设置调用规则
+ * swagger 对restfull注解不支持
  */
-@RestController
+@Controller
+@Api(tags="miaosha controller")
+@RequestMapping("miaosha")
 public class SecKillController {
     Log log = LogFactory.getLog(getClass());
     
@@ -41,7 +51,10 @@ public class SecKillController {
      *@return
      */
     @SuppressWarnings("unchecked")
-	@RequestMapping(value = "/buys", method = RequestMethod.GET)
+    @ApiOperation(value = "秒杀接口描述",notes="秒杀接口notes")
+    //(tags="miao sha interface",value="秒杀接口描述")//会与controller同层级展示
+	@PostMapping(value = "/buys")
+    @ResponseBody
     public  ResultBean<Map<String, Object>> miaosha(String token, long userId, String goodsName, int buys,HttpServletRequest req) {
     	//http://localhost:8881/sk/buy?token=1&userId=1&goodsName=1&buys=1 
     	String uri = "/sk/buy?token="+token+"&userId="+userId+"&goodsName="+goodsName+"&buys="+buys;
@@ -50,16 +63,60 @@ public class SecKillController {
     
     @SuppressWarnings("unchecked")
 	@GetMapping("/initStock")
-	public ResultBean<Map<String, Object>> initGoods(String goodsName, int prdNum,HttpServletRequest request) {
+    @ApiOperation(value = "初始化库存")
+   /* @ApiImplicitParams({
+    	@ApiImplicitParam(value="商品名称",dataType="String",required=true,paramType="query"),
+    	@ApiImplicitParam(value="商品数量",dataType="int",required=true,paramType="query"),	
+    })*/
+    @ResponseBody
+	public ResultBean<Map<String, Object>> initGoods(
+			@ApiParam(value="商品名称")  @RequestParam String goodsName
+			,@ApiParam(value="商品数量")  @RequestParam int prdNum) {
+    	   String method="web-method-defined";
+    	   /*
+    	   用户在传递参数的时候，
+    	   使用a访问正常，如果动态的更新
+    	   每一个ajax请求都对应一个硬编码
+    	   */
+    	   //initStock
+    	   //method a1  获取
+    	   if(method=="a1"){ //post
+    		   
+    	   }
+    	 //restTemplate.postForEntity(url, request, responseType); post 请求
     	String uri = "/sk/initStock?goodsName="+goodsName+"&prdNum="+prdNum;
     	return restTemplate.getForEntity("http://"+serviceId+uri, ResultBean.class).getBody();
 	}
     
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	@GetMapping("/readResult")
-	public ResultBean<Map<String, Object>> result(String goodsName,HttpServletRequest request) {
+    @ApiOperation(value = "读取库存和销售量")
+    @ResponseBody
+	public ResultBean<Map<String, Object>> result(
+			@ApiParam(value="商品名称") @RequestParam String goodsName,HttpServletRequest request) {
     	String uri = "/sk/readResult?goodsName="+goodsName;
     	return restTemplate.getForEntity("http://"+serviceId+uri, ResultBean.class).getBody();
+	}
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 为了对普通的对象进行字段解析。<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param goodsName
+	 *@param request
+	 *@return
+	 */
+	@GetMapping("/readVo")
+    @ApiOperation(value = "读取库存和销售量")
+	@ResponseBody
+	public UserVO readVo(
+			@ApiParam(value="商品名称") @RequestParam String goodsName, int throwEx) {
+        UserVO vo = new UserVO();
+        vo.setName(goodsName);
+        if(throwEx==1){
+        	System.out.println("xx="+(1/0));
+        }
+    	return vo;
 	}
     
 }

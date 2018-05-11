@@ -22,14 +22,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cyb.access.AccessLimit;
 import com.cyb.access.AccessLimitEl;
-import com.cyb.access.UserContext;
 import com.cyb.aop.ResultBean;
 import com.cyb.condition.ConditionService;
 import com.cyb.validate.bean.ValidBean;
@@ -45,6 +44,7 @@ import io.swagger.annotations.Api;
 @Api("测试metrics")
 @RequestMapping("common")
 @Controller
+@CrossOrigin//类方法上添加跨域
 public class CommonController {
 
 	@Autowired
@@ -298,8 +298,56 @@ public class CommonController {
 		System.out.println("====="+id+"====="+name);
 		return "id="+id+",name="+name;
 	}
+//=========================jmeter=================
+@ResponseBody
+@GetMapping("get")
+public String get(String id,String name,String method){
+	System.out.println(" threadname "+Thread.currentThread().getName());
+	System.out.println("id="+id+",name"+name);
+	return "id="+id+",name="+name;
 }
 
+@ResponseBody
+@PostMapping("post1")
+public String post(String id,String name,String method){
+	System.out.println(" threadname "+Thread.currentThread().getName());
+	System.out.println("====="+id+"====="+name);
+	return "id="+id+",name="+name;
+}
+
+@ResponseBody
+@PostMapping("post2")
+public String postBody(@RequestBody ParamBody body ){
+	System.out.println(" threadname "+Thread.currentThread().getName());
+	System.out.println("====="+body.getId()+"====="+body.getName());
+	return "id="+body.getId()+",name="+body.getName();
+}
+}
+
+class ParamBody{
+	String id;
+	String name;
+	String method;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getMethod() {
+		return method;
+	}
+	public void setMethod(String method) {
+		this.method = method;
+	}
+	
+}
 class User{
 	private String name;
     public User(String name){

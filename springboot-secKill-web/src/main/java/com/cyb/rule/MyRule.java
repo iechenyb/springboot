@@ -24,9 +24,9 @@ public class MyRule implements IRule {
 		int rnum = r.nextInt(10);
 		List<Server> servers = lb.getAllServers();
 		if (rnum > 7) {//随机数大于7是用8081，其余用8082
-			return getServerByPort(servers, 8081);
+			return getServerByPort(servers, 8881);
 		}
-		return getServerByPort(servers, 8082);
+		return getServerByPort(servers, 8882);
 	}
 
 	public Server getServerByPort(List<Server> servers, int port) {

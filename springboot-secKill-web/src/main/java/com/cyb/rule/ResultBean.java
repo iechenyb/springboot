@@ -2,11 +2,15 @@ package com.cyb.rule;
 
 import java.io.Serializable;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 作者 : iechenyb<br>
  * 类描述: http://blog.didispace.com/cxy-wsm-zml-2/<br>
  * 创建时间: 2018年1月10日
  */
+@ApiModel(value="统一返回对象",description="统一的返回值定义方式")
 public class ResultBean<T> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -16,11 +20,14 @@ public class ResultBean<T> implements Serializable {
 	public static final int FAIL = 0;
 
 	public static final int NO_PERMISSION = 2;
-
+	
+	@ApiModelProperty(value="执行结果",name="msg",example="执行成功！")
 	private String msg = "success";
-
+	
+	@ApiModelProperty(value="执行状态",name="code",example="0 失败 1成功 ")
 	private int code = SUCCESS;
-
+	
+	@ApiModelProperty(value="数据体",name="data",example="任意类型数据集合")
 	private T data;
 
 	public ResultBean() {
