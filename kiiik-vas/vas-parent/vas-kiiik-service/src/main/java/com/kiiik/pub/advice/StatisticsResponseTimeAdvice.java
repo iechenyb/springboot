@@ -1,23 +1,22 @@
 package com.kiiik.pub.advice;
 
-import java.util.Map;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import com.kiiik.config.SwitchProperties;
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.context.TimeContext;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 
@@ -29,7 +28,9 @@ import net.sf.json.JSONObject;
  */
 @ControllerAdvice
 public class StatisticsResponseTimeAdvice implements ResponseBodyAdvice<Object> {
-    
+	Log logger = LogFactory.getLog(StatisticsResponseTimeAdvice.class);
+	@Autowired
+	SwitchProperties switchPro;
 	@Override
 	public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
         return true;
@@ -53,8 +54,10 @@ public class StatisticsResponseTimeAdvice implements ResponseBodyAdvice<Object> 
 	}
 	
 	public  Object customerReturnObject(Object o){
-		if(o==null){ return o;}
-		System.out.println("进入时间统计方法："+o.getClass().getSimpleName());
+		if(o==null){ 
+			return o;
+		}
+		logger.info("进入时间统计方法："+o.getClass().getSimpleName());
 		/*if (o.getClass().getSimpleName().equals("List")) {
 			JSONArray object = JSONArray.fromObject(o);
 			object.add("执行时间:"+TimeContext.getTime());
@@ -72,7 +75,8 @@ public class StatisticsResponseTimeAdvice implements ResponseBodyAdvice<Object> 
 			System.out.println("json data:" + object);
 			object.put("time", TimeContext.getTime());
 			return object.toString();// 直接返回object则报错！
-		} else*/ if(o.getClass().getSimpleName().contains("ResultBean")){
+		} else*/ 
+		if(o.getClass().getSimpleName().contains("ResultBean")){
 			//自定义对象上新增一个参数，也可以，不需要在其他bean上定义一个time字段
 			@SuppressWarnings("unchecked")
 			ResultBean<Object> ret = (ResultBean<Object>) o;
@@ -80,13 +84,17 @@ public class StatisticsResponseTimeAdvice implements ResponseBodyAdvice<Object> 
 				ret.setData("");
 			}
 			JSONObject object = JSONObject.fromObject(o);
-			object.put("time", TimeContext.getTime());
+			if(switchPro.isShowControllerTime()){
+				object.put("time", TimeContext.getTime());
+			}
 			return object;
 		} else if(o.getClass().getSimpleName().contains("VO")) {
 			ResultBean<Object> ret  = new ResultBean<Object>();
-			ret.data(o).success().msg("执行成功");
+			ret.data(o).success("执行成功");
 			JSONObject object = JSONObject.fromObject(ret);
-			object.put("time", TimeContext.getTime());
+			if(switchPro.isShowControllerTime()){
+				object.put("time", TimeContext.getTime());
+			}
 			return object;
 		}else
 		{ //如果视图包含vo，则将vo扔到集合里边

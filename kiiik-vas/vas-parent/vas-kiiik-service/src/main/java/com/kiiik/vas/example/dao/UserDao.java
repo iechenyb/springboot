@@ -5,7 +5,7 @@ import com.kiiik.vas.example.model.MyUser;
 
 /**
  *作者 : iechenyb<br>
- *类描述: 说点啥<br>
+ *类描述: 将sql写到配置文件中<br>
  *创建时间: 2018年5月4日
  */
 public interface UserDao {

@@ -14,7 +14,7 @@ import com.kiiik.vas.example.model.MyUser;
 
 /**
  * 作者 : iechenyb<br>
- * 类描述: 说点啥<br>
+ * 类描述: sql直接写在注解方法上<br>
  * 创建时间: 2018年5月11日
  */
 @Mapper

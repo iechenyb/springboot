@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.exception.VasException;
 import com.kiiik.vas.example.model.MyUser;
 import com.kiiik.vas.example.service.MyUserServiceImpl2;
@@ -69,4 +70,19 @@ public class MapperController {
 		userService.delete(id);
 		return "删除成功";
 	}
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping("page")
+	@ResponseBody
+	public ResultBean<List<MyUser>> queryByPage(int pageIndex,int pageSize) {
+		if(pageIndex<=0){
+			return new ResultBean<>().fail("页面序号必须大于0");
+		}
+		if(pageSize<=0){
+			return new ResultBean<>().fail("没页记录数必须大于0");
+		}
+		
+		return new ResultBean<>().data(userService.selectMyUserByPage(pageIndex,pageSize));
+	}
+	
 }

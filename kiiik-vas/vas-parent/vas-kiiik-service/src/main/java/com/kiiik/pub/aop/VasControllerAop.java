@@ -35,7 +35,6 @@ import com.kiiik.pub.context.TimeContext;
 @Order(5)
 public class VasControllerAop {
 	Log log = LogFactory.getLog(VasControllerAop.class);
-	
 
 	// 如果有些controller方法不是浏览器发起，二是controller回调的，request可能为空！
 	@Pointcut("execution(* com.kiiik.vas..*.*(..))")
@@ -76,9 +75,9 @@ public class VasControllerAop {
 
 	public void doAfterThrowingAdvice(JoinPoint joinPoint, Throwable exception) {
 		// 目标方法名：
-		System.out.println(joinPoint.getSignature().getName());
+		log.info(joinPoint.getSignature().getName());
 		if (exception instanceof NullPointerException) {
-			System.out.println("发生了空指针异常!!!!!");
+			log.info("发生了空指针异常!!!!!");
 		}
 	}
 
@@ -86,9 +85,9 @@ public class VasControllerAop {
 		// 目标方法名：
 		if (exception instanceof NullPointerException) {
 			NullPointerException e = (NullPointerException) exception;
-			System.out.println("发生了空指针异常!!!!!" + e.getMessage());
+			log.error("发生了空指针异常!!!!!" + e.getMessage());
 		} else {
-			System.out.println("发生了异常！" + exception.getMessage());
+			log.error("发生了异常！" + exception.getMessage());
 		}
 
 		if (retType == null) {

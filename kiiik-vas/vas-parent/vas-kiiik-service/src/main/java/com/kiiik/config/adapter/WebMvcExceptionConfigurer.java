@@ -30,7 +30,7 @@ public class WebMvcExceptionConfigurer extends WebMvcConfigurerAdapter {
         exceptionResolvers.add(new HandlerExceptionResolver() {
             @Override
             public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) {
-                logger.info("进入全局异常处理逻辑......"+e.getMessage());
+                logger.error("进入全局异常处理逻辑......"+e.getMessage());
             	ResultBean<String> result = new ResultBean<String>();
             	result.fail();
             	result.data("");

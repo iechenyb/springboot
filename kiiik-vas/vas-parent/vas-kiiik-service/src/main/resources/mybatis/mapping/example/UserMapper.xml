@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 类型可以不用带 -->
 <mapper namespace="com.kiiik.vas.example.dao.UserDao" >
     <resultMap id="BaseResultMap" type="com.kiiik.vas.example.model.MyUser" >
         <result column="account" property="account"  jdbcType="VARCHAR" />
@@ -11,7 +12,7 @@
         select
         <include refid="Base_Column_List" />
         from t_user
-        where account = #{id,jdbcType=VARCHAR}
+        where account = #{id}
     </select>
     
      <select id="getAllUser" resultMap="BaseResultMap" >

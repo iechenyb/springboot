@@ -16,7 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
- *创建时间: 2017年12月13日
+ *创建时间: 2018年5月14日
  */
 @Configuration
 @EnableSwagger2

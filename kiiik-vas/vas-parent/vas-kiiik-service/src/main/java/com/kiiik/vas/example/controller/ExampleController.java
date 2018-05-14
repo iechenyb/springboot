@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.logging.Log;
@@ -17,7 +16,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -147,5 +145,17 @@ public class ExampleController {
 	public String delete(Integer id) {
 		userService.delete(id);
 		return "删除成功";
+	}
+	@SuppressWarnings("unchecked")
+	@GetMapping("page")
+	@ResponseBody
+	public ResultBean<List<MyUser>> queryByPage(int pageIndex,int pageSize) {
+		if(pageIndex<=0){
+			return new ResultBean<>().fail("页面序号必须大于0");
+		}
+		if(pageSize<=0){
+			return new ResultBean<>().fail("没页记录数必须大于0");
+		}
+		return new ResultBean<>().data(userService.selectMyUserByPage(pageIndex,pageSize));
 	}
 }
