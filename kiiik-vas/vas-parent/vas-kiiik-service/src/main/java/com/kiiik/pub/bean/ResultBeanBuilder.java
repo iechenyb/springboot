@@ -13,7 +13,10 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value="统一返回对象",description="统一的返回值定义方式")
 public class ResultBeanBuilder<T> implements Serializable {
 
-	private  final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public  final int SUCCESS = 1;
 
