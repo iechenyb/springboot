@@ -1,0 +1,4 @@
+1 在指定的文件夹上创建一个目录，用来创建工程，不如vas-parent
+2 new project -maven project - simple project-指定上方的vas-parent目录，点击创建完成。
+3 https://www.cnblogs.com/h--d/p/6001366.html
+点击vas-parent 创建模块工程
