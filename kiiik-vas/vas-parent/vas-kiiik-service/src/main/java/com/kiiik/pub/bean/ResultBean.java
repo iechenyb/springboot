@@ -38,7 +38,6 @@ public class ResultBean<T> extends BaseResult implements Serializable {
 	public ResultBean(Throwable e) {
 		super();
 		this.msg = e.toString();
-		this.code = FAIL;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -54,7 +53,6 @@ public class ResultBean<T> extends BaseResult implements Serializable {
 	}
 	@SuppressWarnings("rawtypes")
 	public ResultBean data(T data) {
-		this.code = SUCCESS;
 		this.data = data;
 		return this;
 	}

@@ -15,11 +15,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.exception.MyException1;
 import com.kiiik.pub.exception.VasException;
 import com.kiiik.vas.example.model.MyUser;
 import com.kiiik.vas.example.param.ValidBean;
@@ -89,6 +92,31 @@ public class ExampleController {
 		bindingResult.getFieldError().getDefaultMessage() : "right";*/
 		return new ResultBean<List<ObjectError>>().data(errorList).success();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@PostMapping("/jsr303formJson")
+	public ResultBean<List<ObjectError>> validateFormJson(
+			@Valid  @ModelAttribute  @RequestBody ValidBean bean,
+			BindingResult bindingResult) {
+		 Map<String, Object> map = new HashMap<String, Object>();
+		 List<ObjectError> errorList = bindingResult.getAllErrors();
+	        if (bindingResult.hasErrors()) {
+	            List<String> mesList=new ArrayList<String>();
+	            for (int i = 0; i < errorList.size(); i++) {
+	                mesList.add(errorList.get(i).getDefaultMessage());
+	            }
+	            map.put("status", false);
+	            map.put("error", mesList);
+	        }
+	        if(errorList == null) errorList = new ArrayList<ObjectError>();
+	        System.out.println("验证结果："+map);
+	     /*		for(FieldError error : bindingResult.getFieldErrors()){
+		    System.out.println(error.getField()+"=="+error.getDefaultMessage()+"==="+error.getCode());
+	     }
+        String msg =  bindingResult.hasErrors() ? 
+		bindingResult.getFieldError().getDefaultMessage() : "right";*/
+		return new ResultBean<List<ObjectError>>().data(errorList).success();
+	}
 	/**
 	 * 
 	 *作者 : iechenyb<br>
@@ -111,6 +139,14 @@ public class ExampleController {
 	public ResultBean<String> sayHello(String name,int integer) throws  VasException {
 		if(integer ==1){
 			return new ResultBean<String>("类型错误").fail();
+		}
+		return new ResultBean<String>("hello "+name).success();
+	}
+	@SuppressWarnings("unchecked")
+	@GetMapping("/exthrow")//当integer为字符串时，统一处理可以获取异常信息
+	public ResultBean<String> exThrow(String name,int integer) throws  MyException1 {
+		if(integer ==1){
+			throw new MyException1("类型错误");//抛出异常后，返回值直接为空！！！！
 		}
 		return new ResultBean<String>("hello "+name).success();
 	}

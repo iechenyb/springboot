@@ -12,9 +12,12 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.exception.VasException;
+import com.kiiik.utils.ResponseUtils;
 
 import net.sf.json.JSONObject;
 /**
@@ -25,6 +28,11 @@ import net.sf.json.JSONObject;
 @Configuration
 public class WebMvcExceptionConfigurer extends WebMvcConfigurerAdapter {
 	Log logger = LogFactory.getLog(WebMvcExceptionConfigurer.class);
+	/*@Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html");
+        super.addResourceHandlers(registry);
+    }*/
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
         exceptionResolvers.add(new HandlerExceptionResolver() {
@@ -33,13 +41,13 @@ public class WebMvcExceptionConfigurer extends WebMvcConfigurerAdapter {
                 logger.error("进入全局异常处理逻辑......"+e.getMessage());
             	ResultBean<String> result = new ResultBean<String>();
             	result.fail();
-            	result.data("");
+            	result.data("error");
                 if (handler instanceof HandlerMethod) {
                     HandlerMethod handlerMethod = (HandlerMethod) handler;
-                    /*if (e instanceof ArithmeticException) {//业务失败的异常，如“账号或密码错误”
-                        result.setMsg("ArithmeticException "+e .getMessage());
+                 if (e instanceof VasException) {//业务失败的异常，如“账号或密码错误”
+                        result.setMsg("VasException[自定义业务逻辑异常] "+e .getMessage());
                         logger.error(e .getMessage());
-                    } else   if (e instanceof NullPointerException) {//业务失败的异常，如“账号或密码错误”
+                    } else {  /* else   if (e instanceof NullPointerException) {//业务失败的异常，如“账号或密码错误”
                     	result.setMsg("空指针异常 "+e .getMessage());
                         logger.error(e .getMessage());
                     } else {
@@ -58,29 +66,20 @@ public class WebMvcExceptionConfigurer extends WebMvcConfigurerAdapter {
                             handlerMethod.getMethod().getName(),
                             e.getMessage());
                     logger.error(message, e);
+                    }
                 } else {
                     if (e instanceof NoHandlerFoundException) {
                         result.setCode(0);
                         result.setMsg("接口 [" + request.getRequestURI() + "] 不存在");
                     } else {
-                        result.setCode(0);
+                        result.fail("system error");
                         result.setMsg(e.getMessage());
                         logger.error(e.getMessage(), e);
                     }
                 }
-                responseResult(response, result);
+                ResponseUtils.writeResult(response, result);
                 return new ModelAndView();
             }
         });
-    }
-   private void responseResult(HttpServletResponse response, ResultBean<String> result) {
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Content-type", "application/json;charset=UTF-8");
-        response.setStatus(200);
-        try {
-            response.getWriter().write(JSONObject.fromObject(result).toString());
-        } catch (IOException ex) {
-            logger.error(ex.getMessage());
-        }
     }
 }

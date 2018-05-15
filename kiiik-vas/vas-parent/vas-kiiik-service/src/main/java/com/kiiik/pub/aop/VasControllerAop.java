@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.context.TimeContext;
+import com.kiiik.utils.AopUtils;
 
 /**
  * 作者 : iechenyb<br>
@@ -110,24 +111,33 @@ public class VasControllerAop {
 			}
 		}
 	}
-
+    /**
+     * 
+     *作者 : iechenyb<br>
+     *方法描述: 异常直接抛出，不在控制逻辑里处理！<br>
+     *创建时间: 2017年7月15日hj12
+     *@param proceedingJoinPoint
+     *@return
+     *@throws Throwable
+     */
 	@Around(value = "executeService()")
 	public Object doAroundAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		Object obj = null;
+		/*Method curMethod = AopUtils.getMethod(proceedingJoinPoint);
 		try {// obj之前可以写目标方法执行前的逻辑
-			long s =System.currentTimeMillis();
+*/			long s =System.currentTimeMillis();
 			obj = proceedingJoinPoint.proceed();// 调用执行目标方法
 			long e =System.currentTimeMillis();
 			TimeContext.setTime(e-s);
 			return obj;
-		} catch (Exception throwable) {
+		/*} catch (Exception throwable) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(proceedingJoinPoint.getTarget().getClass().getName() + " : "
 					+ Arrays.toString(proceedingJoinPoint.getArgs()) + " in "
 					+ proceedingJoinPoint.getSignature().getName() + "()");
 			throwable.printStackTrace();
-			return null;
-		}
+			return doAfterThrowingAdvice(throwable,curMethod.getClass());
+		}*/
 
 	}
 

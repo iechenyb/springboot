@@ -1,6 +1,7 @@
 package com.kiiik.pub.context;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.util.StringUtils;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
@@ -14,6 +15,9 @@ public class TimeContext {
 	}
 	
 	public static long getTime(){
+		if(StringUtils.isEmpty(timeHolder.get())){
+			return 0L;
+		}
 		return timeHolder.get();
 	}
 	
