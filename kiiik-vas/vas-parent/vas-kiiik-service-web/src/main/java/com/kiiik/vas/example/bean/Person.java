@@ -1,4 +1,4 @@
-package com.kiiik.vas.pub.bean;
+package com.kiiik.vas.example.bean;
 
 /**
  *作者 : iechenyb<br>

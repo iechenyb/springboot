@@ -6,4 +6,5 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>vas-api</artifactId>
+  <version>1.0.0</version>
 </project>

@@ -1,4 +1,4 @@
-package com.kiiik.vas.pub.service;
+package com.kiiik.vas.example.service;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.cache.annotation.CacheEvict;
@@ -6,7 +6,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.kiiik.vas.pub.bean.Person;
+import com.kiiik.vas.example.bean.Person;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>

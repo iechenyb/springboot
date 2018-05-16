@@ -30,5 +30,20 @@
 		<artifactId>spring-cloud-starter-eureka</artifactId>
 		 <version>1.4.0.RELEASE</version>
 	</dependency>
+	 <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-feign</artifactId>
+      <version>1.4.0.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-ribbon</artifactId>
+       <version>1.4.0.RELEASE</version>
+    </dependency>
+	<dependency>
+			<groupId>com.kiiik</groupId>
+			 <artifactId>vas-api</artifactId>
+  			 <version>1.0.0</version>
+		</dependency>
 	</dependencies>
 </project>

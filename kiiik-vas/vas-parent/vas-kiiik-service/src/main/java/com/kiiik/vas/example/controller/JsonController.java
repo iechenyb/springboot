@@ -6,16 +6,14 @@ import javax.validation.Valid;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kiiik.pub.bean.ResultBean;
-import com.kiiik.pub.exception.VasException;
 import com.kiiik.utils.ParamterUtils;
 import com.kiiik.vas.example.model.RQ;
 import com.kiiik.vas.example.model.User;
@@ -52,7 +50,6 @@ public class JsonController {
 	 *@param user
 	 *@return
 	 */
-	@ResponseBody  
 	@PostMapping(value="addUser")
 	public User addUser(@RequestBody User user) {        
 	    return user;  
@@ -66,7 +63,6 @@ public class JsonController {
 	 *@param arrStr
 	 *@return
 	 */
-	@ResponseBody  
 	@PostMapping(value="arrStr")
 	public List<String> addUser(@RequestBody List<String> arrStr) {        
 	    return arrStr;  
@@ -80,7 +76,6 @@ public class JsonController {
 	 *@param arrStr
 	 *@return
 	 */
-	@ResponseBody  
 	@PostMapping(value="rqPost")
 	@ApiOperation(value = "趋势规模数据接口", notes = "注意问题点")
 	public  ResultBean<RQ> addUserPost(@Valid  @RequestBody RQ rq,BindingResult bindingResult){
@@ -92,7 +87,6 @@ public class JsonController {
 		}
 	    return new ResultBean<RQ>(rq);  
 	}    
-	@ResponseBody  
 	@GetMapping(value="rqGet")
 	@ApiOperation(value = "趋势规模数据接口", notes = "注意问题点")
 	public  ResultBean<RQ> addUserGet(RQ rq,BindingResult bindingResult){
@@ -103,5 +97,9 @@ public class JsonController {
 			e.printStackTrace();
 		}
 	    return new ResultBean<RQ>(rq);  
-	}    
+	}   
+	@GetMapping("/sayHello")
+	public String localMethodName(@RequestParam("words") String words){
+		return "Hi "+words;
+	}
 }

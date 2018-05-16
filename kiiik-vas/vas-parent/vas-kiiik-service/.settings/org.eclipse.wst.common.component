@@ -4,6 +4,9 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="vas-api-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/vas-api/vas-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="vas-kiiik-service"/>
         <property name="java-output-path" value="/vas-kiiik-service/target/classes"/>
     </wb-module>

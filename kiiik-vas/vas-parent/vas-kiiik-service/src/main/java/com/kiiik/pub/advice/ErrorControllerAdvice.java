@@ -1,4 +1,4 @@
-package com.kiiik.pub.exception;
+package com.kiiik.pub.advice;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
