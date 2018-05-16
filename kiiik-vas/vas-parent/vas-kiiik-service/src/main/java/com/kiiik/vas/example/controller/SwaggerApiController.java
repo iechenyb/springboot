@@ -33,6 +33,6 @@ public class SwaggerApiController {
 	@ApiOperation(value = "方法描述信息", notes = "注意问题点")
 	@GetMapping("/methodTwo")
 	public ValidBeanVO methodTwo(@ModelAttribute ValidBeanVO bean) {
-		return bean;
+		return bean;//测试返回值描述，查看bean定义
 	}
 }

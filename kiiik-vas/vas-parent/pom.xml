@@ -80,5 +80,6 @@
   	<module>vas-api</module>
   	<module>vas-kiiik-service</module>
   	<module>vas-newkiiik-service</module>
+  	<module>vas-kiiik-service-web</module>
   </modules>
 </project>

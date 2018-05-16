@@ -134,21 +134,90 @@ public class ExampleController {
 		}
 		return new ResultBean<String>("hello "+name).success();
 	}
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 手动封装异常信息直接返回！<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param th
+	 *@return
+	 *@throws VasException
+	 */
 	@SuppressWarnings("unchecked")
-	@GetMapping("/ex")//当integer为字符串时，统一处理可以获取异常信息
-	public ResultBean<String> sayHello(String name,int integer) throws  VasException {
-		if(integer ==1){
+	@GetMapping("/exResultBean")//当integer为字符串时，统一处理可以获取异常信息
+	public ResultBean<String> exResultBean(boolean th) throws  VasException {
+		if(th){
 			return new ResultBean<String>("类型错误").fail();
 		}
-		return new ResultBean<String>("hello "+name).success();
+		return new ResultBean<String>("hello ").success();
 	}
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 运行时异常，自动抛出异常<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param th
+	 *@return
+	 *@throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@GetMapping("/throwJvmEx")//当integer为字符串时，统一处理可以获取异常信息
+	public ResultBean<String> throwJvmEx(boolean th) throws Exception {
+		if(th){
+			System.out.println("aa="+1/0);
+		}
+		return new ResultBean<String>("hello ").success();
+	}
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 抛出JVM定义的底层的异常<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param th
+	 *@return
+	 *@throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@GetMapping("/throwRunJvmEx")//当integer为字符串时，统一处理可以获取异常信息
+	public ResultBean<String> throwRunJvmEx(boolean th) throws  Exception {
+		if(th){
+			throw new NullPointerException("空指针");
+		}
+		return new ResultBean<String>("hello ").success();
+	}
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 抛出自定义子类型异常<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param th
+	 *@return
+	 *@throws MyException1
+	 */
 	@SuppressWarnings("unchecked")
 	@GetMapping("/exthrow")//当integer为字符串时，统一处理可以获取异常信息
-	public ResultBean<String> exThrow(String name,int integer) throws  MyException1 {
-		if(integer ==1){
+	public ResultBean<String> exThrow(boolean th) throws  MyException1 {
+		if(th){
 			throw new MyException1("类型错误");//抛出异常后，返回值直接为空！！！！
 		}
-		return new ResultBean<String>("hello "+name).success();
+		return new ResultBean<String>("hello ").success();
+	}
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述:抛出自定义基础类型异常<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param th
+	 *@return
+	 *@throws VasException
+	 */
+	@SuppressWarnings("unchecked")
+	@GetMapping("/exBaseThrow")//当integer为字符串时，统一处理可以获取异常信息
+	public ResultBean<String> exBaseThrow(boolean th) throws  VasException {
+		if(th){
+			throw new VasException("类型错误");//抛出异常后，返回值直接为空！！！！
+		}
+		return new ResultBean<String>("hello ").success();
 	}
 	@GetMapping("get")
 	public MyUser getUser(String acc) {
