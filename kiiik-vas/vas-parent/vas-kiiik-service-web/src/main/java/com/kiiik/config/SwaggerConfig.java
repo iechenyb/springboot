@@ -1,4 +1,4 @@
-package com.kiiik.vas.config;
+package com.kiiik.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

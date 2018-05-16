@@ -19,21 +19,11 @@ import io.swagger.annotations.ApiOperation;
  *类描述: 说点啥<br>
  *创建时间: 2018年5月16日
  */
-@FeignClient(name = "VAS-KIIIK-SERVICE",fallbackFactory=DemoDaoCallBack.class)
-public interface DemoDao {
-	@PostMapping(value = "/recList")
-	public Object paraList(@RequestBody List<User> user);
-	@PostMapping(value = "addUser")
-	public User addUser(@RequestBody User user);
-	@PostMapping(value = "arrStr")
-	public List<String> addUser(@RequestBody List<String> arrStr);
-	@PostMapping(value = "rqPost")
-	@ApiOperation(value = "趋势规模数据接口", notes = "注意问题点")
-	public ResultBean<RQ> addUserPost(@Valid @RequestBody RQ rq);
-	@GetMapping(value = "rqGet")
-	@ApiOperation(value = "趋势规模数据接口", notes = "注意问题点")
-	public ResultBean<RQ> addUserGet(RQ rq);
+@FeignClient(name = "${vas.kiiik.service.name}",fallbackFactory=DemoDaoCallBack.class,path="${vas.kiiik.service.context}")
+public interface DemoDao extends DemoDaoSuper{
+	
 }
+
 class DemoDaoCallBack implements DemoDao{
 
 	@Override

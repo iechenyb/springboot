@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ import io.swagger.annotations.ApiOperation;
  *创建时间: 2018年5月15日
  */
 @RestController
+@RequestMapping("/json")
 public class JsonController {
 	Log log = LogFactory.getLog(JsonController.class);
 	/**

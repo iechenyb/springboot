@@ -1,4 +1,4 @@
-package com.kiiik.vas;
+package com.kiiik;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

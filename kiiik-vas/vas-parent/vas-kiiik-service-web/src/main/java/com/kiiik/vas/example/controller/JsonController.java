@@ -79,7 +79,13 @@ public class JsonController {
 	 * 作者 : iechenyb<br>
 	 * 方法描述: 复杂的请求对象 RequestBody jsr校验<br>
 	 * 创建时间: 2017年7月15日hj12
-	 * 
+	 * {
+		  "abCdDe": "string",
+		  "f": "getUser",
+		  "id": "99",
+		  "pc": ["ag","cu"],
+		  "v": "大于0的整数"
+		}
 	 * @param arrStr
 	 * @return
 	 */

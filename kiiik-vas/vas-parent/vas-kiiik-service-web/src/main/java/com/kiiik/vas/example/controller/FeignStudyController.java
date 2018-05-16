@@ -4,14 +4,20 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * 假如工程存在上下文，则需要在mapping上加上上下文信息
+ * 比如 工程名为 vasservice
+ * 如下测试用例 需要设置path参数
+ * 当根据版本更新的时候 需要手动更改path参数值
+ * @author DHUser
+ *
+ */
 //发现远端服务
-@FeignClient(name = "VAS-KIIIK-SERVICE")
+@FeignClient(name = "${vas.kiiik.service.name}",path="${vas.kiiik.service.context}")
 interface ComputerFeignClient{
-	@GetMapping("/sayHello")
+	@GetMapping("/json/sayHello")
 	public String say(@RequestParam("words") String words);
 }
 
@@ -24,7 +30,6 @@ public class FeignStudyController {
 	
 	@GetMapping("/sayHello")
 	public String localMethodName(@RequestParam("words") String words){
-		client.say(words);//调用远端服务
-		return words;
+		return client.say(words);//调用远端服务
 	}
 }

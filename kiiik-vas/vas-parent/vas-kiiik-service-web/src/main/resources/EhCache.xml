@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ehcache>
 	<!-- people与cache中的value不对应，则dao报错！ -->
-    <cache name="people" maxElementsInMemory="1000" timeToLiveSeconds="10"/>
+    <cache name="people" maxElementsInMemory="1000" timeToLiveSeconds="100"/>
     <diskStore path="java.io.tmpdir"/>
     <defaultCache 
       maxElementsInMemory="500" 
