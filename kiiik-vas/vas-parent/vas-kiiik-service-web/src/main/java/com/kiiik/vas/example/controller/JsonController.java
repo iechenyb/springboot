@@ -89,10 +89,12 @@ public class JsonController {
 	 * @param arrStr
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@PostMapping(value = "rqPost")
 	@ApiOperation(value = "趋势规模数据接口", notes = "注意问题点")
 	public ResultBean<RQ> addUserPost(@Valid @RequestBody RQ rq) {
-		return demoDao.addUserPost(rq);
+		return new ResultBean<RQ>(rq).success();
+		//return demoDao.addUserPost(rq);
 	}
 	/**
 	 * 
@@ -102,9 +104,11 @@ public class JsonController {
 	 *@param rq
 	 *@return
 	 */
+	@SuppressWarnings("unchecked")
 	@GetMapping(value = "rqGet")
 	@ApiOperation(value = "趋势规模数据接口(存在问题，建议使用post)", notes = "注意问题点")
 	public ResultBean<RQ> addUserGet(RQ rq) {
-		return demoDao.addUserGet(rq);
+		return new ResultBean<RQ>(rq).success()
+				;//demoDao.addUserGet(rq)
 	}
 }

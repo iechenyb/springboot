@@ -34,6 +34,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="src/main/webapp/lib/iechenyb.jar"/>
-	<classpathentry kind="lib" path="src/main/webapp/lib/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

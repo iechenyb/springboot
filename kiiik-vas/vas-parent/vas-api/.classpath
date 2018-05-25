@@ -33,15 +33,6 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/maven/repos/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar" sourcepath="D:/maven/repos/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0-sources.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="javax.servlet"/>
-			<attribute name="maven.artifactId" value="javax.servlet-api"/>
-			<attribute name="maven.version" value="3.1.0"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="src/main/webapp/lib/json-lib-2.4-jdk15.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
