@@ -6,7 +6,10 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+/*import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;  
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;  
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;  
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*; */
 import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.logging.Log;
@@ -44,7 +47,7 @@ import com.cyb.service.LoginLogServiceImpl;
 @WebAppConfiguration
 @ContextConfiguration(locations = { "classpath:application-tansaction.xml", "classpath:application-bean.xml" })
 // @ImportResource("classpath:application-tansaction.xml")
-public class UpdateExceptionTest {
+public class MVCMockTest {
 	Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
