@@ -1,0 +1,38 @@
+http://localhost:1130/user/
+http://localhost:1130/admin/
+http://localhost:1130/oauth/check_token/?token=75fbb5e6-9fd7-43ce-b0d8-144f7522f18e
+
+第一步  http://localhost:1130/login 登录 用户名密码均为cyb 提交之后，跳到授权确认界面。
+第二步  http://localhost:1130/oauth/authorize?response_type=code&client_id=my-trusted-client&redirect_uri=http://baidu.com&state=123
+https://www.baidu.com/?code=0Yy444&state=123 返回的百度链接带了code参数
+第三步 使用code换token
+http://localhost:1130/oauth/token?client_id=my-trusted-client&grant_type=authorization_code&redirect_uri=http://baidu.com&code=0Yy444
+
+
+遗留问题：
+登录成功后，页面不能正常跳转！！！
+但是可以去进行授权获取code值
+
+
+client_id:my-trusted-client
+grant_type:password
+redirect_uri:http://baidu.com
+code:0Yy444
+_csrf:6c863663-3185-478f-978c-5c5558e21b2c
+
+
+check_token token有效时，验证返回的结果  
+{
+    "exp": 1532076605,
+    "user_name": "cyb",
+    "scope": [
+        "read",
+        "write",
+        "trust"
+    ],
+    "authorities": [
+        "ROLE_TRUSTED_CLIENT",
+        "ROLE_CLIENT"
+    ],
+    "client_id": "my-trusted-client"
+}

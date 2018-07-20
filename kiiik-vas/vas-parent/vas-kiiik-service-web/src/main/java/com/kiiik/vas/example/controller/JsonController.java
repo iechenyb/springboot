@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
  * 类描述:get 请求没有 request body 所以 json请求只能用post<br>
  * 创建时间: 2018年5月15日
  */
-@RestController
+//@RestController
 public class JsonController {
 	
 	@Autowired

@@ -1,13 +1,9 @@
 package test.kiiik;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.io.UnsupportedEncodingException;
+	import static org.hamcrest.core.Is.is;
+	import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+	import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+	import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,7 +22,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.cyb.date.DateUtil;
 import com.cyb.file.FileUtils;
 import com.kiiik.KiiikVasServiceStarter;
 

@@ -14,7 +14,7 @@ import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 @MapperScan("com.kiiik.vas")//扫描mapper
 @SpringBootApplication
-@EnableDiscoveryClient
+//@EnableDiscoveryClient
 public class KiiikVasServiceStarter extends WebMvcConfigurerAdapter {
 	@Bean//使用@Bean注入fastJsonHttpMessageConvert
     public HttpMessageConverters fastJsonHttpMessageConverters(){

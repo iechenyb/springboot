@@ -1,0 +1,21 @@
+输入
+http://localhost:1130/oauth/authorize?response_type=code&client_id=my-trusted-client&redirect_uri=http://baidu.com&state=123
+页面重定向到登录页面，输入用户名cyb和密码cyb，提交登录
+进入登录确认界面，确认授权，调到重定向的url 如www.baidu.com 并带code值
+
+将code值换取token   （利用火狐浏览器的restclient进行post模拟）
+http://localhost:1130/oauth/token?client_id=my-trusted-client
+&grant_type=authorization_code
+&redirect_uri=http://baidu.com&code=kaUGhp
+貌似只能换一次
+
+{"access_token":"d538ac3d-6304-43cb-a1bb-97db18caadd9"
+,"token_type":"bearer",
+"refresh_token":"c92a356b-1e29-49c8-b3bf-d8e3960918b2"
+,"expires_in":119,
+"scope":"read write trust"
+}
+token过期怎么办？
+
+刷新token 使用上次申请的refrsh_token
+http://localhost:1130/oauth/token?grant_type=refresh_token&refresh_token=6cfd8c6d-8349-4480-8e31-b20b31ec929d&client_id=my-trusted-client&client_secret=secret

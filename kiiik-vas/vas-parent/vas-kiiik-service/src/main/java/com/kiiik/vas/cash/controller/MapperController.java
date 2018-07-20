@@ -1,4 +1,4 @@
-package com.kiiik.vas.example.controller;
+package com.kiiik.vas.cash.controller;
 import java.util.List;
 import java.util.UUID;
 

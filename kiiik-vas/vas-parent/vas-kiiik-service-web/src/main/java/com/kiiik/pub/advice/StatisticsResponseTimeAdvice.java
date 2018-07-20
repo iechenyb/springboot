@@ -55,7 +55,7 @@ public class StatisticsResponseTimeAdvice implements ResponseBodyAdvice<Object> 
 		if(o==null){ 
 			return o;
 		}
-		logger.info("进入时间统计方法："+o.getClass().getSimpleName());
+		//logger.info("进入时间统计方法："+o.getClass().getSimpleName());
 		/*if (o.getClass().getSimpleName().equals("List")) {
 			JSONArray object = JSONArray.fromObject(o);
 			object.add("执行时间:"+TimeContext.getTime());

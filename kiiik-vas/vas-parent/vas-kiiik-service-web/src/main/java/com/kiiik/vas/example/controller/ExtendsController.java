@@ -14,7 +14,7 @@ import com.kiiik.vas.example.model.User;
  *类描述: 没有必要这样写，注解均没有被继承！！！<br>
  *创建时间: 2018年5月16日
  */
-@RestController
+//@RestController
 public class ExtendsController implements DemoDaoSuper {
 	Log log = LogFactory.getLog(ExtendsController.class);
 

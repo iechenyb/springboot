@@ -1,0 +1,159 @@
+package com.lxg.springboot.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.portlet.ModelAndView;
+
+import com.lxg.springboot.entity.User;
+import com.lxg.springboot.service.UserService;
+
+@Controller
+public class HelloWorldRestController {
+  
+    @Autowired
+    UserService userService;  //Service which will do all data retrieval/manipulation work
+  
+      
+    //-------------------Retrieve All Users--------------------------------------------------------
+    //"ROLE_CLIENT","ROLE_TRUSTED_CLIENT"
+    //@PreAuthorize("hasRole('ROLE_TRUSTED_CLIENT')")
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    @ResponseBody
+    public List<User> admin() {
+        List<User> users = userService.findAll();
+        if(users.isEmpty()){
+            return null;
+        }
+        return users;
+    }
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @ResponseBody
+    public List<User> user() {
+        List<User> users = userService.findAll();
+        if(users.isEmpty()){
+            return null;
+        }
+        return users;
+    }
+    
+    @RequestMapping(value = "/other", method = RequestMethod.GET)
+    @ResponseBody
+    public List<User> other() {
+        List<User> users = userService.findAll();
+        if(users.isEmpty()){
+            return null;
+        }
+        return users;
+    }
+    @Autowired
+    AuthenticationManager authenticationManager;
+    
+    @RequestMapping(value = "/userLogin", method = RequestMethod.POST)
+    public ModelAndView login(User user) {
+    	 Authentication request = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+         System.out.println("before:" + request);
+         Authentication result = authenticationManager.authenticate(request);
+         System.out.println("after:" + result);
+         SecurityContextHolder.getContext().setAuthentication(result);
+        List<User> users = userService.findAll();
+        if(users.isEmpty()){
+            return null;
+        }
+        ModelAndView a = new ModelAndView();
+        a.setViewName("/oauth/confirm_access");
+        return a;
+    }
+  
+  
+    //-------------------Retrieve Single User--------------------------------------------------------
+      
+    /*@RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<User> getUser(@PathVariable("id") long id) {
+        System.out.println("Fetching User with id " + id);
+        User user = userService.findById(id);
+        if (user == null) {
+            System.out.println("User with id " + id + " not found");
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }*/
+  
+      
+      
+    //-------------------Create a User--------------------------------------------------------
+      
+    /*@RequestMapping(value = "/user/", method = RequestMethod.POST)
+    public ResponseEntity<Void> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
+        System.out.println("Creating User " + user.getName());
+  
+        if (userService.isUserExist(user)) {
+            System.out.println("A User with name " + user.getName() + " already exist");
+            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+        }
+  
+        userService.saveUser(user);
+  
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(ucBuilder.path("/user/{id}").buildAndExpand(user.getId()).toUri());
+        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+    }*/
+  
+      
+    //------------------- Update a User --------------------------------------------------------
+      
+    /*@RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
+        System.out.println("Updating User " + id);
+          
+        User currentUser = userService.findById(id);
+          
+        if (currentUser==null) {
+            System.out.println("User with id " + id + " not found");
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        }
+  
+        currentUser.setName(user.getName());
+        currentUser.setAge(user.getAge());
+        currentUser.setSalary(user.getSalary());
+          
+        userService.updateUser(currentUser);
+        return new ResponseEntity<User>(currentUser, HttpStatus.OK);
+    }*/
+  
+    //------------------- Delete a User --------------------------------------------------------
+      
+    /*@RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<User> deleteUser(@PathVariable("id") long id) {
+        System.out.println("Fetching & Deleting User with id " + id);
+  
+        User user = userService.findById(id);
+        if (user == null) {
+            System.out.println("Unable to delete. User with id " + id + " not found");
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
+        }
+  
+        userService.deleteUserById(id);
+        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
+    }*/
+  
+      
+    //------------------- Delete All Users --------------------------------------------------------
+      
+    /*@RequestMapping(value = "/user/", method = RequestMethod.DELETE)
+    public ResponseEntity<User> deleteAllUsers() {
+        System.out.println("Deleting All Users");
+  
+        userService.deleteAllUsers();
+        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
+    }*/
+  
+}

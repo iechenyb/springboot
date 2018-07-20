@@ -4,7 +4,7 @@
 通用的分页方法
 通用的接口编程方法
 系统架构  spingboot+mybatis+mysql
-
+https://docs.spring.io/spring/docs/current/spring-framework-reference/integration.html#cache
 ***异常处理***
 http://localhost:8080/common/jsr303formJson?name=1&age=1  方法不支持 比如 post 用get请求
 {

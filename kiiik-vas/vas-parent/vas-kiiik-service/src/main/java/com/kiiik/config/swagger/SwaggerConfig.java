@@ -18,12 +18,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  *类描述: 说点啥<br>
  *创建时间: 2018年5月14日
  */
-@Configuration
-@EnableSwagger2
+/*@Configuration
+@EnableSwagger2*/
 public class SwaggerConfig {
 	Log log = LogFactory.getLog(SwaggerConfig.class);
 
-	@Bean
+	//@Bean
 	public Docket createRestApi() {
 		log.info("create api!");
 		return new Docket(DocumentationType.SWAGGER_2)

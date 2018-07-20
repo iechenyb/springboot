@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 //发现远端服务
-@FeignClient(name = "${vas.kiiik.service.name}",path="${vas.kiiik.service.context}")
+//@FeignClient(name = "${vas.kiiik.service.name}",path="${vas.kiiik.service.context}")
 interface ComputerFeignClient{
 	@GetMapping("/json/sayHello")
 	public String say(@RequestParam("words") String words);
 }
 
-@RestController
+//@RestController
 public class FeignStudyController {
 	Log log = LogFactory.getLog(FeignStudyController.class);
 	//本地调用远端服务
