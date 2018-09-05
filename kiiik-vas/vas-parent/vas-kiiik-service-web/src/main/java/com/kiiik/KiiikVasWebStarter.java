@@ -11,6 +11,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 @SpringBootApplication(exclude = {
 		DataSourceAutoConfiguration.class,
 		DataSourceTransactionManagerAutoConfiguration.class,
@@ -27,4 +28,9 @@ public class KiiikVasWebStarter {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
+	//节省流量
+	@Bean
+	public ShallowEtagHeaderFilter shallowEtagHeaderFilter(){
+		return new ShallowEtagHeaderFilter();
+	}
 }

@@ -1,11 +1,15 @@
 package com.kiiik.vas.example.service;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.cache.CacheManagerCustomizer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -120,5 +124,64 @@ public class CacheService {
     	System.out.println("读取数据库"+person.getId());
     	return new ResultBean<Person>(person).success();
     }
+    
+    //map的value为“”或者null时不缓存
+    /**
+     * Property or field 'value' cannot be found on object of type 'java.util.HashMap' - maybe not public
+     *作者 : iechenyb<br>
+     *方法描述: 说点啥<br>
+     *创建时间: 2017年7月15日hj12
+     *@param isNull
+     *@return
+     *#result.value == null or #result.value == \"\" 报异常，无value属性
+     *可以在result上新增一个标记 表示当data=null或者data=""的状态 然后根据状态值进行 ||与or都行
+     */
+    @Cacheable(value = "people",unless = "#result.get(\"value\") == null || #result.get(\"value\") == \"\" || #result.get(\"value\").size()==0")//操作成功 进行缓存
+    public Map<String,Object> cacheMapCondition(String isNull) {//******
+    	Map<String,Object> data = new HashMap<String,Object>();
+    	if("1".equals(isNull)){
+    		data.put("value", null);
+    	}else if("2".equals(isNull)){
+    		data.put("value", "");
+    	}else if("3".equals(isNull)){
+    		data.put("value", new ArrayList<>());//成功缓存
+    	}else if("4".equals(isNull)){
+    		data.put("value", new LinkedHashMap<>());//成功缓存
+    	}else{
+    		data.put("value", "chenyb");//没有size方法 报错  一般情况下 是知道方法的类型的！！！
+    	}
+    	System.out.println("如果不为空，则缓存，否则每次都查询数据库！");
+    	return data;
+    }
+    //unless  满足的条件是 不缓存
+    @Cacheable(value = "people",unless = "#result.cacheable == false")//操作成功 进行缓存*******
+    public ResultBean<String> cacheRSBeanCondition(String isNull) {
+    	ResultBean<String> data = new ResultBean<>();
+    	if("1".equals(isNull)){
+    		data.data(null);
+    		data.cacheable(false);
+    	}else if("2".equals(isNull)){
+    		data.data("");
+    		data.cacheable(false);
+    	}else{
+    		data.data("chenyb");
+    		data.cacheable();
+    	}
+    	System.out.println("如果不为空，则缓存，否则每次都查询数据库！");
+    	return data;
+    }
+    
+   /* @CachePut(value="accountCache",key="#account.getName()")
+    public Account updateAccount(Account account) { 
+      return updateDB(account); 
+    } */
+    
+   /* @Cacheable(value = "models", key = "#testModel.name", condition = "#testModel.address !=  '' ")
+    public TestModel getFromMem(TestModel testModel) throws InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        testModel.setName(testModel.getName().toUpperCase());
+        return testModel;
+    }*/
+    
     
 }

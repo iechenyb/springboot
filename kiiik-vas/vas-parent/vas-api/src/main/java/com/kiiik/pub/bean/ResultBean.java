@@ -1,6 +1,8 @@
 package com.kiiik.pub.bean;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,19 +17,25 @@ public class ResultBean<T> extends BaseResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final int NO_PERMISSION = 2;
-	
 	@ApiModelProperty(value="执行结果",name="msg",example="执行成功！")
-	private String msg = "success";
+	private String msg = "";
+	public boolean cacheable = false;
 	
 	@ApiModelProperty(value="执行状态",name="code",example="0 失败 1成功 ")
-	private int code = SUCCESS;
+	private String code = SUCCESS;
 	
 	@ApiModelProperty(value="数据体",name="data",example="任意类型数据集合")
-	private T data;
+	protected  T data;
 
 	public ResultBean() {
 		super();
+		/* Type type = ((ParameterizedType)data.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+	     System.out.println(type);
+	     
+	    ParameterizedType parameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();//获取当前new对象的泛型的父类类型
+	 	Class clazz = (Class<T>) parameterizedType.getActualTypeArguments()[0];
+	 	System.out.println("clazz ==>> "+clazz);*/
+		 //this.data=(T)"";
 	}
 
 	public ResultBean(T data) {
@@ -38,8 +46,8 @@ public class ResultBean<T> extends BaseResult implements Serializable {
 	public ResultBean(Throwable e) {
 		super();
 		this.msg = e.toString();
+		this.code = FAIL;
 	}
-
 	@SuppressWarnings("rawtypes")
 	public ResultBean success() {
 		this.code = SUCCESS;
@@ -53,6 +61,10 @@ public class ResultBean<T> extends BaseResult implements Serializable {
 	}
 	@SuppressWarnings("rawtypes")
 	public ResultBean data(T data) {
+		if(data==null){
+			
+			//this.data  = "";如果data为基本类型 
+		}
 		this.data = data;
 		return this;
 	}
@@ -88,11 +100,11 @@ public class ResultBean<T> extends BaseResult implements Serializable {
 		return this;
 	}
 
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
 
-	public void setCode(int code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 
@@ -104,20 +116,45 @@ public class ResultBean<T> extends BaseResult implements Serializable {
 		this.data = data;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 
-	public static int getSuccess() {
+	public static String getSuccess() {
 		return SUCCESS;
 	}
 
-	public static int getFail() {
+	public static String getFail() {
 		return FAIL;
 	}
 
-	public static int getNoPermission() {
+	public static String getNoPermission() {
 		return NO_PERMISSION;
 	}
+	
+	public ResultBean<T> refuse(){
+		this.code = NO_PERMISSION;
+		return this;
+	}
+	public ResultBean<T> refuse(String msg){
+		this.code = NO_PERMISSION;
+		this.msg = msg;
+		return this;
+	}
 
+	public boolean isCacheable() {
+		return cacheable;
+	}
+
+	public void setCacheable(boolean cacheable) {
+		this.cacheable = cacheable;
+	}
+	
+	public ResultBean<T> cacheable(boolean cacheable) {
+		this.cacheable = cacheable;
+		return this;
+	}
+
+	
+	public ResultBean<T> cacheable() {
+		this.cacheable = true;
+		return this;
+	}
 }

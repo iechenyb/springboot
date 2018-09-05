@@ -6,9 +6,9 @@ import com.kiiik.pub.bean.BaseResult;
  *创建时间: 2018年5月14日
  */
 public class ValidateRestult extends BaseResult {
-	 int code = 0; 
+	 String code = SUCCESS; 
 	 String msg;
-	public ValidateRestult(int code_,String msg_){
+	public ValidateRestult(String code_,String msg_){
 		code = code_;
 		msg = msg_;
 	}

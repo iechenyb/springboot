@@ -6,6 +6,7 @@ package com.kiiik.pub.bean;
  *创建时间: 2018年5月14日
  */
 public class BaseResult {
-	public static final int SUCCESS = 1;
-	public static final int FAIL = 0;
+	public static final String SUCCESS = "0";
+	public static final String FAIL = "1";
+	public static final String NO_PERMISSION = "2";
 }

@@ -1,6 +1,7 @@
 package com.kiiik.vas.example.controller;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerMapping;
 
+import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.oauth.AccessTokenUtils;
 import com.kiiik.vas.example.bean.Person;
 import com.kiiik.vas.example.service.CacheService;
+import com.netflix.discovery.converters.Auto;
 
 /**
  * 作者 : iechenyb<br>
@@ -111,6 +115,16 @@ public class CacheMemStudyController {
 			cacheManager.getCache(keys.next()).clear();
 		}
 		return "缓存清除成功！";
+	}
+	
+	@GetMapping("/mapCache")
+	public Map<String,Object> mapCache(String isNull){
+		return personService.cacheMapCondition(isNull);
+	}
+	
+	@GetMapping("/rsBeanCache")
+	public ResultBean<String> rsBeanCache(String isNull){
+		return  personService.cacheRSBeanCondition(isNull);
 	}
 	
 }
