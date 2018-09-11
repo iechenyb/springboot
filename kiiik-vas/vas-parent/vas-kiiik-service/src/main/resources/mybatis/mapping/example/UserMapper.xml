@@ -5,6 +5,7 @@
     <resultMap id="BaseResultMap" type="com.kiiik.vas.example.model.MyUser" >
         <result column="account" property="account"  jdbcType="VARCHAR" />
     </resultMap>
+   
     <sql id="Base_Column_List" >
         id,account, password
     </sql>

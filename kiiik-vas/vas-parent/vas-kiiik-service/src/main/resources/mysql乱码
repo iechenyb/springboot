@@ -1,0 +1,8 @@
+select * from tb_user;
+update tb_user SET account = '', name = ?, password = ? WHERE id = ?;
+delete from tb_user;
+show variables like "%char%"; 
+SET character_set_client='utf8'; 
+SET character_set_connection='utf8'; 
+SET character_set_server='utf8';
+set character_set_results='utf8'; //决定性的属性  但是只能每一次生效

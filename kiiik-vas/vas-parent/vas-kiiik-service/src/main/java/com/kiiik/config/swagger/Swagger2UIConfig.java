@@ -34,7 +34,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @version 2017年10月19日 许畅 新建
  */
 @Configuration
-@PropertySources({ @PropertySource(value = "classpath:swagger2.properties", ignoreResourceNotFound = true, encoding = "UTF-8") })
+@PropertySources({ @PropertySource(value = "classpath:swagger2.properties",
+ignoreResourceNotFound = true, encoding = "UTF-8") })
 @EnableSwagger2
 public class Swagger2UIConfig {
     
@@ -53,7 +54,7 @@ public class Swagger2UIConfig {
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
         	.apiInfo(apiInfo()).select()
-            .apis(Swagger2UIConfig.basePackage("com.kiiik.vas.cash"))
+            .apis(Swagger2UIConfig.basePackage("com.kiiik.vas.common"))
             .paths(PathSelectors.any()).build();
     }
     
