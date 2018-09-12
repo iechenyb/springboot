@@ -71,7 +71,7 @@ public class RedisBasedDistributedLock extends AbstractLock {
 		long lockExpireTime = System.currentTimeMillis() + lockExpires + 1;
 		String stringOfLockExpireTime = String.valueOf(lockExpireTime);
 
-		if (jedis.setnx(lockKey, stringOfLockExpireTime) == 1) { 
+		if (jedis.setnx(lockKey, stringOfLockExpireTime) == 1) { //1 已经被set
 			locked = true;
 			setExclusiveOwnerThread(Thread.currentThread());
 			return true;

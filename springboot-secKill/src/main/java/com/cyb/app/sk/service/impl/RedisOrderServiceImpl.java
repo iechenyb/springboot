@@ -156,7 +156,8 @@ public class RedisOrderServiceImpl implements OrderService {
 	public boolean makeOrder(String goodsName, long userId, int buys) {
 		boolean buySuccess = false;
 		Jedis jedis = getJedis();
-		RedisBasedDistributedLock redisBasedDistributedLock = new RedisBasedDistributedLock(jedis, "lock.lock", 5 * 1000);
+		RedisBasedDistributedLock redisBasedDistributedLock
+		= new RedisBasedDistributedLock(jedis, "lock.lock", 5 * 1000);
 		for(int i=0;i<10;i++){
 			//先判断缓存是否有商品
 			if(Integer.valueOf(jedis.get(goodsName))<= 0) {
