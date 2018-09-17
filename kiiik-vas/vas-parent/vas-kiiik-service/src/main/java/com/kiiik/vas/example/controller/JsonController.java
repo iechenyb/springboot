@@ -1,6 +1,7 @@
 package com.kiiik.vas.example.controller;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
@@ -100,8 +101,8 @@ public class JsonController {
 		}
 	    return new ResultBean<RQ>(rq);  
 	}   
-	@GetMapping("/sayHello")
-	public String localMethodName(@RequestParam("words") String words){
-		return "Hi "+words;
+	@GetMapping("/sayHello")//用于负载均衡，高可用检查
+	public String localMethodName(@RequestParam("words") String words,HttpServletRequest req){
+		return "Hi "+words+"，负载服务端口号"+req.getServerPort();
 	}
 }
