@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kiiik.vas.common.v1.mapper.GenericMybatisMapper">
-	<parameterMap type="com.kiiik.vas.common.v1.bean.EntityInfo" id="EntityInfo" ></parameterMap>
+	<parameterMap type="com.kiiik.vas.common.v1.bean.EntityInfo" id="EntityInfo"></parameterMap>
 	<select id="queryDBEntity" parameterType="com.kiiik.vas.common.v1.bean.EntityInfo" 
 	resultType="java.util.HashMap">
 		select 
