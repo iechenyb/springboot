@@ -34,7 +34,7 @@ public class KiiikDBConfig {
 		bean.setDataSource(dataSource);
 		bean.setMapperLocations(
 				new PathMatchingResourcePatternResolver()
-				.getResources(env.getProperty("mapper.xml.path")));//"classpath:mybatis/auth/**/*Mapper.xml")
+				.getResources(env.getProperty("mapper.xml.path")));
 		return bean.getObject();
 	}
 

@@ -59,7 +59,7 @@ public class AuthInvocationSecurityMetadataSourceService  implements
 		HttpServletRequest request = ((FilterInvocation) object).getHttpRequest();
 		String url = request.getRequestURI();
 		url = url.replaceFirst(request.getContextPath(), "");
-		log.info("url："+url+",access="+resourceMap.containsKey(url));
+		log.info("url："+url+",是否需要过滤="+resourceMap.containsKey(url));
 		return resourceMap.get(url);//返回空，说明不受限制，放行，可以访问。不为空，则进行权限过滤，必须存在指定的角色才能访问。
 	}
 

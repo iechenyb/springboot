@@ -1,5 +1,6 @@
 package com.kiiik.zuul;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.kiiik.zuul.filter.AccessFilter;
 import com.kiiik.zuul.filter.ErrorFilter;
+import com.kiiik.zuul.web.log.repository.SystemLogRepository;
 
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -26,10 +28,14 @@ public class ZuulApplication {
     public static void main(String[] args) {
         SpringApplication.run(ZuulApplication.class, args);
     }
-
+    @Autowired
+	SystemLogRepository logRes;
+    
     @Bean
     public AccessFilter accessFilter() {
-        return new AccessFilter();
+    	AccessFilter filter = new AccessFilter();
+    	filter.setSystemLogRepository(logRes);
+        return filter;
     }
     @Bean 
     public ErrorFilter errorFilter(){

@@ -6,6 +6,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.alibaba.fastjson.JSON;
+import com.kiiik.zuul.utils.RequestUtils;
+import com.kiiik.zuul.web.log.repository.SystemLogRepository;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 
@@ -13,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AccessFilter extends ZuulFilter {
+	
+	SystemLogRepository systemLogRepository;
+	
     @Override
     public String filterType() {
         //前置过滤器
@@ -43,8 +48,18 @@ public class AccessFilter extends ZuulFilter {
         String userInfor = JSON.toJSONString(authentication.getPrincipal());
         System.out.println(userInfor+"\n"+JSON.parseObject(userInfor).get("username"));
         requestContext.addZuulRequestHeader("X-AUTH-ID",authentication.getPrincipal().toString());
-        System.out.println(request.getSession().getId()+",send {} request to {}"+ request.getMethod()+ request.getRequestURL().toString());         //获取传来的参数accessToken
+        //System.out.println(request.getSession().getId()+",send {} request to {}"+ request.getMethod()+ request.getRequestURL().toString());         //获取传来的参数accessToken
+        System.out.println(RequestUtils.getSystemLog(request));
+        systemLogRepository.save(RequestUtils.getSystemLog(request));
         return null;
     }
+
+	public SystemLogRepository getSystemLogRepository() {
+		return systemLogRepository;
+	}
+
+	public void setSystemLogRepository(SystemLogRepository systemLogRepository) {
+		this.systemLogRepository = systemLogRepository;
+	}
 
 }
