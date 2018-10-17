@@ -1,4 +1,4 @@
-package com.kiiik.zuul.security;
+package com.kiiik.zuul.utils;
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -7,7 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.alibaba.fastjson.JSON;
-import com.kiiik.zuul.dataObject.ResultBean;
+import com.kiiik.zuul.pub.bean.ResultBean;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>

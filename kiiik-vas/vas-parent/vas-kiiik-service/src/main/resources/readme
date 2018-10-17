@@ -1,1 +1,3 @@
 https://blog.csdn.net/qq_19239339/article/details/80593464  zuul+eureka+fegin高可用
+
+没有加权限控制  有通用的mybatis操作 适合做无权限控制的后端服务框架

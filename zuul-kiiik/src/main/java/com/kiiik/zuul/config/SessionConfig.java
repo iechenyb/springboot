@@ -1,4 +1,4 @@
-package com.kiiik.zuul.security;
+package com.kiiik.zuul.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,6 +21,7 @@ public class SessionConfig {
 	@Value("${redis.port:6379}")
 	int Port;
 
+	@SuppressWarnings("deprecation")
 	@Bean public JedisConnectionFactory connectionFactory() { 
 		JedisConnectionFactory connection = new JedisConnectionFactory(); 
 		connection.setPort(6011);

@@ -1,4 +1,4 @@
-package com.kiiik.zuul.user.controller;
+package com.kiiik.zuul.web.user.controller;
 
 import java.util.List;
 

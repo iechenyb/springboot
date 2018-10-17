@@ -1,4 +1,4 @@
-package com.kiiik.zuul.security;
+package com.kiiik.zuul.config;
 
 import java.util.HashSet;
 import java.util.Set;

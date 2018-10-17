@@ -1,4 +1,4 @@
-package com.kiiik.zuul.dataObject;
+package com.kiiik.zuul.web.user.bean;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,8 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-//@Data
-public class UserInfo {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,4 +1,4 @@
-package com.kiiik.zuul.security;
+package com.kiiik.zuul.config.advice;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.kiiik.zuul.dataObject.ResultBean;
+import com.kiiik.zuul.pub.bean.ResultBean;
+import com.kiiik.zuul.pub.exception.VasException;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>

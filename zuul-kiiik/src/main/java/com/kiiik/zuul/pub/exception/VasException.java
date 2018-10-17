@@ -1,4 +1,4 @@
-package com.kiiik.zuul.security;
+package com.kiiik.zuul.pub.exception;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 /**

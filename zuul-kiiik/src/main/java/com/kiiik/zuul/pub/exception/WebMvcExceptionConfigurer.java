@@ -1,4 +1,4 @@
-package com.kiiik.zuul.security;
+package com.kiiik.zuul.pub.exception;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -6,21 +6,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.kiiik.zuul.dataObject.ResultBean;
+import com.kiiik.zuul.pub.bean.ResultBean;
+import com.kiiik.zuul.utils.ResponseUtils;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
  *创建时间: 2018年3月8日
  */
+@SuppressWarnings("deprecation")
 @Configuration
 public class WebMvcExceptionConfigurer extends WebMvcConfigurerAdapter {
 	Log logger = LogFactory.getLog(WebMvcExceptionConfigurer.class);

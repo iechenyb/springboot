@@ -1,4 +1,4 @@
-package com.kiiik.zuul.security;
+package com.kiiik.zuul.config.interceptor;
 import java.util.Arrays;
 import java.util.List;
 

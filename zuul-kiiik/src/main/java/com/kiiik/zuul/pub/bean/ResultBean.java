@@ -1,4 +1,4 @@
-package com.kiiik.zuul.dataObject;
+package com.kiiik.zuul.pub.bean;
 
 import java.io.Serializable;
 
