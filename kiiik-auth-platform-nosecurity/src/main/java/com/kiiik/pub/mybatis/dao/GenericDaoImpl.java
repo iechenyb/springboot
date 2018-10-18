@@ -112,6 +112,7 @@ public class GenericDaoImpl implements GenericDao {
 			try {
 				colConfg.setValue(PropertyUtils.getProperty(entity, colConfg.getEntityColName()));
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw new IllegalArgumentException("read property from entity error");
 			}
 		}

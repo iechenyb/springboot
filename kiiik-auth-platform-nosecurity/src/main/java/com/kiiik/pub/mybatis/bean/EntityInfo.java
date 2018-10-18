@@ -51,7 +51,7 @@ public class EntityInfo implements Serializable,Cloneable{
 	}
 	public EntityInfoCol getColByEntityColName(String name){
 		for(EntityInfoCol eachCol:cols){
-			if(eachCol.getEntityColName().equals(name)){
+			if(eachCol.getEntityColName().toUpperCase().equals(name.toUpperCase())){//忽略大小写
 				return eachCol;	
 			}
 		}
