@@ -20,9 +20,13 @@ import com.github.pagehelper.PageHelper;
 import com.kiiik.pub.mybatis.annotation.DBColumn;
 import com.kiiik.pub.mybatis.annotation.DBEntity;
 import com.kiiik.pub.mybatis.annotation.KeyColumn;
+import com.kiiik.pub.mybatis.bean.ComplexCondition;
+import com.kiiik.pub.mybatis.bean.ComplexConditionNode;
 import com.kiiik.pub.mybatis.bean.EntityInfo;
 import com.kiiik.pub.mybatis.bean.EntityInfoCol;
 import com.kiiik.pub.mybatis.mapper.GenericMybatisMapper;
+
+import tk.mybatis.orderbyhelper.OrderByHelper;
 
 /**
  * 作者 : iechenyb<br>
@@ -124,7 +128,7 @@ public class GenericDaoImpl implements GenericDao {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 * 更新或者是插入
 	 * @see
 	 * com.kingdee.finance.p2p.service.generic.GenericService#saveDBEntity(java.
 	 * lang.Object)
@@ -214,7 +218,6 @@ public class GenericDaoImpl implements GenericDao {
 	 * @param orderBys
 	 * @return
 	 */
-	@SuppressWarnings("unused")
 	private String orderParse(Class<?> clazz, String... orderBys) {
 		if (orderBys == null) {
 			return null;
@@ -339,4 +342,65 @@ public class GenericDaoImpl implements GenericDao {
 		int rows = genericDao.deleteDBEntity(info);
 		return rows;
 	}
+	//----------------------------复杂的单表查询-------------------------------------
+	public <T> T queryDBEntitySingleComplex(Class<T> clazz,	ComplexCondition condition){
+		return getFirst(queryDBEntityListComplex(clazz, condition));
+	}
+	public <T> List<T> queryDBEntityListComplex(Class<T> clazz,	ComplexCondition condition) {
+		return queryDBEntityListComplex(clazz, condition, 1, 0);
+	}
+	
+	public <T> Page<T> queryDBEntityListComplexTop(Class<T> clazz,	ComplexCondition condition, int top,String orderBys) {
+		return queryDBEntityListComplex(clazz, condition, 1, top,orderBys);
+	}
+	
+	public <T> Page<T> queryDBEntityListComplex(Class<T> clazz,	ComplexCondition condition, int pageNum, int pageSize) {
+		return queryDBEntityListComplex(clazz, condition, pageNum, pageSize,"");
+	}
+	
+	@SuppressWarnings({ "unchecked" })
+	public <T> Page<T> queryDBEntityListComplex(Class<T> clazz,	ComplexCondition condition, int pageNum, int pageSize,String... orderBys) {
+		EntityInfo info=getInfoNoValue(clazz);
+		String orderStr=this.orderParse(clazz, orderBys);
+		if(StringUtils.isNotBlank(orderStr)){
+			OrderByHelper.orderBy(orderStr);
+		}
+		
+		//分页
+		PageHelper.startPage(pageNum, pageSize);
+		//将condition 中 col 替换为数据库对应字段
+		for (ComplexConditionNode eachNode:condition.getNodes()) {
+			if("col".equals(eachNode.getLink())){
+				EntityInfoCol entityInfoCol= info.getColByEntityColName((String) eachNode.getObjects()[0]);
+				eachNode.setObjects(entityInfoCol.getDbColName());
+			}
+		}
+		
+		Page<Map<String, Object>> list = genericDao.queryDBEntityComplex(info,condition);
+		Page<T> result= (Page<T>) list.clone();
+		result.clear();
+		for(Map<String, Object> eachBeanMap:list){
+			T eachObject = null;
+			try {
+				eachObject = (T)(clazz.newInstance());
+			} catch (Exception e1) {
+				log.error("instantiate new bean error.",e1.fillInStackTrace());
+			} 
+			
+			try {
+				BeanUtils.copyProperties(eachObject, eachBeanMap);
+			} catch (Exception e) {
+				log.error("copyProperties from Map to bean error.",e.fillInStackTrace());
+			} 
+			result.add(eachObject);
+		}
+		return result;
+	}
+	
+	
+
+	/*@Override
+	public Page<Map<String, Object>> queryDBEntity(EntityInfo entityInfo) {
+		return genericDao.queryDBEntity(entityInfo);
+	}*/
 }

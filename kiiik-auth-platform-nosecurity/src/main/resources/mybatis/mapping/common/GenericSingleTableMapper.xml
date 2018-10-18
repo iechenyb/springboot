@@ -28,7 +28,7 @@
 		<!-- 排序  aaa asc,bbb desc -->
 	</select>
 	
-	<!-- <select id="queryDBEntityComplex" resultType="java.util.HashMap">
+    <select id="queryDBEntityComplex" resultType="java.util.HashMap">
 		select 
 		<foreach collection="entityInfo.cols" item="eachCol" separator=",">
 			`${eachCol.dbColName}` as ${eachCol.entityColName}
@@ -43,10 +43,10 @@
 					<when test='node.link=="("'>(</when>
 					<when test='node.link==")"'>)</when>
 					<when test='node.link=="eq"'>= #{node.object}</when>
-					<when test='node.link=="gt"'>> #{node.object}</when>
-					<when test='node.link=="lt"'>< #{node.object}</when>
-					<when test='node.link=="gte"'>>= #{node.object}</when>
-					<when test='node.link=="lte"'><= #{node.object}</when>
+					<when test='node.link=="gt"'>&gt; #{node.object}</when>
+					<when test='node.link=="lt"'>&lt; #{node.object}</when>
+					<when test='node.link=="gte"'>&gt;= #{node.object}</when>
+					<when test='node.link=="lte"'>&lt;= #{node.object}</when>
 					<when test='node.link=="bw"'>like '${node.object}%'</when>
 					<when test='node.link=="bn"'>not like '${node.object}%'</when>
 					<when test='node.link=="ew"'>like '%${node.object}' </when>
@@ -70,7 +70,7 @@
 				</choose>
 			</foreach>	
 		</where>
-	</select> -->
+	</select>
 	
 	<insert id="insertDBEntity" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" useGeneratedKeys="true" keyProperty="generatedKey">
 		insert into <if test="database!=null">${database}.</if>${tableName} 

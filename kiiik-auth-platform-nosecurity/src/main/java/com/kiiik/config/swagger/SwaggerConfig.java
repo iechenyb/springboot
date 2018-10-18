@@ -36,7 +36,7 @@ public class SwaggerConfig {
 
 	private ApiInfo apiInfo() {
 		log.info("api Info!");
-		return new ApiInfoBuilder().title("东航金控-集中权限管理系统 ")
+		return new ApiInfoBuilder().title("东航金控-统一开发平台 ")
 				.description("接口中心仅对测试环境开放，正式环境请关闭!")
 				.termsOfServiceUrl("zzuchenyb@sina.com")
 				.version("1.0")
