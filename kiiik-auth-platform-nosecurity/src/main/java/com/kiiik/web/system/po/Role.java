@@ -3,7 +3,11 @@ package com.kiiik.web.system.po;
 import com.kiiik.pub.mybatis.annotation.DBColumn;
 import com.kiiik.pub.mybatis.annotation.DBEntity;
 import com.kiiik.pub.mybatis.annotation.KeyColumn;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 @DBEntity("t_sys_role")
+@ApiModel(value="角色信息")
 public class Role {
 	/**
 	 * @作者:iechenyb</br>
@@ -12,11 +16,14 @@ public class Role {
 	 */
 	@KeyColumn(useGeneratedKeys=true)
 	@DBColumn(value = "id",insertIfNull="default")	
+	@ApiModelProperty(value="主键")
 	private Integer id; 
 	
+	@ApiModelProperty(value="角色标识")
 	@DBColumn("rolename")
     private String roleName;  
 	
+	@ApiModelProperty(value="角色描述")
 	@DBColumn("description")
     private String description;
     

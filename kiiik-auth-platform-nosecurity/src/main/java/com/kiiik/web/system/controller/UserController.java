@@ -25,8 +25,13 @@ import com.kiiik.utils.IdCardGenerator;
 import com.kiiik.utils.RandomUtils;
 import com.kiiik.web.system.po.User;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping("user")
+@Api("用户管理模块")
 public class UserController {
 	Log log = LogFactory.getLog(UserController.class);
 	
@@ -35,7 +40,8 @@ public class UserController {
 	
 	@SuppressWarnings("unchecked")
 	@PostMapping("genUsers")
-	public ResultBean<String> genUsers(Integer theNumbersOfToGen){
+	@ApiOperation("模拟生成用户信息，仅供测试使用")
+	public ResultBean<String> genUsers(@ApiParam("生成用户数量") Integer theNumbersOfToGen){
 		User po = null;
 		if (theNumbersOfToGen == null) {
 			theNumbersOfToGen = 10;
@@ -80,6 +86,7 @@ public class UserController {
      */
 	@SuppressWarnings("unchecked")
 	@PostMapping("list")
+	@ApiOperation("用户列表")
 	public ResultBean<List<User>> listUsers(@RequestBody User user){
 		List<User> users = genericService.queryDBEntityList(user);
 		return new ResultBean<List<User>>(users).success();
@@ -87,6 +94,7 @@ public class UserController {
 	
 	@SuppressWarnings("unchecked")
 	@GetMapping("listPage")
+	@ApiOperation("用户列表分页查询")
 	public ResultBean<List<User>> listUsersPage(User user,Page page){
 		List<User> users = genericService.queryDBEntityList(user,page.getPageNum(),page.getPageSize()," id asc");
 		return new ResultBean<List<User>>(users).success();
@@ -95,6 +103,7 @@ public class UserController {
 
 	@SuppressWarnings({ "unchecked"})
 	@PostMapping("add")
+	@ApiOperation("新增用户信息")
 	public ResultBean<String> addUser(@RequestBody User user){
 		User user_tmp = null;
 		user_tmp = genericService.queryDBEntitySingleComplex(User.class, new ComplexCondition()
@@ -110,16 +119,17 @@ public class UserController {
 	
 	@SuppressWarnings("unchecked")
 	@GetMapping("deleteById")
+	@ApiOperation("根据主键删除用户信息")
 	public ResultBean<String> delUser(Integer id){
 		User user = new User();
 		user.setId(id);
 		int count = genericService.deleteDBEntityByKey(user);
 		return new ResultBean<String>("删除"+count+"记录！").success();
-		
 	}
 
 	@SuppressWarnings("unchecked")
 	@PostMapping("update")
+	@ApiOperation("更新用户信息")
 	public ResultBean<String> updUser(@RequestBody User user){
 		User user_tmp = null;
 		user_tmp = genericService.queryDBEntitySingleComplex(User.class, 

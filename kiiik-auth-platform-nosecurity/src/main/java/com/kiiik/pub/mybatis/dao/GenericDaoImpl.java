@@ -196,6 +196,16 @@ public class GenericDaoImpl implements GenericDao {
 		int rows = genericDao.updateDBEntityByKey(info);
 		return rows;
 	}
+	
+	public int updateDBEntityByKeyBatch(Object entity){
+		
+		return 0;
+	}
+	
+	public int deleteDBEntityByKeyBatch(){
+		
+		return 0;
+	}
 
 	/*
 	 * (non-Javadoc)

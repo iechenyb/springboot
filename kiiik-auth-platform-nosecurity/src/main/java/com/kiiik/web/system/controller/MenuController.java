@@ -8,13 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kiiik.pub.bean.res.ResultBean;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
-import com.kiiik.web.system.po.Role;
+import com.kiiik.web.system.po.Menu;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,10 +23,10 @@ import io.swagger.annotations.ApiOperation;
  *创建时间: 2018年10月18日
  */
 @RestController
-@RequestMapping("role")
-@Api("角色管理模块")
-public class RoleController {
-	Log log = LogFactory.getLog(RoleController.class);
+@RequestMapping("menu")
+@Api("菜单管理模块")
+public class MenuController {
+	Log log = LogFactory.getLog(MenuController.class);
 	
 	@Autowired
 	GenericService genericService;
@@ -42,54 +41,54 @@ public class RoleController {
      *@return
      */
 	@SuppressWarnings("unchecked")
+	@ApiOperation("菜单信息查询")
 	@PostMapping("list")
-	@ApiOperation("角色列表信息")
-	public ResultBean<List<Role>> listRoles(@RequestBody Role role){
-		List<Role> roles = genericService.queryDBEntityList(role);
-		return new ResultBean<List<Role>>(roles).success();
+	public ResultBean<List<Menu>> listMenus(@RequestBody Menu menu){
+		List<Menu> menus = genericService.queryDBEntityList(menu);
+		return new ResultBean<List<Menu>>(menus).success();
 	}
 	
 
 	@SuppressWarnings({ "unchecked"})
 	@PostMapping("add")
-	@ApiOperation("新增角色信息")
-	public ResultBean<String> addRole(@RequestBody Role role){
-		Role role_tmp = null;
-		role_tmp = genericService.queryDBEntitySingleComplex(Role.class, 
+	@ApiOperation("菜单信息新增")
+	public ResultBean<String> addMenu(@RequestBody Menu menu){
+		Menu menu_tmp = null;
+		menu_tmp = genericService.queryDBEntitySingleComplex(Menu.class, 
 				new ComplexCondition()
 				.and()
-				.col("rolename")
-				.eq(role.getRoleName()));
+				.col("url")
+				.eq(menu.getUrl()));
 		int count = 0 ;
-		if(role_tmp==null){
-			count = genericService.insertDBEntity(role);
-			return new ResultBean<Integer>(count).fail("角色插入成功!");
+		if(menu_tmp==null){
+			count = genericService.insertDBEntity(menu);
+			return new ResultBean<Integer>(count).fail("菜单插入成功!");
 		}
-		return new ResultBean<Integer>(count).success("角色已经存在！");
+		return new ResultBean<Integer>(count).success("菜单已经存在！");
 	}
 	
 	@SuppressWarnings("unchecked")
 	@GetMapping("deleteById")
-	@ApiOperation("根据主键删除角色信息")
-	public ResultBean<String> delRole(Integer id){
-		Role role = new Role();
-		role.setId(id);
-		int count = genericService.deleteDBEntityByKey(role);
+	@ApiOperation(value="根据主键删除菜单")
+	public ResultBean<String> delMenu(Integer id){
+		Menu menu = new Menu();
+		menu.setId(id);
+		int count = genericService.deleteDBEntityByKey(menu);
 		return new ResultBean<String>("删除"+count+"记录！").success();
 		
 	}
 
 	@SuppressWarnings("unchecked")
 	@PostMapping("update")
-	@ApiOperation("更新角色信息")
-	public ResultBean<String> updRole(@RequestBody Role role){
-		Role role_tmp = null;
-		role_tmp = genericService.queryDBEntitySingleComplex(Role.class, 
-				new ComplexCondition().col("id").notIn(role.getId()).and().col("rolename").eq(role.getRoleName()));
-		if(role_tmp!=null){
+	@ApiOperation(value="更新菜单信息")
+	public ResultBean<String> updMenu(@RequestBody Menu menu){
+		Menu menu_tmp = null;
+		menu_tmp = genericService.queryDBEntitySingleComplex(Menu.class, 
+				new ComplexCondition().col("id").notIn(menu.getId()).and().col("url").eq(menu.getUrl()));
+		if(menu_tmp!=null){
 			return new ResultBean<String>().success("角色名已经存在！");
 		}else{
-			int count = genericService.updateDBEntityByKey(role);
+			int count = genericService.updateDBEntityByKey(menu);
 			return new ResultBean<String>().success("更新成功！更新记录数"+count);
 		}
 	}

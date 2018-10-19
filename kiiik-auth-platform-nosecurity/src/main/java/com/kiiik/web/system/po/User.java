@@ -2,12 +2,16 @@ package com.kiiik.web.system.po;
 import com.kiiik.pub.mybatis.annotation.DBColumn;
 import com.kiiik.pub.mybatis.annotation.DBEntity;
 import com.kiiik.pub.mybatis.annotation.KeyColumn;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 /**
  *作者 : iechenyb<br>
  *类描述: bean的字段基础类型都用包装类定义<br>
  *创建时间: 2018年10月18日
  */
 @DBEntity("t_sys_user")
+@ApiModel(value="系统用户信息")
 public class User {
 	/**
 	 * @作者:iechenyb</br>
@@ -16,58 +20,66 @@ public class User {
 	 */
 	@KeyColumn(useGeneratedKeys=true)
 	@DBColumn(value = "id",insertIfNull="default")	
+	@ApiModelProperty("主键")
 	private Integer id;  
 	
+	@ApiModelProperty("用户名称")
 	@DBColumn("username")
     private String userName;  
 	
+	@ApiModelProperty("用户编号")
 	@DBColumn("empno")
     private String empNo;  
 	
+	@ApiModelProperty("身份证信息")
 	@DBColumn("idcard")
     private String idCard; 
 	
+	@ApiModelProperty("电子邮件")
 	@DBColumn("email")
     private String email; 
 	
+	@ApiModelProperty("手机号码")
 	@DBColumn("phone")
     private String phone; 
 	
+	@ApiModelProperty("密码")
 	@DBColumn("password")
     private String password; 
 	
-    
+    @ApiModelProperty("上次登录时间")
     @DBColumn("lastLoginTime")
     public Long lastLoginTime;
     @DBColumn("lastLoginIp")
+    @ApiModelProperty(value="上次登录ip")
     public String lastLoginIp;
     @DBColumn("loginIp")
+    @ApiModelProperty(value="最新登录ip")
     public String loginIp;
     @DBColumn("loginSum")
+    @ApiModelProperty(value="登录次数")
     public Integer loginSum;
     @DBColumn("isEffect")
+    @ApiModelProperty(value="是否可用 1可用 其他值不可用")
     public Integer isEffect;
     @DBColumn("sex")
+    @ApiModelProperty(value="性别 0男 1女 2未知")
     public Integer sex;
     @DBColumn("operateID")
+    @ApiModelProperty(value="操作员标识")
     public String operateID;
     public User() {  
         super();  
     }  
- 
    
     public Integer getId() {
 		return id;
 	}
 
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-
-	
-    
     public String getPassword() {  
         return password;  
     }  
