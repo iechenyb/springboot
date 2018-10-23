@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kiiik.pub.mybatis.mapper.GenericMybatisMapper">
+	<cache></cache>
 	<parameterMap type="com.kiiik.pub.mybatis.bean.EntityInfo" id="EntityInfo"></parameterMap>
-	<select id="queryDBEntity" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" 
+	<select id="queryDBEntity" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" flushCache="true"
 	resultType="java.util.HashMap">
 		select 
 		<foreach collection="cols" item="eachCol" separator=",">
@@ -28,7 +29,7 @@
 		<!-- 排序  aaa asc,bbb desc -->
 	</select>
 	
-    <select id="queryDBEntityComplex" resultType="java.util.HashMap">
+    <select id="queryDBEntityComplex" resultType="java.util.HashMap" flushCache="true">
 		select 
 		<foreach collection="entityInfo.cols" item="eachCol" separator=",">
 			`${eachCol.dbColName}` as ${eachCol.entityColName}
@@ -72,7 +73,7 @@
 		</where>
 	</select>
 	
-	<insert id="insertDBEntity" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" useGeneratedKeys="true" keyProperty="generatedKey">
+	<insert id="insertDBEntity" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" flushCache="true" useGeneratedKeys="true" keyProperty="generatedKey">
 		insert into <if test="database!=null">${database}.</if>${tableName} 
 		<foreach collection="cols" item="eachCol" separator="," open="(" close=")">
 			`${eachCol.dbColName}`
@@ -90,7 +91,7 @@
 		</foreach>
 	</insert>
 	
-	<insert id="insertDBEntityBatch" parameterType="java.util.List">
+	<insert id="insertDBEntityBatch" parameterType="java.util.List" flushCache="true">
 		<foreach collection="list" item="eachInfo" index="index" separator=",">
 			<if test=" index == 0 ">
 					insert into <if test="eachInfo.database!=null">${eachInfo.database}.</if>${eachInfo.tableName} 
@@ -112,7 +113,7 @@
 		</foreach>
 	</insert>
 	
-	<update id="updateDBEntityByKey" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo">
+	<update id="updateDBEntityByKey" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" flushCache="true">
 			update <if test="database!=null">${database}.</if>${tableName} 
 			<set>
 				<foreach collection="cols" item="eachCol">
@@ -132,7 +133,7 @@
 				${keyCol.dbColName} = #{keyCol.value}
 			</where>
 	</update>
-	<delete id="deleteDBEntityByKey" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo">
+	<delete id="deleteDBEntityByKey" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" >
 		delete from <if test="database!=null">${database}.</if>${tableName}
 		<where>
 			<if test="keyCol.value==null"> 
@@ -142,7 +143,7 @@
 		</where>
 	</delete>
 	
-	<delete id="deleteDBEntity" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo">
+	<delete id="deleteDBEntity" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" >
 		delete from <if test="database!=null">${database}.</if>${tableName}
 		<where>
 			<foreach collection="cols" item="eachCol" separator="and">

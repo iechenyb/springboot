@@ -1,4 +1,6 @@
 package com.kiiik.web.system.po;
+import java.io.Serializable;
+
 import com.kiiik.pub.mybatis.annotation.DBColumn;
 import com.kiiik.pub.mybatis.annotation.DBEntity;
 import com.kiiik.pub.mybatis.annotation.KeyColumn;
@@ -12,7 +14,12 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @DBEntity("t_sys_user")
 @ApiModel(value="系统用户信息")
-public class User {
+public class User implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @作者:iechenyb</br>
 	 * @功能描述：</br>

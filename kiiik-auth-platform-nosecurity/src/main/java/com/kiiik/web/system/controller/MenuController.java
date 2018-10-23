@@ -14,6 +14,7 @@ import com.kiiik.pub.bean.res.ResultBean;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.system.po.Menu;
+import com.kiiik.web.system.service.MenuServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -92,4 +93,46 @@ public class MenuController {
 			return new ResultBean<String>().success("更新成功！更新记录数"+count);
 		}
 	}
+	
+	
+	@Autowired
+	MenuServiceImpl menuService;
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 获取系统菜单<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param roleId
+	 */
+	@SuppressWarnings("unchecked")
+	@GetMapping("getSystemMenuTree")
+	public ResultBean<Menu> getSystemMenuTree(){
+		return new ResultBean<Menu>(menuService.getSystemMenuTree()).success();
+	}
+	
+	
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 获取用户的系统菜单<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param roleId
+	 */
+	@GetMapping("getUserSystemMenuTree")
+	public ResultBean<Menu> getUserSystemMenuTree(String userId){
+		return new ResultBean<Menu>(menuService.getUserSystemMenuTree(userId));
+	}
+	
 }
+/**
+ *作者 : iechenyb<br>
+ *类描述: rid-leaf   1-d 2-h 3-f 4-g<br>
+ *创建时间: 2018年10月19日
+ *        root
+ *   /      |      \
+ *   a1     b2      c3
+ *   |     /  \      /
+ *   d4    e5   f6   g8
+ *         /
+ *        h7
+ */

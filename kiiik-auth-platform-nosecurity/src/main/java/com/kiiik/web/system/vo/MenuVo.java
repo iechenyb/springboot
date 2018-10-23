@@ -1,4 +1,4 @@
-package com.kiiik.web.system.po;
+package com.kiiik.web.system.vo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 @DBEntity("t_sys_menu")
 @ApiModel(description="系统菜单信息",value="系统菜单信息！")
-public class Menu implements Serializable{
+public class MenuVo implements Serializable{
 	/**
 	 * 
 	 */
@@ -57,7 +57,7 @@ public class Menu implements Serializable{
 	@ApiModelProperty(value="菜单排序权重值(兄弟菜单排序)")
 	private Integer ordor ;//菜单排序
 	@ApiModelProperty(value="子节点，请求时参数忽略")
-	private List<Menu> children = new ArrayList<Menu>();
+	private List<MenuVo> children = new ArrayList<MenuVo>();
 	public Integer getId() {
 		return id;
 	}
@@ -124,10 +124,10 @@ public class Menu implements Serializable{
 	public void setOrdor(Integer ordor) {
 		this.ordor = ordor;
 	}
-	public List<Menu> getChildren() {
+	public List<MenuVo> getChildren() {
 		return children;
 	}
-	public void setChildren(List<Menu> children) {
+	public void setChildren(List<MenuVo> children) {
 		this.children = children;
 	}
 	

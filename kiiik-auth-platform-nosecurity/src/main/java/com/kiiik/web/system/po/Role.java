@@ -1,5 +1,7 @@
 package com.kiiik.web.system.po;
 
+import java.io.Serializable;
+
 import com.kiiik.pub.mybatis.annotation.DBColumn;
 import com.kiiik.pub.mybatis.annotation.DBEntity;
 import com.kiiik.pub.mybatis.annotation.KeyColumn;
@@ -8,7 +10,12 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 @DBEntity("t_sys_role")
 @ApiModel(value="角色信息")
-public class Role {
+public class Role implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @作者:iechenyb</br>
 	 * @功能描述：</br>

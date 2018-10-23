@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 /**
  *作者 : iechenyb<br>
  *类描述: 如何考虑分页<br>
@@ -24,6 +25,8 @@ import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.utils.IdCardGenerator;
 import com.kiiik.utils.RandomUtils;
 import com.kiiik.web.system.po.User;
+import com.kiiik.web.system.service.UserServiceImpl;
+import com.kiiik.web.system.vo.UserRoleVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -142,4 +145,38 @@ public class UserController {
 			return new ResultBean<String>().success("更新成功！更新记录数"+count);
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping("getUserRoles")
+	@ApiOperation("获取用户的角色信息")
+	public ResultBean<List<UserRoleVo>> getUserRole(String userId){
+		return new ResultBean<List<UserRoleVo>>(userService.getUserRoles(userId)).success();
+	}
+	
+	@Autowired
+	UserServiceImpl userService;
+	
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 全覆盖式存储，不用判断有无重复记录<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param roleIds
+	 *@param userId
+	 *@return
+	 */
+	@SuppressWarnings("unchecked")
+	@GetMapping("saveUserRole")
+	@ApiOperation("保存用户角色")
+	public ResultBean<String> saveUserRole(@RequestParam(value = "roleIds[]") String[] roleIds,@RequestParam(value = "userId") String userId){
+		if(roleIds.length==0||userId==null){
+			return new ResultBean<String>().success("角色或者用户信息不能为空！");
+		}
+		int total = roleIds.length;
+		if(total>0){
+			userService.saveUserRoles(roleIds, userId);
+		}
+		return new ResultBean<String>().success("用户角色信息保存成功！！");
+	}
+	
 }
