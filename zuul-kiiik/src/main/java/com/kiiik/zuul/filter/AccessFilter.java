@@ -1,12 +1,19 @@
 package com.kiiik.zuul.filter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.kiiik.zuul.pub.bean.SessionUser;
 import com.kiiik.zuul.utils.RequestUtils;
+import com.kiiik.zuul.web.auth.bean.SystemUser;
 import com.kiiik.zuul.web.log.repository.SystemLogRepository;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -40,15 +47,10 @@ public class AccessFilter extends ZuulFilter {
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
-        System.out.println("用户信息："+request.getRemoteUser());
-        request.setAttribute("name", "chenyb");
-        ctx.addZuulRequestHeader("Cookie", "SESSION=" + request.getSession().getId());
+        //ctx.addZuulRequestHeader("Cookie", "SESSION=" + request.getSession().getId());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         RequestContext requestContext = RequestContext.getCurrentContext();
-        String userInfor = JSON.toJSONString(authentication.getPrincipal());
-        System.out.println(userInfor+"\n"+JSON.parseObject(userInfor).get("username"));
-        requestContext.addZuulRequestHeader("X-AUTH-ID",authentication.getPrincipal().toString());
-        //System.out.println(request.getSession().getId()+",send {} request to {}"+ request.getMethod()+ request.getRequestURL().toString());         //获取传来的参数accessToken
+        requestContext.addZuulRequestHeader("X-AUTH-ID",JSON.toJSONString(RequestUtils.getSessionUser(authentication)));
         System.out.println(RequestUtils.getSystemLog(request));
         systemLogRepository.save(RequestUtils.getSystemLog(request));
         return null;

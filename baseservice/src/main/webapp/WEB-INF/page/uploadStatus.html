@@ -8,7 +8,7 @@
 </head>
 <body th:with="basePath=${#httpServletRequest.getScheme() + '://' + #httpServletRequest.getServerName() + ':' + #httpServletRequest.getServerPort()  + #httpServletRequest.getContextPath() + '/'} ">
 	<div th:if="${ message }">
-	    <h2 th:text="${ message }"/>
+	    <span th:text="${message}"></span>
 	</div>
 </body>
 </html>

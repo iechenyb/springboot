@@ -59,24 +59,19 @@ public class WebMvcExceptionConfigurer extends WebMvcConfigurerAdapter {
                 
                 String requestType = request.getHeader("X-Requested-With");
                 if("XMLHttpRequest".equals(requestType)){
-                    System.out.println("AJAX请求..");
-                    ResponseUtils.writeResult(response, result);
+                	   ResponseUtils.writeResult(response, result);
                 }else{
-                    System.out.println("非AJAX请求..");
-                    ModelAndView view = new ModelAndView();
-        	    	view.addObject("msg", e.getMessage());
-        			view.setViewName("/"+response.getStatus());
-                    return view;
+                    /*ModelAndView view = new ModelAndView();
+                    view.addObject("path", request.getRequestURI());
+        	    	view.addObject("error", e.getMessage());
+        	    	view.addObject("timestamp",new Date().getTime());
+        	    	view.addObject("status",response.getStatus());
+        	    	view.addObject("message", ExceptionCode.ERRORCODE.get(response.getStatus()));
+        			view.setViewName("error1");*/
+                    return ResponseUtils.getErrorView(request, response, e);
                 }
                 return null;
             }
         });
     }
-    /*@Autowired
-    ErrorPageInterceptor errorPageInterceptor;
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(errorPageInterceptor);
-        super.addInterceptors(registry);
-    }*/
 }
