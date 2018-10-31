@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.kiiik.pub.bean.ResultBean;
-import com.kiiik.pub.exception.VasException;
+import com.kiiik.pub.exception.KiiikException;
 import com.kiiik.utils.ResponseUtils;
 
 import net.sf.json.JSONObject;
@@ -44,7 +44,7 @@ public class WebMvcExceptionConfigurer extends WebMvcConfigurerAdapter {
             	result.data("error");
                 if (handler instanceof HandlerMethod) {
                     HandlerMethod handlerMethod = (HandlerMethod) handler;
-                 if (e instanceof VasException) {//业务失败的异常，如“账号或密码错误”
+                 if (e instanceof KiiikException) {//业务失败的异常，如“账号或密码错误”
                         result.setMsg("VasException[自定义业务逻辑异常] "+e .getMessage());
                         logger.error(e .getMessage());
                     } else {  /* else   if (e instanceof NullPointerException) {//业务失败的异常，如“账号或密码错误”

@@ -8,7 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
-import com.kiiik.pub.exception.VasException;
+import com.kiiik.pub.exception.KiiikException;
 
 /**
  * 作者 : iechenyb<br>
@@ -28,7 +28,7 @@ public class ParamterUtils {
 	public static void checkObjectParams(BindingResult bindingResult) {
 		List<ObjectError> errorList = bindingResult.getAllErrors();
 		if (bindingResult.hasErrors()) {
-			throw new VasException(
+			throw new KiiikException(
 					"非法参数：" + errorList.get(0).getObjectName() + "" + errorList.get(0).getDefaultMessage());
 		}
 	}

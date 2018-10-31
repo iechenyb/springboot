@@ -13,6 +13,7 @@
 		 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <docker.image.prefix>comcyb</docker.image.prefix>
          <project.artifactId>cyb</project.artifactId>
+         <springfox.version>2.6.1</springfox.version>
           <project.build.directory>/src/main/dockerfile</project.build.directory>
            <project.build.finalName>test1.0</project.build.finalName>
 	</properties>
@@ -59,6 +60,16 @@
 		    <groupId>com.alibaba</groupId>
 		    <artifactId>fastjson</artifactId>
 		    <version>1.2.51</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>${springfox.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>${springfox.version}</version>
 		</dependency>
 		<!-- <dependency>
 			<groupId>org.thymeleaf.extras</groupId>

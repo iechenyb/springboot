@@ -139,9 +139,9 @@ public class ComplexCondition {
 		}
 		return result;
 	}
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		ComplexCondition cc = new ComplexCondition().col("id").gt(5);
 		cc.and(cc);
 		System.out.println(cc);
-	}
+	}*/
 }

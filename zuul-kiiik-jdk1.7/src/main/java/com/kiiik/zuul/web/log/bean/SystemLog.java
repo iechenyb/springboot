@@ -13,7 +13,7 @@ import javax.persistence.Table;
  *只有操作正常的请求才会记录日志
  */
 @Entity
-@Table(name="system_log")
+@Table(name="t_sys_log")
 public class SystemLog {
 	  @Id
 	  @GeneratedValue(strategy = GenerationType.IDENTITY)

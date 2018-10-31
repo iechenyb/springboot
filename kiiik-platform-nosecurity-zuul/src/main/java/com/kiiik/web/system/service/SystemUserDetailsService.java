@@ -1,0 +1,62 @@
+package com.kiiik.web.system.service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import com.kiiik.pub.mybatis.service.GenericService;
+import com.kiiik.web.contant.Contants_Test;
+import com.kiiik.web.system.po.User;
+import com.kiiik.web.system.vo.SystemUser;
+import com.kiiik.web.system.vo.UserRoleVo;
+
+@Component
+public class SystemUserDetailsService implements UserDetailsService {
+    
+    @Autowired
+    private  GenericService genericService;
+    
+    @Autowired
+    UserServiceImpl userService;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    	User user = new User();
+    	user.setEmpNo(username);
+    	user = genericService.queryDBEntitySingle(user);
+    	if(user==null){
+    		throw new UsernameNotFoundException("用户名或密码不正确");
+    	}
+    	List<UserRoleVo> roles = userService.getUserRoles(user.getId());
+		return new SystemUser(
+				user.getUserName()
+				,user.getPassword()
+				,user.getIsEffect()==1?true:false,
+				true,
+				true,
+				true,
+				getAuthoritiesById(roles,username));
+		
+    }
+    
+    public Collection<? extends GrantedAuthority> getAuthoritiesById(List<UserRoleVo> roles,String empno) {
+		List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+		if(!CollectionUtils.isEmpty(roles)){
+			for(UserRoleVo role:roles){
+				list.add(new SimpleGrantedAuthority(role.getRoleName()));
+			}
+		}
+		list.add(Contants_Test.testRoles(empno));
+		return list;
+	}
+    
+}

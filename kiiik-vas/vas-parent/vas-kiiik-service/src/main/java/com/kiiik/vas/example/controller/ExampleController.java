@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.exception.MyException1;
-import com.kiiik.pub.exception.VasException;
+import com.kiiik.pub.exception.KiiikException;
 import com.kiiik.vas.example.model.MyUser;
 import com.kiiik.vas.example.param.ValidBean;
 import com.kiiik.vas.example.service.MyUserServiceImpl;
@@ -141,11 +141,11 @@ public class ExampleController {
 	 *创建时间: 2017年7月15日hj12
 	 *@param th
 	 *@return
-	 *@throws VasException
+	 *@throws KiiikException
 	 */
 	@SuppressWarnings("unchecked")
 	@GetMapping("/exResultBean")//当integer为字符串时，统一处理可以获取异常信息
-	public ResultBean<String> exResultBean(boolean th) throws  VasException {
+	public ResultBean<String> exResultBean(boolean th) throws  KiiikException {
 		if(th){
 			return new ResultBean<String>("类型错误").fail();
 		}
@@ -209,13 +209,13 @@ public class ExampleController {
 	 *创建时间: 2017年7月15日hj12
 	 *@param th
 	 *@return
-	 *@throws VasException
+	 *@throws KiiikException
 	 */
 	@SuppressWarnings("unchecked")
 	@GetMapping("/exBaseThrow")//当integer为字符串时，统一处理可以获取异常信息
-	public ResultBean<String> exBaseThrow(boolean th) throws  VasException {
+	public ResultBean<String> exBaseThrow(boolean th) throws  KiiikException {
 		if(th){
-			throw new VasException("类型错误");//抛出异常后，返回值直接为空！！！！
+			throw new KiiikException("类型错误");//抛出异常后，返回值直接为空！！！！
 		}
 		return new ResultBean<String>("hello ").success();
 	}

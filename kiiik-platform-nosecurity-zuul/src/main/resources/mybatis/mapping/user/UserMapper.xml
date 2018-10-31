@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kiiik.web.system.mapper.UserMapper" >
+    <cache></cache>
+    <resultMap id="BaseResultMap" type="com.kiiik.web.system.vo.UserRoleVo" ></resultMap>
+     <resultMap id="menuMap" type="com.kiiik.web.system.po.Menu"></resultMap>
+    <select id="getUserRoles" resultMap="BaseResultMap" parameterType="Integer" flushCache="true">
+        select ur.userId,ur.roleId,r.roleName,u.username 
+		from t_sys_role r,t_sys_user_role ur,t_sys_user u
+		where u.id=ur.userId 
+		and r.id=ur.roleId
+		and userid= #{userId}
+    </select>
+    
+    <select id="getUserMenus" resultMap="menuMap" parameterType="Integer" flushCache="true">
+         SELECT
+			distinct m.id,m.*
+		FROM
+			t_sys_user_role ur,
+			t_sys_role_menu rm,
+			t_sys_menu m
+		WHERE
+			ur.roleid = rm.roleid
+		AND rm.menuid = m.id
+		AND ur.userid =  #{userId}
+    </select>
+  
+</mapper>

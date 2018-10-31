@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<artifactId>kiiik-auth-platform</artifactId>
+	<packaging>jar</packaging>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.9.RELEASE</version>
 		<relativePath />
 	</parent>
-	<artifactId>kiiik-auth-platform</artifactId>
-	<packaging>war</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -21,12 +21,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -130,13 +124,26 @@
 		    <artifactId>pinyin4j</artifactId>
 		    <version>2.5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.cyb</groupId>
+			<artifactId>iechenyb</artifactId>
+			<version>1.0</version>
+			<systemPath>d:/data/lib/my/iechenyb-1.0.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.cyb</groupId>
+			<artifactId>vas-api</artifactId>
+			<version>1.0.0</version>
+			<systemPath>d:/data/lib/my/vas-api-1.0.0.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>1.4.2.RELEASE</version><!--$NO-MVN-MAN-VER$ -->
 				<configuration>
 					<includeSystemScope>true</includeSystemScope>
 				</configuration>
@@ -155,6 +162,23 @@
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArgs>
+                        <!-- 过期的方法的警告-->
+                        <arg>-Xlint:deprecation</arg>
+                    </compilerArgs>
+                    <compilerArguments>
+                        <!-- 是否输出所有的编译信息（包括类的加载等）-->
+                        <!--<verbose />-->
+                        <!-- 解决maven命令编译报错，因为rt.jar 和jce.jar在jre的lib下面，不在jdk的lib下面，
+                        导致maven找不到（java7以后会出现这个问题），将这2个jar包拷贝到jdk的lib下面估计也好使-->
+                        <bootclasspath>${java.home}\lib\rt.jar;${java.home}\lib\jce.jar</bootclasspath>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
 		</plugins>
 		<resources>
 			<resource>
@@ -166,8 +190,7 @@
 			</resource>
 			<resource>
 				<directory>${project.basedir}/src/main/resources</directory>
-				<targetPath></targetPath><!-- 参数只能是空 不能是/ 否则无法打包 -->
-				<!-- 默认目录：D:\chenyb\bootws\kiiik-vas\vas-parent\vas-kiiik-service\target\【vasservice\WEB-INF\classes】 -->
+				<targetPath></targetPath>
 				<includes>
 					<include>**/**</include>
 				</includes>

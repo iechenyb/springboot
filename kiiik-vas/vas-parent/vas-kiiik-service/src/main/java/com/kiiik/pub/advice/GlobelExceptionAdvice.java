@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.kiiik.pub.bean.ResultBean;
-import com.kiiik.pub.exception.VasException;
+import com.kiiik.pub.exception.KiiikException;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
@@ -46,7 +46,7 @@ public class GlobelExceptionAdvice {
 	       r.fail();
 	       return r;
 	   }
-	   @ExceptionHandler(value = VasException.class)
+	   @ExceptionHandler(value = KiiikException.class)
 	    @ResponseBody
 	    public Object baseErrorHandler(HttpServletRequest req, Exception e) throws Exception {
 	      System.out.println("---BaseException Handler---Host {} invokes url {} ERROR: {}"+req.getRemoteHost()+ req.getRequestURL()+e.getMessage());

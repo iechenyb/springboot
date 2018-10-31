@@ -62,7 +62,7 @@ public class ApiController extends BaseController{
 			i++;
 			outerList.add(innerMap);
 		}
-		view.setViewName("index");
+		view.setViewName("/index");
 		view.addObject("listmap", outerList);
 		return view;
 	}

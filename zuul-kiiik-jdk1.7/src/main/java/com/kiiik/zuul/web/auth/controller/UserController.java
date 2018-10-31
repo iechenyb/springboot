@@ -76,8 +76,7 @@ public class UserController {
 	public ModelAndView toLogin() {
 		log.info("正在跳转到登录页面！");
 		ModelAndView view = new ModelAndView();
-		view.setViewName("/user/login_page");
-		view.addObject("author", "chenyuanbao");
+		view.setViewName("user/login_page");
 		return view;
 	}
 

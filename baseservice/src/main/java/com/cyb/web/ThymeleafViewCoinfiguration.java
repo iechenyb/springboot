@@ -55,7 +55,7 @@ public class ThymeleafViewCoinfiguration {
 	@Bean
 	public SpringResourceTemplateResolver templateResolver() {
 		SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-		resolver.setPrefix("/WEB-INF/page/");//设置地址前缀
+		resolver.setPrefix("classpath:/templates");//设置地址前缀
 		resolver.setSuffix(".html");// 设置后缀
 		resolver.setCacheable(false);// 设置不缓存
 		resolver.setTemplateMode("HTML5");

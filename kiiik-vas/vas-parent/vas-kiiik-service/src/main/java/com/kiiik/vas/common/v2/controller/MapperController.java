@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kiiik.pub.bean.ResultBean;
-import com.kiiik.pub.exception.VasException;
+import com.kiiik.pub.exception.KiiikException;
 import com.kiiik.vas.example.dao.UserDaoImpl;
 import com.kiiik.vas.example.model.MyUser;
 import com.kiiik.vas.example.service.MyUserServiceImpl2;
@@ -37,9 +37,9 @@ public class MapperController {
 	
 	@GetMapping("/hello")
 	@ResponseBody
-	public String sayHello(String name,boolean hasEx) throws VasException{
+	public String sayHello(String name,boolean hasEx) throws KiiikException{
 		if(hasEx){
-			throw new VasException("除数不能为零！");
+			throw new KiiikException("除数不能为零！");
 		}
 		return "hello "+name;
 	}
