@@ -9,6 +9,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cyb.resolver.MyParam;
+
 @RestController
 public class TestController {
     @GetMapping("/helloworld")
@@ -39,8 +41,8 @@ public class TestController {
         return user+",后端会话id："+req.getSession().getId()+",服务器ip："+req.getServerPort()+",参数："+para;
     }
 
-    @GetMapping("/test2")
-    public String test2() {
+    @GetMapping("/myparamresovler")
+    public String test2(@MyParam int a) {
         return "权限2";
     }
 }

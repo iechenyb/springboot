@@ -82,7 +82,7 @@ public class Swagger2UIConfig {
     	ignoreController=new HashMap<>();
     	ignoreController.put("GenericController", "");
     	ignoreController.put("JSRController", "");
-    	ignoreController.put("ApiController", "");
+    	//ignoreController.put("ApiController", "");
     }
     /**
      * 处理包路径配置规则,支持多路径扫描匹配以逗号隔开

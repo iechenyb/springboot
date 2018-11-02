@@ -24,29 +24,29 @@ public class UserRole implements Serializable {
 	@KeyColumn(useGeneratedKeys=true)
 	@DBColumn(value = "id",insertIfNull="default")	
 	@ApiModelProperty(value="主键")
-	private String id;  
+	private Integer id;  
 	@DBColumn("userid")
 	@ApiModelProperty("用户主键")
-	private String userId; 
+	private Integer userId; 
 	@DBColumn("roleid")
 	@ApiModelProperty("角色主键")
-	private String roleId;
-	public String getId() {
+	private Integer roleId;
+	public Integer getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public String getRoleId() {
+	public Integer getRoleId() {
 		return roleId;
 	}
-	public void setRoleId(String roleId) {
+	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
 	} 
 	

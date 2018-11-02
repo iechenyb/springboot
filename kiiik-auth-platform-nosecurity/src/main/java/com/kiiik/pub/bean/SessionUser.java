@@ -1,5 +1,7 @@
 package com.kiiik.pub.bean;
 
+import java.util.List;
+
 /**
  * 作者 : iechenyb<br>
  * 类描述: 说点啥<br>
@@ -7,9 +9,10 @@ package com.kiiik.pub.bean;
  */
 public class SessionUser {
 
-	private String userName;
+	private String userName;//页面可能要显示员工名称
 	private String empNo;
 	private String userId;
+	private List<String> roles;
 
 	public SessionUser(String userName,String empNo,String userId){
 		this.userName = userName;
@@ -39,6 +42,14 @@ public class SessionUser {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 
 }

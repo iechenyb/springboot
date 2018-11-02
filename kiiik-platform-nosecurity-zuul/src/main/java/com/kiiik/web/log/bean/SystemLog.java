@@ -23,7 +23,7 @@ public class SystemLog {
 	@DBColumn("client_ip")
 	public String clientIp;// 客户端ip
 	@ApiModelProperty(value="访问时间")
-	@DBColumn("visitor_time")
+	@DBColumn("visit_time")
 	public String visitorTime;// 访问时间
 	@ApiModelProperty(value="访问地址")
 	@DBColumn("uri")
@@ -34,7 +34,10 @@ public class SystemLog {
 	@ApiModelProperty(value="模块名称")
 	@DBColumn("module")
 	public String module;// 模块名称 module为uri的前缀 比如 uri /system/user 则 // module为/system
-
+	@ApiModelProperty(value="请求参数")
+	@DBColumn("param")
+	public String param;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -81,6 +84,14 @@ public class SystemLog {
 
 	public void setModule(String module) {
 		this.module = module;
+	}
+
+	public String getParam() {
+		return param;
+	}
+
+	public void setParam(String param) {
+		this.param = param;
 	}
 
 	public String toString() {

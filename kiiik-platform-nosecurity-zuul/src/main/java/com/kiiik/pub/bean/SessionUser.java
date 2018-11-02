@@ -8,6 +8,7 @@ import java.util.List;
 public class SessionUser {
 	private String userName;
 	private Integer userId;
+	private String empNo;
 	private List<String> roles;
 	
 	public String getUserName() {
@@ -27,6 +28,12 @@ public class SessionUser {
 	}
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
+	}
+	public String getEmpNo() {
+		return empNo;
+	}
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
 	}
 	
 }

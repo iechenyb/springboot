@@ -15,6 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.exception.KiiikException;
 import com.kiiik.utils.ResponseUtils;
+import com.kiiik.web.example.anno.RequestDateParamMethodArgumentResolver;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
@@ -103,7 +105,22 @@ public class WebMvcExceptionConfigurer extends WebMvcConfigurerAdapter {
         StringHttpMessageConverter converter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
         return converter;
     }
-
+    
+    /* @Bean
+    public FilterRegistrationBean repeatedlyReadFilter() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        RepeatedlyReadFilter repeatedlyReadFilter = new RepeatedlyReadFilter();
+        registration.setFilter(repeatedlyReadFilter);
+        registration.addUrlPatterns("/*");
+        return registration;
+    }*/
+    
+    /*@Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new RepeatedlyReadInterceptor()).addPathPatterns("/**");
+        super.addInterceptors(registry);
+    }*/
+    
     /**
      * 修改StringHttpMessageConverter默认配置
      * @param converters
@@ -111,5 +128,9 @@ public class WebMvcExceptionConfigurer extends WebMvcConfigurerAdapter {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters){
         converters.add(responseBodyStringConverter());
+    }
+    
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(new RequestDateParamMethodArgumentResolver());    //添加自定义参数解析器
     }
 }

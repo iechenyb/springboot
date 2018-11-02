@@ -1,13 +1,11 @@
 package com.kiiik.pub.filter;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.alibaba.fastjson.JSON;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.utils.RequestUtils;
+import com.kiiik.utils.req.RequestParamAnalysis;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 
@@ -16,6 +14,7 @@ import com.netflix.zuul.context.RequestContext;
 public class AccessFilter extends ZuulFilter {
 	
 	GenericService genericService;
+	RequestParamAnalysis analysis;
 	
     @Override
     public String filterType() {
@@ -37,13 +36,15 @@ public class AccessFilter extends ZuulFilter {
 
     @Override
     public Object run() {
-        RequestContext ctx = RequestContext.getCurrentContext();
-        HttpServletRequest request = ctx.getRequest();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        RequestContext requestContext = RequestContext.getCurrentContext();
-        requestContext.addZuulRequestHeader("X-AUTH-ID",JSON.toJSONString(RequestUtils.getSessionUser(authentication)));
-        System.out.println(RequestUtils.getSystemLog(request));
-        genericService.insertDBEntity(RequestUtils.getSystemLog(request));
+        RequestContext.getCurrentContext()
+        .addZuulRequestHeader("X-AUTH-ID",
+        		JSON.toJSONString(
+        				RequestUtils.getSessionUser(
+        						SecurityContextHolder.getContext().getAuthentication())));
+        if(RequestUtils.needSaveLog(RequestContext.getCurrentContext().getRequest())){
+        	genericService.insertDBEntity(RequestUtils.getSystemLog(
+        			RequestContext.getCurrentContext().getRequest(),true));
+        }
         return null;
     }
 
@@ -53,6 +54,14 @@ public class AccessFilter extends ZuulFilter {
 
 	public void setGenericService(GenericService genericService) {
 		this.genericService = genericService;
+	}
+
+	public RequestParamAnalysis getAnalysis() {
+		return analysis;
+	}
+
+	public void setAnalysis(RequestParamAnalysis analysis) {
+		this.analysis = analysis;
 	}
 
 }

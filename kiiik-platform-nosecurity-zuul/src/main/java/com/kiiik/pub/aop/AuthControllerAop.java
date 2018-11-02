@@ -4,6 +4,8 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.JoinPoint;
@@ -14,16 +16,25 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint;
 import org.springframework.aop.framework.ReflectiveMethodInvocation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.context.TimeContext;
+import com.kiiik.pub.mybatis.service.GenericService;
+import com.kiiik.utils.RequestUtils;
+import com.kiiik.web.log.bean.SystemLog;
 
 /**
  * 作者 : iechenyb<br>
@@ -35,8 +46,7 @@ import com.kiiik.pub.context.TimeContext;
 public class AuthControllerAop {
 	Log log = LogFactory.getLog(AuthControllerAop.class);
 
-	// 如果有些controller方法不是浏览器发起，二是controller回调的，request可能为空！
-	@Pointcut("execution(* com.kiiik.vas..*.*(..))")
+	@Pointcut("execution(* com.kiiik.web.system.controller.*.*(..))")
 	public void executeService() {
 	}
 
@@ -70,7 +80,6 @@ public class AuthControllerAop {
 		return m.isAnnotationPresent(RequestMapping.class) || m.isAnnotationPresent(GetMapping.class)
 				|| m.isAnnotationPresent(PostMapping.class) || m.isAnnotationPresent(PutMapping.class);
 	}
-
 
 	public void doAfterThrowingAdvice(JoinPoint joinPoint, Throwable exception) {
 		// 目标方法名：
@@ -109,34 +118,75 @@ public class AuthControllerAop {
 			}
 		}
 	}
-    /**
-     * 
-     *作者 : iechenyb<br>
-     *方法描述: 异常直接抛出，不在控制逻辑里处理！<br>
-     *创建时间: 2017年7月15日hj12
-     *@param proceedingJoinPoint
-     *@return
-     *@throws Throwable
-     */
+
+	/**
+	 * 
+	 * 作者 : iechenyb<br>
+	 * 方法描述: 异常直接抛出，不在控制逻辑里处理！<br>
+	 * 创建时间: 2017年7月15日hj12
+	 * 
+	 * @param proceedingJoinPoint
+	 * @return
+	 * @throws Throwable
+	 */
 	@Around(value = "executeService()")
 	public Object doAroundAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		Object obj = null;
-		/*Method curMethod = AopUtils.getMethod(proceedingJoinPoint);
-		try {// obj之前可以写目标方法执行前的逻辑
-*/			long s =System.currentTimeMillis();
-			obj = proceedingJoinPoint.proceed();// 调用执行目标方法
-			long e =System.currentTimeMillis();
-			TimeContext.setTime(e-s);
-			return obj;
-		/*} catch (Exception throwable) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(proceedingJoinPoint.getTarget().getClass().getName() + " : "
-					+ Arrays.toString(proceedingJoinPoint.getArgs()) + " in "
-					+ proceedingJoinPoint.getSignature().getName() + "()");
-			throwable.printStackTrace();
-			return doAfterThrowingAdvice(throwable,curMethod.getClass());
-		}*/
+		long s = System.currentTimeMillis();
+		obj = proceedingJoinPoint.proceed();// 调用执行目标方法
+		long e = System.currentTimeMillis();
+		TimeContext.setTime(e - s);
+		recordVisitLog(proceedingJoinPoint);
+		return obj;
+	}
 
+	@Autowired
+	GenericService genericService;
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 直接使用转换后的参数信息<br>
+	 *创建时间: 2017年7月15日hj12
+	 *@param proceedingJoinPoint
+	 */
+	private void recordVisitLog(ProceedingJoinPoint proceedingJoinPoint) {
+		Object[] args = proceedingJoinPoint.getArgs();//参数 
+		
+		try {
+			RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+			if (ra != null) {
+				ServletRequestAttributes sra = (ServletRequestAttributes) ra;
+				HttpServletRequest request = sra.getRequest();
+				if (!StringUtils.isEmpty(request.getRemoteUser())) {
+					SystemLog log= RequestUtils.getSystemLog(request,false);
+					if(args!=null){
+						log.setParam(JSON.toJSONString(args));
+					}
+					genericService.insertDBEntity(log);
+				}
+			}
+		} catch (Exception e) {
+			// 日志异常容错，不进行记录
+			e.printStackTrace();
+		}
+	}
+	
+
+	@SuppressWarnings("unused")
+	private void recordVisitLog() {
+		try {
+			RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+			if (ra != null) {
+				ServletRequestAttributes sra = (ServletRequestAttributes) ra;
+				HttpServletRequest request = sra.getRequest();
+				if (!StringUtils.isEmpty(request.getRemoteUser())) {
+					genericService.insertDBEntity(RequestUtils.getSystemLog(request,false));
+				}
+			}
+		} catch (Exception e) {
+			// 日志异常容错，不进行记录
+			e.printStackTrace();
+		}
 	}
 
 	@SuppressWarnings("unused")

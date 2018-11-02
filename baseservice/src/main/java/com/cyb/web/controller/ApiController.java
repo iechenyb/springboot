@@ -17,11 +17,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.cyb.web.bean.SessionUser;
 
 /**
  * 作者 : iechenyb<br>
@@ -95,6 +98,24 @@ public class ApiController extends BaseController{
 	@GetMapping("free")
 	public String free(String name) {
 		return "free！";
+	}
+	
+	@ResponseBody
+	@PostMapping("postString")
+	public String postString(String name) {
+		return "free！";
+	}
+	
+	@ResponseBody
+	@PostMapping("postObject")
+	public SessionUser postString(SessionUser user) {
+		return user;
+	}
+	
+	@ResponseBody
+	@PostMapping("postRequestBodyObject")
+	public SessionUser postRequestBodyObject(@RequestBody SessionUser user) {
+		return user;
 	}
 
 	@PostMapping("/upload")

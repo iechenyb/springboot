@@ -38,43 +38,38 @@ public class User implements Serializable{
 	@DBColumn("empno")
     private String empNo;  
 	
-	@ApiModelProperty("身份证信息")
-	@DBColumn("idcard")
-    private String idCard; 
-	
-	@ApiModelProperty("电子邮件")
-	@DBColumn("email")
-    private String email; 
-	
-	@ApiModelProperty("手机号码")
-	@DBColumn("phone")
-    private String phone; 
-	
 	@ApiModelProperty("密码")
 	@DBColumn("password")
     private String password; 
 	
-    @ApiModelProperty("上次登录时间")
+    @ApiModelProperty("上次登录时间，忽略")
     @DBColumn("lastLoginTime")
     public Long lastLoginTime;
+    
+    @ApiModelProperty("登录时间，忽略")
+    @DBColumn("loginTime")
+    public Long loginTime;
+    
     @DBColumn("lastLoginIp")
-    @ApiModelProperty(value="上次登录ip")
+    @ApiModelProperty(value="上次登录ip，忽略")
     public String lastLoginIp;
+    
     @DBColumn("loginIp")
-    @ApiModelProperty(value="最新登录ip")
+    @ApiModelProperty(value="最新登录ip，忽略")
     public String loginIp;
+    
     @DBColumn("loginSum")
-    @ApiModelProperty(value="登录次数")
+    @ApiModelProperty(value="登录次数，忽略")
     public Integer loginSum;
+    
     @DBColumn("isEffect")
     @ApiModelProperty(value="是否可用 1可用 其他值不可用")
     public Integer isEffect;
-    @DBColumn("sex")
-    @ApiModelProperty(value="性别 0男 1女 2未知")
-    public Integer sex;
+    
     @DBColumn("operateID")
-    @ApiModelProperty(value="操作员标识")
-    public String operateID;
+    @ApiModelProperty(value="记录操作人员id,忽略")
+    Integer operateID;
+    
     public User() {  
         super();  
     }  
@@ -118,43 +113,7 @@ public class User implements Serializable{
 	public void setIsEffect(Integer isEffect) {
 		this.isEffect = isEffect;
 	}
-	public String getOperateID() {
-		return operateID;
-	}
-	public void setOperateID(String operateID) {
-		this.operateID = operateID;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-
-	public String getPhone() {
-		return phone;
-	}
-
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-
-	public Integer getSex() {
-		return sex;
-	}
-
-
-	public void setSex(int sex) {
-		this.sex = sex;
-	}
-
-
+	
 	public String getLoginIp() {
 		return loginIp;
 	}
@@ -184,19 +143,20 @@ public class User implements Serializable{
 		this.empNo = empNo;
 	}
 
-
-	public String getIdCard() {
-		return idCard;
+	public Integer getOperateID() {
+		return operateID;
 	}
 
-
-	public void setIdCard(String idCard) {
-		this.idCard = idCard;
+	public void setOperateID(Integer operateID) {
+		this.operateID = operateID;
 	}
 
+	public Long getLoginTime() {
+		return loginTime;
+	}
 
-	public void setSex(Integer sex) {
-		this.sex = sex;
-	}  
+	public void setLoginTime(Long loginTime) {
+		this.loginTime = loginTime;
+	}
 	
 }

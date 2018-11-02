@@ -1,28 +1,44 @@
 package com.kiiik.config;
 
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 
 /**
  * 作者 : iechenyb<br>
  * 类描述: 说点啥<br>
  * 创建时间: 2018年10月15日
  */
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds= 1800)
+@Configurable
 public class SessionConfig {
-	// 冒号后的值为没有配置文件时，制动装载的默认值
-	@Value("${redis.hostname:localhost}")
-	String hostName;
-	@Value("${redis.port:6379}")
-	int port;
-
-	@Bean public JedisConnectionFactory connectionFactory() { 
-		JedisConnectionFactory connection = new JedisConnectionFactory(); 
-		connection.setPort(port);
-		connection.setHostName(hostName); 
-		return connection; 
-	}
+	
+	@Value("${server.session.timeout}")
+    private int sessionTimeout;
+ 
+    @Primary
+    @Bean
+    public RedisOperationsSessionRepository sessionRepository(
+        @Qualifier("sessionRedisTemplate") RedisOperations<Object, Object> sessionRedisTemplate,
+        ApplicationEventPublisher applicationEventPublisher) {
+        RedisOperationsSessionRepository sessionRepository = new RedisOperationsSessionRepository(sessionRedisTemplate);
+        sessionRepository.setApplicationEventPublisher(applicationEventPublisher);
+        sessionRepository.setDefaultMaxInactiveInterval(sessionTimeout);
+        return sessionRepository;
+    }
+    
+	/*@Bean public JedisConnectionFactory connectionFactory() { 
+		 RedisStandaloneConfiguration redisStandaloneConfiguration =
+	                new RedisStandaloneConfiguration();
+	        redisStandaloneConfiguration.setHostName("localhost");
+	        redisStandaloneConfiguration.setDatabase(0);
+	        redisStandaloneConfiguration.setPassword();
+	        redisStandaloneConfiguration.setPort(6380);
+		return new JedisConnectionFactory(redisStandaloneConfiguration); 
+	}*/
 
 }

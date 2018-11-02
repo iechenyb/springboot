@@ -10,4 +10,6 @@ public class ResponseStatus {
 	public final  static String FAIL = "1";
 	public final  static  String NO_PERMISSION = "2";
 	public final  static  String NEED_CACHEABLE = "3";
+	public final  static  String SESSION_TIME_OUT = "4";
+	
 }

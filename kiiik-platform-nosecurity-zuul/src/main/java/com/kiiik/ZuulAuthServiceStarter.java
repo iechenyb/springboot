@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.kiiik.pub.filter.AccessFilter;
 import com.kiiik.pub.mybatis.service.GenericService;
+import com.kiiik.utils.req.RequestParamAnalysis;
 
 @ServletComponentScan
 @SpringBootApplication
@@ -26,6 +27,8 @@ import com.kiiik.pub.mybatis.service.GenericService;
 @Controller
 @EnableWebMvc
 public class ZuulAuthServiceStarter {
+	
+	
 	public static void main(String[] args) {
 		SpringApplication.run(ZuulAuthServiceStarter.class, args);
 	}
@@ -38,11 +41,15 @@ public class ZuulAuthServiceStarter {
 	
 	@Autowired
 	GenericService genericService;
+	
+	@Autowired
+	RequestParamAnalysis analysis;
 	    
 	@Bean
 	public AccessFilter accessFilter() {
 		AccessFilter filter = new AccessFilter();
 		filter.setGenericService(genericService);
+		filter.setAnalysis(analysis);
 		return filter;
 	}
 

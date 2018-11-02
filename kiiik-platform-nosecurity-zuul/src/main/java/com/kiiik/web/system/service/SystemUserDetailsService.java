@@ -29,23 +29,25 @@ public class SystemUserDetailsService implements UserDetailsService {
     UserServiceImpl userService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String empno) throws UsernameNotFoundException {
     	User user = new User();
-    	user.setEmpNo(username);
+    	user.setEmpNo(empno);
     	user = genericService.queryDBEntitySingle(user);
     	if(user==null){
     		throw new UsernameNotFoundException("用户名或密码不正确");
     	}
     	List<UserRoleVo> roles = userService.getUserRoles(user.getId());
-		return new SystemUser(
-				user.getUserName()
+    	SystemUser sysUser =  new SystemUser(
+				user.getEmpNo()
 				,user.getPassword()
 				,user.getIsEffect()==1?true:false,
 				true,
 				true,
 				true,
-				getAuthoritiesById(roles,username));
-		
+				getAuthoritiesById(roles,empno));
+    	sysUser.setId(user.getId());
+    	sysUser.setShowUserName(user.getUserName());
+		return sysUser;
     }
     
     public Collection<? extends GrantedAuthority> getAuthoritiesById(List<UserRoleVo> roles,String empno) {

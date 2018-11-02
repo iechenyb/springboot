@@ -31,7 +31,7 @@ public class UserServiceImpl extends BaseService {
 	 *@param userId
 	 *@return
 	 */
-	public int saveUserRoles(String[] roleIds,String userId){
+	public int saveUserRoles(Integer[] roleIds,Integer userId){
 		
 		UserRole ur=null;
 		ur = new UserRole();

@@ -1,7 +1,6 @@
 package com.kiiik.pub.bean;
 
 import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -71,6 +70,7 @@ public class ResultBean<T> implements Serializable {
 	public ResultBean fail(Throwable e) {
 		this.ec = ResponseStatus.FAIL;
 		this.es = e.toString();
+		
 		return this;
 	}
 	
@@ -87,6 +87,16 @@ public class ResultBean<T> implements Serializable {
 		this.ec = ResponseStatus.NO_PERMISSION;
 		return this;
 	}
+	public ResultBean<T> sessionTimeOut(String msg){
+		this.ec = ResponseStatus.SESSION_TIME_OUT;
+		this.es=msg;
+		return this;
+	}
+	public ResultBean<T> sessionTimeOut(){
+		this.ec = ResponseStatus.SESSION_TIME_OUT;
+		return this;
+	}
+	
 	public ResultBean<T> refuse(String msg){
 		this.ec = ResponseStatus.NO_PERMISSION;
 		this.es = msg;

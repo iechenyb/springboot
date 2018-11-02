@@ -7,16 +7,16 @@ import org.springframework.security.core.userdetails.User;
 
 public class SystemUser extends User{
 	private Integer id;//用户主键
-
+	private String showUserName;
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public SystemUser(String username, String password, boolean enabled, boolean accountNonExpired,
+	public SystemUser(String empno, String password, boolean enabled, boolean accountNonExpired,
 			boolean credentialsNonExpired, boolean accountNonLocked,
 			Collection<? extends GrantedAuthority> authorities) {
-		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+		super(empno, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 		
 	}
 
@@ -27,6 +27,15 @@ public class SystemUser extends User{
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	public String getShowUserName() {
+		return showUserName;
+	}
+
+	public void setShowUserName(String showUserName) {
+		this.showUserName = showUserName;
+	}
+
 	
     
 }

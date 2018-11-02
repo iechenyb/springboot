@@ -7,7 +7,10 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.alibaba.fastjson.JSON;
 import com.kiiik.pub.bean.SessionUser;
+import com.kiiik.pub.contant.KiiikContants;
+
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
@@ -25,13 +28,15 @@ public class BaseController {
 	 *@return
 	 */
 	protected String getRemoteUser() {
-		String user = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
-				.getHeader("X-AUTH-ID");
+		String user = ((ServletRequestAttributes) RequestContextHolder
+				.getRequestAttributes())
+				.getRequest()
+				.getHeader(getConfig().getString("zuul.http.head.auth.name"));
 		return user;
 	}
 	
 	protected SessionUser getUser() {
-		if(getConfig().getBoolean("platform.integration")){//如果已经集成，则从zuul的转发请求中获取用户信息
+		if(!KiiikContants.DEV.equals(getConfig().getBoolean("spring.profiles.active"))){//如果已经集成，则从zuul的转发请求中获取用户信息
 			return wrapUserInfor(getRemoteUser());
 		}else{
 			return new SessionUser("缺省值","default","999999");
@@ -46,7 +51,7 @@ public class BaseController {
 	 *@return
 	 */
 	private SessionUser wrapUserInfor(String userInfor){
-		return  new SessionUser("缺省值","default","999999");//暂时先不实现，等后期确定后在进行实现
+		return JSON.parseObject(userInfor, SessionUser.class);
 	}
 	/**
 	 * 

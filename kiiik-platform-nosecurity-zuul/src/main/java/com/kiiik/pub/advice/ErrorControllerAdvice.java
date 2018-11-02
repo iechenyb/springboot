@@ -39,11 +39,13 @@ public class ErrorControllerAdvice implements ErrorController {
 	    @RequestMapping(value = ERROR_PATH, produces = "text/html")
 	    @ResponseBody
 	    public String errorHtml(HttpServletRequest request,HttpServletResponse response,Exception e) {
+	    	 System.out.println("普通请求");
 	    	 if(!isProduction) {
 	             return JSONObject.fromObject(buildBody(request,response,true)).toString();
 	         }else{
 	             return JSONObject.fromObject(buildBody(request,response,false)).toString();
 	         }
+	    	 
 	    }
 	 
 	    boolean isProduction = false;
@@ -74,7 +76,7 @@ public class ErrorControllerAdvice implements ErrorController {
 	    @Autowired
 	    private ErrorAttributes errorAttributes;
 
-	    @SuppressWarnings({ "unchecked", "unused" })
+	    @SuppressWarnings({"unused" })
 		private ResultBean<String> buildBody(HttpServletRequest request,HttpServletResponse response,Boolean includeStackTrace){
 	        Map<String,Object> errorAttributes = getErrorAttributes(request, includeStackTrace);
 	        Integer status=(Integer)errorAttributes.get("status");
@@ -84,6 +86,8 @@ public class ErrorControllerAdvice implements ErrorController {
 	        	messageFound = "服务器故障！";
 	        }else if(response.getStatus()==404){
 	        	messageFound="请求尚未开发！";
+	        }else if(response.getStatus()==403){
+	        	messageFound="请求被拒绝！";
 	        }
 	        String message="";
 	        String trace ="";
@@ -96,7 +100,7 @@ public class ErrorControllerAdvice implements ErrorController {
 	                 message += String.format(" and trace %s", trace);
 	             }
 	        }
-	        return new ResultBean<String>().fail(message);
+	        return new ResultBean<String>().refuse(message);
 	    }
 	    private Map<String, Object> getErrorAttributes(HttpServletRequest request, boolean includeStackTrace) {
 	        RequestAttributes requestAttributes = new ServletRequestAttributes(request);

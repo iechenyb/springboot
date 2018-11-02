@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
         .antMatchers("/auth/**")
         //版本二的登录页面打开
+        .antMatchers("/favicon.ico")
         .antMatchers("/js/**")
         .antMatchers("/exception/**")
         .antMatchers("/img/**")

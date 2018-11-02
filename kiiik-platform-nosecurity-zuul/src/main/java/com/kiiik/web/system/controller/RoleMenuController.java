@@ -1,5 +1,4 @@
 package com.kiiik.web.system.controller;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -13,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kiiik.pub.bean.ResultBean;
-import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
-import com.kiiik.web.system.po.Menu;
 import com.kiiik.web.system.po.RoleMenu;
 import com.kiiik.web.system.service.MenuServiceImpl;
 
@@ -28,7 +25,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("rolemenu")
-@Api("菜单管理模块")
+@Api("角色菜单管理模块")
 public class RoleMenuController {
 	Log log = LogFactory.getLog(RoleMenuController.class);
 	
@@ -71,30 +68,18 @@ public class RoleMenuController {
 	
 	@SuppressWarnings("unchecked")
 	@GetMapping("deleteById")
-	@ApiOperation(value="根据主键删除菜单")
+	@ApiOperation(value="根据主键删除角色菜单")
 	public ResultBean<String> delMenu(Integer id){
-		RoleMenu menu = new RoleMenu();
-		menu.setId(id);
-		int count = genericService.deleteDBEntityByKey(menu);
-		return new ResultBean<String>("删除"+count+"记录！").success();
+		RoleMenu rmenu = new RoleMenu();
+		rmenu.setId(id);
+		int count = genericService.deleteDBEntityByKey(rmenu);
+		if(count>0){
+			return new ResultBean<String>().success("记录删除成功！");
+		}else{
+			return new ResultBean<String>().fail("记录删除失败！");
+		}
 		
 	}
-
-	@SuppressWarnings("unchecked")
-	@PostMapping("update")
-	@ApiOperation(value="更新菜单信息")
-	public ResultBean<String> updMenu(@RequestBody Menu menu){
-		Menu menu_tmp = null;
-		menu_tmp = genericService.queryDBEntitySingleComplex(Menu.class, 
-				new ComplexCondition().col("id").notIn(menu.getId()).and().col("url").eq(menu.getUrl()));
-		if(menu_tmp!=null){
-			return new ResultBean<String>().success("角色名已经存在！");
-		}else{
-			int count = genericService.updateDBEntityByKey(menu);
-			return new ResultBean<String>().success("更新成功！更新记录数"+count);
-		}
-	}
-	
 	/**
 	 * 
 	 *作者 : iechenyb<br>
@@ -117,23 +102,16 @@ public class RoleMenuController {
 	 *@param leafIds
 	 *@param roleId
 	 */
+	@SuppressWarnings("unchecked")
 	@GetMapping("saveRoleMenuBatch")
 	@ApiOperation("批量保存角色菜单信息")
-	public void saveRMBatch(@RequestParam(value = "menuIds[]") Integer[] menuIds,Integer roleId){
-		//根据叶子节点查询所有父类目录，将不重复节点存入，保证每角色读取的都会一颗子树。
-		RoleMenu rm = new RoleMenu();
-		rm.setRoleId(roleId);
-		genericService.deleteDBEntity(rm);//清除历史记录
-		List<Object> entitys= new ArrayList<Object>();
-		RoleMenu rm_tmp ;
-		for(int i=0;i<menuIds.length;i++){
-			rm_tmp = new RoleMenu();
-			rm_tmp.setMenuId(menuIds[i]);
-			rm_tmp.setRoleId(roleId);
-			entitys.add(rm_tmp);
-			rm_tmp = null;
+	public ResultBean<String> saveRMBatch(@RequestParam(value = "menuIds[]") Integer[] menuIds,Integer roleId){
+		int count = menuService.saveRMBatch(menuIds, roleId);
+		if(count>0){
+			return new ResultBean<String>().success("角色菜单信息保存成功！");
+		}else{
+			return new ResultBean<String>().success("角色菜单信息保存失败！");	
 		}
-		this.genericService.insertDBEntityBatch(entitys);
 	}
 	
 	/**
@@ -143,11 +121,12 @@ public class RoleMenuController {
 	 *创建时间: 2017年7月15日hj12
 	 *@param roleId
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"unchecked" })
 	@GetMapping("getRoleMenu")
+	@ApiOperation("获取当前角色的菜单信息")
 	public ResultBean<List<RoleMenu>> getAssignedRoleMenu(Integer roleId){
 		List<RoleMenu> rm = menuService.getAssignedRoleMenu(roleId);
-		return new ResultBean(rm).success();
+		return new ResultBean<List<RoleMenu>>(rm).success();
 	}
 	
 	@Autowired

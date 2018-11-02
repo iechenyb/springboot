@@ -1,4 +1,5 @@
 package com.kiiik.web.system.service;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.contant.KiiikContants;
+import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.service.BaseService;
 import com.kiiik.web.contant.Contants_Test;
 import com.kiiik.web.system.mapper.MenuMapper;
@@ -89,6 +93,60 @@ public class MenuServiceImpl extends BaseService {
 				}
 			}
 			return resourceMap;
+	}
+	
+	public int saveRMBatch(Integer[] menuIds,Integer roleId){
+		RoleMenu rm = new RoleMenu();
+		rm.setRoleId(roleId);
+		genericDao.deleteDBEntity(rm);//清除历史记录
+		List<Object> entitys= new ArrayList<Object>();
+		RoleMenu rm_tmp ;
+		for(int i=0;i<menuIds.length;i++){
+			rm_tmp = new RoleMenu();
+			rm_tmp.setMenuId(menuIds[i]);
+			rm_tmp.setRoleId(roleId);
+			entitys.add(rm_tmp);
+			rm_tmp = null;
+		}
+		return this.genericDao.insertDBEntityBatch(entitys);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ResultBean<String> saveMenu(Menu menu){
+		Menu menu_tmp = null;
+		if(KiiikContants.ROOTID!=menu.getParentId()){//不是根节点id值
+			//从数据库查询id值对应父菜单记录
+			menu_tmp = new Menu();
+			menu_tmp.setId(menu.getParentId());
+			menu_tmp = genericDao.queryDBEntitySingle(menu_tmp);
+			if(menu_tmp==null){
+				return new ResultBean<String>().fail("父菜单信息不存在！");
+			}
+		}
+		menu_tmp = genericDao.queryDBEntitySingleComplex(Menu.class, 
+				new ComplexCondition()
+				.and()
+				.col("url")
+				.eq(menu.getUrl()));
+		if(menu_tmp==null){
+			genericDao.insertDBEntity(menu);
+			return new ResultBean<String>().fail("菜单插入成功!");
+		}else{
+			return new ResultBean<String>().success("菜单地址已经存在！");
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ResultBean<String> updMenu(Menu menu){
+		Menu menu_tmp = null;
+		menu_tmp = genericDao.queryDBEntitySingleComplex(Menu.class, 
+				new ComplexCondition().col("id").notIn(menu.getId()).and().col("url").eq(menu.getUrl()));
+		if(menu_tmp!=null){
+			return new ResultBean<String>().success("角色名已经存在！");
+		}else{
+			int count = genericDao.updateDBEntityByKey(menu);
+			return new ResultBean<String>().success("更新成功！更新记录数"+count);
+		}
 	}
 	
 }

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kiiik.pub.bean.ResultBean;
-import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.system.po.Menu;
 import com.kiiik.web.system.service.MenuServiceImpl;
@@ -50,22 +49,10 @@ public class MenuController {
 	}
 	
 
-	@SuppressWarnings({ "unchecked"})
 	@PostMapping("add")
 	@ApiOperation("菜单信息新增")
 	public ResultBean<String> addMenu(@RequestBody Menu menu){
-		Menu menu_tmp = null;
-		menu_tmp = genericService.queryDBEntitySingleComplex(Menu.class, 
-				new ComplexCondition()
-				.and()
-				.col("url")
-				.eq(menu.getUrl()));
-		int count = 0 ;
-		if(menu_tmp==null){
-			count = genericService.insertDBEntity(menu);
-			return new ResultBean<Integer>(count).fail("菜单插入成功!");
-		}
-		return new ResultBean<Integer>(count).success("菜单已经存在！");
+		return menuService.saveMenu(menu); 
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -75,23 +62,17 @@ public class MenuController {
 		Menu menu = new Menu();
 		menu.setId(id);
 		int count = genericService.deleteDBEntityByKey(menu);
-		return new ResultBean<String>("删除"+count+"记录！").success();
-		
+		if(count>0){
+			return new ResultBean<String>().success("删除记录成功！");
+		}else{
+			return new ResultBean<String>().fail("删除记录失败！");
+		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@PostMapping("update")
 	@ApiOperation(value="更新菜单信息")
 	public ResultBean<String> updMenu(@RequestBody Menu menu){
-		Menu menu_tmp = null;
-		menu_tmp = genericService.queryDBEntitySingleComplex(Menu.class, 
-				new ComplexCondition().col("id").notIn(menu.getId()).and().col("url").eq(menu.getUrl()));
-		if(menu_tmp!=null){
-			return new ResultBean<String>().success("角色名已经存在！");
-		}else{
-			int count = genericService.updateDBEntityByKey(menu);
-			return new ResultBean<String>().success("更新成功！更新记录数"+count);
-		}
+		return menuService.updMenu(menu);
 	}
 	
 	

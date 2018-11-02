@@ -17,6 +17,7 @@ public class Contants_Test {
 	public static String TEST_UPD_USERNAME="upd";
 	public static String TEST_DEL_USERNAME="del"; 
 	public static String TEST_QUERY_USERNAME="query"; 
+	public static String TEST_OA_USERNAME="chenyuanbao"; 
 	
 	public static String TEST_ADD_RoleNAME="ROLE_ADD";
 	public static String TEST_UPD_RoleNAME="ROLE_UPDATE";
@@ -67,7 +68,9 @@ public class Contants_Test {
 			return new SimpleGrantedAuthority(Contants_Test.TEST_UPD_RoleNAME);
 		}else if(Contants_Test.TEST_QUERY_USERNAME.equals(empno)){
 			return new SimpleGrantedAuthority(Contants_Test.TEST_QUERY_RoleNAME);
-		}else{
+		}else if(Contants_Test.TEST_OA_USERNAME.equals(empno)){
+			return new SimpleGrantedAuthority(Contants_Test.TEST_ADD_RoleNAME);
+		}else {
 			return new SimpleGrantedAuthority("");
 		}
 	}

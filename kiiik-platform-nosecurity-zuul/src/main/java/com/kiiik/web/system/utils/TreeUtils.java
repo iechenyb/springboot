@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.web.system.po.Menu;
 /**
  *作者 : iechenyb<br>
@@ -29,9 +30,9 @@ public class TreeUtils {
 	
 	public static Menu getRoot(){
 		Menu root = new Menu();
-		root.setId(-1);
+		root.setId(KiiikContants.ROOTID);
 		root.setMenuName("根节点");
-		root.setParentId(-1);
+		root.setParentId(KiiikContants.ROOTID);
 		root.setChildren(new ArrayList<Menu>());
 		return root;
 	}
