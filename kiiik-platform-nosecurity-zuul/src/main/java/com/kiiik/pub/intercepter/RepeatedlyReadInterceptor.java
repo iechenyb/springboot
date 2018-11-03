@@ -6,18 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.Collection;
-import java.util.Iterator;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -28,7 +24,7 @@ import com.kiiik.pub.wapper.RepeatedlyReadRequestWrapper;
  *创建时间: 2018年11月2日
  */
 public class RepeatedlyReadInterceptor extends HandlerInterceptorAdapter {
-	Log log = LogFactory.getLog(RepeatedlyReadInterceptor.class);
+		Log log = LogFactory.getLog(RepeatedlyReadInterceptor.class);
 
 
 	    @Override
@@ -120,7 +116,7 @@ public class RepeatedlyReadInterceptor extends HandlerInterceptorAdapter {
 	        int len;
 	        try {
 	            while ((len = inputStream.read(buffer)) > -1) {
-	            byteArrayOutputStream.write(buffer, 0, len);
+	            	byteArrayOutputStream.write(buffer, 0, len);
 	            }
 	            byteArrayOutputStream.flush();
 	        } catch (IOException e) {

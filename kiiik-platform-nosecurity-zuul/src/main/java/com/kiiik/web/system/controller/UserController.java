@@ -93,7 +93,7 @@ public class UserController extends BaseController{
      *{
      * "username":"chenyuanbao"
      *}<br>
-     *创建时间: 2017年7月15日hj12
+     *创建时间: 2017年7月15日
      *@param user
      *@return
      */
@@ -170,7 +170,7 @@ public class UserController extends BaseController{
 	 * 
 	 *作者 : iechenyb<br>
 	 *方法描述: 全覆盖式存储，不用判断有无重复记录<br>
-	 *创建时间: 2017年7月15日hj12
+	 *创建时间: 2017年7月15日
 	 *@param roleIds
 	 *@param userId
 	 *@return
@@ -207,7 +207,6 @@ public class UserController extends BaseController{
 			}
 			Authentication request = new UsernamePasswordAuthenticationToken(username, password);
 			Authentication result = authenticationManager.authenticate(request);
-			System.out.println("result:"+result);
 			SecurityContextHolder.getContext().setAuthentication(result);
 			req.getSession().setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext()); // 这个非常重要，否则验证后将无法登陆
 		}catch(Exception e){
@@ -217,7 +216,7 @@ public class UserController extends BaseController{
 			}
 			return new ResultBean<String>().fail("登录失败！");
 		}
-		return new ResultBean<String>().fail("登录成功！");
+		return new ResultBean<String>().success("登录成功！");
 	}
 	
 	@PostMapping(value ="/loginPage", produces = {"text/html"})

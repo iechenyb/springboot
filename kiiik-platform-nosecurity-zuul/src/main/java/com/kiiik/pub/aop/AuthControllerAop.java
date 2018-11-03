@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.pub.context.TimeContext;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.utils.RequestUtils;
@@ -162,6 +163,7 @@ public class AuthControllerAop {
 					if(args!=null){
 						log.setParam(JSON.toJSONString(args));
 					}
+					log.setModule(KiiikContants.ZUULNAME);
 					genericService.insertDBEntity(log);
 				}
 			}

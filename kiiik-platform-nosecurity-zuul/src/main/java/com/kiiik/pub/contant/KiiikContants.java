@@ -9,5 +9,8 @@ import java.util.List;
  */
 public class KiiikContants {
 	public final static int ROOTID=-1;
+	public static final String ZUULNAME = "zuul-service";
+	public static final String DEFAULT_OPERATOR_NAME = "defaultName";
+	public static final String BLANK = "";
 	public static List<String> logStaticFile;
 }

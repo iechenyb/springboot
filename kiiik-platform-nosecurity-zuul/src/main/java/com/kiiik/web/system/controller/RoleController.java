@@ -36,7 +36,7 @@ public class RoleController {
      * 
      *作者 : iechenyb<br>
      *<br>
-     *创建时间: 2017年7月15日hj12
+     *创建时间: 2017年7月15日
      *@param user
      *@return
      */

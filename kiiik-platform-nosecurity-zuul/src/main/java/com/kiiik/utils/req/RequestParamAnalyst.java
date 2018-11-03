@@ -14,6 +14,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.kiiik.pub.contant.KiiikContants;
 
 /**
  * 作者 : iechenyb<br>
@@ -28,7 +29,7 @@ public class RequestParamAnalyst extends AbstractRequestParamAnalysis {
 	public String getParams(HttpServletRequest request) {
 		 Map<String,String[]> map = request.getParameterMap();  
 		 if(CollectionUtils.isEmpty(map)){
-			 return "";
+			 return KiiikContants.BLANK;
 		 }else{
 			 return JSON.toJSONString(map);
 		 }
@@ -36,7 +37,7 @@ public class RequestParamAnalyst extends AbstractRequestParamAnalysis {
 	//子系统的请求参数获取ok，当前系统参数获取失败
 	@Override
 	public String postParams(HttpServletRequest request) {
-		String result = "";
+		String result = KiiikContants.BLANK;
             // 签名处理过程 end....
             if (ServletFileUpload.isMultipartContent(request)) {// 是否合适上传文件请求
     			return result;
@@ -49,11 +50,11 @@ public class RequestParamAnalyst extends AbstractRequestParamAnalysis {
     					 //FileCopyUtils.copyToByteArray(requestWrapper.getInputStream())
     					result =  new String(FileCopyUtils.copyToString(request.getReader()));
     					if(!StringUtils.isEmpty(result)){
-    						return result.replace(" ", "");//多余的空格去掉
+    						return result.replace(" ", KiiikContants.BLANK);//多余的空格去掉
     					}
     				 }
     			} catch (IOException e) {
-    				return "";
+    				return KiiikContants.BLANK;
     			}
     		}
         //}

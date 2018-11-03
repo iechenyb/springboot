@@ -36,7 +36,7 @@ public class MenuController {
      * 
      *作者 : iechenyb<br>
      *<br>
-     *创建时间: 2017年7月15日hj12
+     *创建时间: 2017年7月15日
      *@param user
      *@return
      */
@@ -82,7 +82,7 @@ public class MenuController {
 	 * 
 	 *作者 : iechenyb<br>
 	 *方法描述: 获取系统菜单<br>
-	 *创建时间: 2017年7月15日hj12
+	 *创建时间: 2017年7月15日
 	 *@param roleId
 	 */
 	@SuppressWarnings("unchecked")
@@ -97,7 +97,7 @@ public class MenuController {
 	 * 
 	 *作者 : iechenyb<br>
 	 *方法描述: 获取用户的系统菜单<br>
-	 *创建时间: 2017年7月15日hj12
+	 *创建时间: 2017年7月15日
 	 *@param roleId
 	 */
 	@GetMapping("getUserSystemMenuTree")

@@ -37,7 +37,7 @@ public class RoleMenuController {
      * 
      *作者 : iechenyb<br>
      *<br>
-     *创建时间: 2017年7月15日hj12
+     *创建时间: 2017年7月15日
      *@param user
      *@return
      */
@@ -53,7 +53,7 @@ public class RoleMenuController {
      * 
      *作者 : iechenyb<br>
      *方法描述: 单个信息添加<br>
-     *创建时间: 2017年7月15日hj12
+     *创建时间: 2017年7月15日
      *@param rmenu
      *@return
      */
@@ -84,7 +84,7 @@ public class RoleMenuController {
 	 * 
 	 *作者 : iechenyb<br>
 	 *方法描述: 只保存叶子节点<br>
-	 *创建时间: 2017年7月15日hj12
+	 *创建时间: 2017年7月15日
 	 *@param leafIds
 	 *@param roleId
 	 */
@@ -98,7 +98,7 @@ public class RoleMenuController {
 	 * 
 	 *作者 : iechenyb<br>
 	 *方法描述: 只保存叶子节点<br>
-	 *创建时间: 2017年7月15日hj12
+	 *创建时间: 2017年7月15日
 	 *@param leafIds
 	 *@param roleId
 	 */
@@ -118,7 +118,7 @@ public class RoleMenuController {
 	 * 
 	 *作者 : iechenyb<br>
 	 *方法描述: 获取角色的菜单<br>
-	 *创建时间: 2017年7月15日hj12
+	 *创建时间: 2017年7月15日
 	 *@param roleId
 	 */
 	@SuppressWarnings({"unchecked" })

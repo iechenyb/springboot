@@ -39,10 +39,12 @@ public class RequestUtils {
 		if(!StringUtils.isEmpty(request.getRemoteUser())){
 			log.setOperator(request.getRemoteUser());
 		}else{
-			log.setOperator("default");
+			log.setOperator(KiiikContants.DEFAULT_OPERATOR_NAME);
 		}
 		log.setUri(request.getRequestURI());
-		log.setModule(request.getContextPath());
+		if(!StringUtils.isEmpty(log.getUri())){
+			log.setModule(log.getUri().split("/")[1]);
+		}
 		if(parseParam){
 			log.setParam(analysis.parseParams(request));//BodyReaderHttpServletRequestWrapper
 		}
