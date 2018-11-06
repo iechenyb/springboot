@@ -1,0 +1,93 @@
+package com.kiiik.web.example.controller;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.joda.time.LocalDateTime;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.utils.VerifyCodeUtils;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+/**
+ *作者 : iechenyb<br>
+ *类描述: 说点啥<br>
+ *创建时间: 2018年11月6日
+ */
+@Controller
+@RequestMapping("code")
+@Api
+public class VerityCodeController {
+	Log log = LogFactory.getLog(VerityCodeController.class);
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 获取验证码<br>
+	 *创建时间: 2017年7月15日
+	 *@return
+	 */
+	@GetMapping(value="/authImage")
+	@ApiOperation("跳转到验证码的操作界面")
+    public String authImage(){
+    	return "/code/authImage";
+    }
+	
+	@GetMapping(value="/getImage")
+	@ApiOperation("获取验证码")
+    public void authImage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setHeader("Pragma", "No-cache");
+		response.setHeader("Cache-Control", "no-cache");
+		response.setDateHeader("Expires", 0);
+		response.setContentType("image/jpeg");
+		// 生成随机字串
+		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
+		// 存入会话session
+		HttpSession session = request.getSession(true);
+		// 删除以前的
+		session.removeAttribute("verCode");
+		session.removeAttribute("codeTime");
+		session.setAttribute("verCode", verifyCode.toLowerCase());
+		session.setAttribute("codeTime", LocalDateTime.now());
+		// 生成图片
+		int w = 100, h = 30;
+		OutputStream out = response.getOutputStream();
+		VerifyCodeUtils.outputImage(w, h, out, verifyCode);
+    }
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping(value="validImage")
+	@ResponseBody
+	@ApiOperation("验证码校验")
+    public ResultBean<String> validImage(HttpServletRequest request,HttpSession session){
+    	String code = request.getParameter("code");
+    	Object verCode = session.getAttribute("verCode");
+    	if (null == verCode) {
+    		return new ResultBean<String>().fail("验证码已失效，请重新输入");
+    	}
+    	String verCodeStr = verCode.toString();
+    	/*LocalDateTime localDateTime = (LocalDateTime)session.getAttribute("codeTime");
+    	long past = localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    	long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();*/
+    	if(verCodeStr == null || code == null || code.isEmpty() || !verCodeStr.equalsIgnoreCase(code)){
+    		request.setAttribute("errmsg", "验证码错误");
+    		return new ResultBean<String>().fail("验证码错误");
+    	}/* else if((now-past)/1000/60>5){
+    		request.setAttribute("errmsg", "验证码已过期，重新获取");
+    		return "验证码已过期，重新获取";
+    	} */else {
+    		//验证成功，删除存储的验证码
+    		session.removeAttribute("verCode");
+    		return new ResultBean<String>().success("验证码正确！");
+    	}
+    }
+}

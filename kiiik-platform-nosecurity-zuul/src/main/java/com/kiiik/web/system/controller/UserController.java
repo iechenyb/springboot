@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
@@ -269,7 +270,7 @@ public class UserController extends BaseController{
 	@ResponseBody
 	@GetMapping("infor")
 	@ApiOperation("用户信息")
-	public String getInfor(HttpServletRequest req) {
+	public String getInfor(HttpServletRequest req,HttpServletResponse res) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		log.info("用户名：" + auth.getName());
 		Object[] roles = auth.getAuthorities().toArray();

@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.contant.KiiikContants;
 
 import net.sf.json.JSONObject;
 /**
@@ -17,7 +18,7 @@ import net.sf.json.JSONObject;
 public class ResponseUtils {
 	static Log log = LogFactory.getLog(ResponseUtils.class);
 	public static void writeResult(HttpServletResponse response, ResultBean<String> result) {
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding(KiiikContants.UTF8);
         response.setHeader("Content-type", "application/json;charset=UTF-8");
         response.setStatus(200);
         try {
@@ -25,6 +26,7 @@ public class ResponseUtils {
         } catch (IOException ex) {
             log.error(ex.getMessage());
         }
+        return ;
     }
 	
 }

@@ -17,7 +17,6 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 @Configuration
 @MapperScan(basePackages = {
-	/*"com.kiiik.pub.mybatis.dao",*/
 	"com.kiiik.pub.mybatis.mapper",
 	"com.kiiik.web.system.mapper"
 	},

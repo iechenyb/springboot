@@ -12,5 +12,10 @@ public class KiiikContants {
 	public static final String ZUULNAME = "zuul-service";
 	public static final String DEFAULT_OPERATOR_NAME = "defaultName";
 	public static final String BLANK = "";
+	public static final String PROD = "prod";
+	public static final String TEST = "test";
+	public static final String DEV = "dev";
+	public static final String UTF8 = "UTF-8";
+	
 	public static List<String> logStaticFile;
 }

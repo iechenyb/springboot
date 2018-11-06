@@ -3,6 +3,8 @@ package com.kiiik.pub.aop;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -152,7 +154,15 @@ public class AuthControllerAop {
 	 */
 	private void recordVisitLog(ProceedingJoinPoint proceedingJoinPoint) {
 		Object[] args = proceedingJoinPoint.getArgs();//参数 
-		
+		List<Object> args_new= new ArrayList<Object>();
+		for(int i=0;i<args.length;i++){
+			
+			if(!args[i].toString().contains("RequestWrapper")&&
+				!args[i].toString().contains("ResponseWrapper")
+			){
+				args_new.add(args[i]);//去掉包装类参数
+			}
+		}
 		try {
 			RequestAttributes ra = RequestContextHolder.getRequestAttributes();
 			if (ra != null) {
@@ -161,7 +171,7 @@ public class AuthControllerAop {
 				if (!StringUtils.isEmpty(request.getRemoteUser())) {
 					SystemLog log= RequestUtils.getSystemLog(request,false);
 					if(args!=null){
-						log.setParam(JSON.toJSONString(args));
+						log.setParam(JSON.toJSONString(args_new));//将request和response去掉
 					}
 					log.setModule(KiiikContants.ZUULNAME);
 					genericService.insertDBEntity(log);

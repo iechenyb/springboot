@@ -26,25 +26,18 @@ import com.kiiik.pub.wapper.RepeatedlyReadRequestWrapper;
 public class RepeatedlyReadInterceptor extends HandlerInterceptorAdapter {
 		Log log = LogFactory.getLog(RepeatedlyReadInterceptor.class);
 
-
 	    @Override
 	    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 	        /**
 	         * 对来自后台的请求统一进行日志处理
 	         */
-	        RepeatedlyReadRequestWrapper requestWrapper;//代理bean，非包裹类
-	       /* Collection<Part> parts = request.getParts();//只能获取multipart类请求
-	        Iterator<Part> a = parts.iterator();
-	        while(a.hasNext()){
-	        	byte[] data = FileCopyUtils.copyToByteArray(a.next().getInputStream());
-	        	System.out.println(new String(data));
-	        }*/
-	        if (request instanceof RepeatedlyReadRequestWrapper) {
-	            // 签名处理过程 start.... 
-	            requestWrapper = (RepeatedlyReadRequestWrapper) request;
-	            log.info( getBodyString(requestWrapper));
-	            // 签名处理过程 end....
-	        }
+	    	/*Object auth = request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
+	    	if(auth==null){
+		        ResultBean<String> result = new ResultBean<>();
+		        result.sessionTimeOut("会话过期，请重新登陆！");
+		        ResponseUtils.writeResult(response, result);
+		        return false;
+	    	}*/
 	        return super.preHandle(request, response, handler);
 	    }
 

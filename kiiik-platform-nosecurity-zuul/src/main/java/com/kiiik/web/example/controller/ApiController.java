@@ -8,13 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.controller.BaseController;
@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiImplicitParams;
  *类描述: 说点啥<br>
  *创建时间: 2018年9月3日上午9:03:14
  */
-@RestController
+@Controller
 @RequestMapping("api")
 public class ApiController extends BaseController{
 	
@@ -87,6 +87,7 @@ public class ApiController extends BaseController{
 		@ApiImplicitParam(name="date",value="日期",dataType="java.util.Date",paramType="query")
 	})
 	@GetMapping(value = "requestDateParamTest")
+	@ResponseBody
     public String requestDateParamTest(@RequestDateParam Date date,int a,String str) {
         System.out.println(date);
         return "parse date is " + date+"--->"+a+","+str;
@@ -94,6 +95,7 @@ public class ApiController extends BaseController{
 	
 	@SuppressWarnings("unchecked")
 	@PostMapping("validateBean")
+	@ResponseBody
 	public ResultBean<String> validateBean(@RequestBody @Validated ValidateBean bean){
 		System.out.println(bean);
 		return new ResultBean<String>("").success();
@@ -104,8 +106,10 @@ public class ApiController extends BaseController{
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="param1",value="参数1",dataType="String",paramType="query")
 	})//并未成功校验
+	@ResponseBody
 	public ResultBean<String> validateParam( @Validated @NotBlank String param1){
 		System.out.println(param1);
 		return new ResultBean<String>("").success(param1);
 	}
+	
 }

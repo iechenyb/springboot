@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.kiiik.config.SwitchProperties;
 import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.pub.context.TimeContext;
 
 import net.sf.json.JSONObject;
@@ -49,7 +50,7 @@ public class StatisticsResponseTimeAdvice implements ResponseBodyAdvice<Object> 
 					PostMapping rq = methodParameter.getMethodAnnotation(PostMapping.class);
 					return customerReturnObject(o,rq.value()[0]) ;
 				}else{
-					return customerReturnObject(o,"".intern()) ;
+					return customerReturnObject(o,KiiikContants.BLANK) ;
 				}
 			}else{
 				return o;
@@ -69,7 +70,7 @@ public class StatisticsResponseTimeAdvice implements ResponseBodyAdvice<Object> 
 			@SuppressWarnings("unchecked")
 			ResultBean<Object> ret = (ResultBean<Object>) o;
 			if(ret.getD()==null){
-				ret.setD("");
+				ret.setD(KiiikContants.BLANK);
 			}
 			JSONObject object = JSONObject.fromObject(o);
 			if(switchPro.isShowControllerTime()){
