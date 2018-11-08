@@ -1,4 +1,4 @@
-package com.kiiik.web.contant;
+package com.kiiik.pub.contant;
 
 import java.util.ArrayList;
 import java.util.List;

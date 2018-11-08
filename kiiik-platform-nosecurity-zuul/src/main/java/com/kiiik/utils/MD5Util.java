@@ -9,6 +9,8 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 
+import com.kiiik.pub.contant.KiiikContants;
+
 public class MD5Util {
 	/***
 	 * MD5加密 生成32位md5码
@@ -76,6 +78,10 @@ public class MD5Util {
 		System.out.println("MD5后：" + md5Encode(str));
 		System.out.println("MD5后：" + md5Encode(str));
 		System.out.println("MD5后：" + md5Encode("c4ca4238a0b923820dcc509a6f75849b"));
+		//empno+password明文+salt
+		String empno="chenyb";
+		String password="password";
+		str = md5Encode(KiiikContants.SALT+empno+password);//加密方式
 		System.out.println(getMd5ByFile(new File("d:\\data\\mail.txt")));
 	}
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.system.po.RoleMenu;
-import com.kiiik.web.system.service.MenuServiceImpl;
+import com.kiiik.web.system.service.impl.MenuServiceImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

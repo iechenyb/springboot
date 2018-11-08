@@ -64,7 +64,7 @@ public class RoleController {
 			count = genericService.insertDBEntity(role);
 			return new ResultBean<Integer>(count).fail("角色插入成功!");
 		}
-		return new ResultBean<Integer>(count).success("角色已经存在！");
+		return new ResultBean<Integer>(count).success("角色名称已经存在！");
 	}
 	
 	@SuppressWarnings("unchecked")

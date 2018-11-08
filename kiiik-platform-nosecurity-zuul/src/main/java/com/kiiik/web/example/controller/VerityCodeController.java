@@ -68,18 +68,13 @@ public class VerityCodeController {
 	@GetMapping(value="validImage")
 	@ResponseBody
 	@ApiOperation("验证码校验")
-    public ResultBean<String> validImage(HttpServletRequest request,HttpSession session){
-    	String code = request.getParameter("code");
+    public ResultBean<String> validImage(String code,HttpSession session){
     	Object verCode = session.getAttribute("verCode");
     	if (null == verCode) {
     		return new ResultBean<String>().fail("验证码已失效，请重新输入");
     	}
     	String verCodeStr = verCode.toString();
-    	/*LocalDateTime localDateTime = (LocalDateTime)session.getAttribute("codeTime");
-    	long past = localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-    	long now = LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();*/
     	if(verCodeStr == null || code == null || code.isEmpty() || !verCodeStr.equalsIgnoreCase(code)){
-    		request.setAttribute("errmsg", "验证码错误");
     		return new ResultBean<String>().fail("验证码错误");
     	}/* else if((now-past)/1000/60>5){
     		request.setAttribute("errmsg", "验证码已过期，重新获取");

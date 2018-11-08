@@ -2,6 +2,7 @@ package com.kiiik.config.swagger;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
@@ -12,10 +13,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.env.Environment;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
+import com.kiiik.pub.contant.KiiikContants;
 
 import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -41,6 +44,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 ignoreResourceNotFound = true, encoding = "UTF-8") })
 @EnableSwagger2
 public class Swagger2UIConfig {
+	@Autowired
+	Environment env;
     
     /**
      * 获取API标题
@@ -55,9 +60,10 @@ public class Swagger2UIConfig {
      */
     @Bean
     public Docket createRestApi() {
+    	initIngoreControllers();
         return new Docket(DocumentationType.SWAGGER_2)
         	.apiInfo(apiInfo()).select()
-            .apis(Swagger2UIConfig.basePackage("com.kiiik.web"))
+            .apis(basePackage("com.kiiik.web"))
             .paths(PathSelectors.any()).build();
     }
     
@@ -68,7 +74,7 @@ public class Swagger2UIConfig {
      * @param basePackage - base package of the classes
      * @return this
      */
-    public static Predicate<RequestHandler> basePackage(final String basePackage) {
+    public  Predicate<RequestHandler> basePackage(final String basePackage) {
         return new Predicate<RequestHandler>() {
             
             @Override
@@ -77,12 +83,17 @@ public class Swagger2UIConfig {
             }
         };
     }
-    public static Map<String,String> ignoreController = null;
-    static {
+   public  Map<String,String> ignoreController = null;
+   public  synchronized void  initIngoreControllers() {
     	ignoreController=new HashMap<>();
-    	ignoreController.put("GenericController", "");
-    	ignoreController.put("JSRController", "");
-    	//ignoreController.put("ApiController", "");
+    	if(KiiikContants.DEV.equals(env.getProperty("spring.profiles.active"))){
+	    	ignoreController.put("GenericController",KiiikContants.BLANK);
+	    	ignoreController.put("JSRController", KiiikContants.BLANK);
+	    	ignoreController.put("ApiController", KiiikContants.BLANK);
+	    	ignoreController.put("RSAController", KiiikContants.BLANK);
+	    	ignoreController.put("VerityCodeController", KiiikContants.BLANK);
+    	}
+    	
     }
     /**
      * 处理包路径配置规则,支持多路径扫描匹配以逗号隔开
@@ -90,11 +101,16 @@ public class Swagger2UIConfig {
      * @param basePackage 扫描包路径
      * @return Function
      */
-    private static Function<Class<?>, Boolean> handlerPackage(final String basePackage) {
+    private  Function<Class<?>, Boolean> handlerPackage(final String basePackage) {
+    	
         return new Function<Class<?>, Boolean>() {
             
             @Override
             public Boolean apply(Class<?> input) {
+            	//如果生产环境，直接返回false,不生成接口信息
+            	if(KiiikContants.PROD.equals(env.getProperty("spring.profiles.active"))){
+            		return false;
+            	}
                 for (String strPackage : basePackage.split(",")) {
                     boolean isMatch = input.getPackage().getName().startsWith(strPackage);
                     if(ignoreController.containsKey(input.getSimpleName())){
@@ -115,7 +131,7 @@ public class Swagger2UIConfig {
      * @param input RequestHandler
      * @return Optional
      */
-    private static Optional<? extends Class<?>> declaringClass(RequestHandler input) {
+    private  Optional<? extends Class<?>> declaringClass(RequestHandler input) {
         return Optional.fromNullable(input.declaringClass());
     }
     

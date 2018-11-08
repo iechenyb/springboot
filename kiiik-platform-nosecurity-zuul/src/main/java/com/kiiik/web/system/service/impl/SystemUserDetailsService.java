@@ -1,4 +1,4 @@
-package com.kiiik.web.system.service;
+package com.kiiik.web.system.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import com.kiiik.pub.contant.Contants_Test;
 import com.kiiik.pub.mybatis.service.GenericService;
-import com.kiiik.web.contant.Contants_Test;
 import com.kiiik.web.system.po.User;
 import com.kiiik.web.system.vo.SystemUser;
 import com.kiiik.web.system.vo.UserRoleVo;

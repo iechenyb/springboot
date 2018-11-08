@@ -16,6 +16,12 @@ public class KiiikContants {
 	public static final String TEST = "test";
 	public static final String DEV = "dev";
 	public static final String UTF8 = "UTF-8";
+	public static final String VERIFY_CODE = "verCode";
+	public static final String SPRING_CONTEXT_KEY = "SPRING_SECURITY_CONTEXT";
 	
 	public static List<String> logStaticFile;
+	public static final String SALT="kiiik";
+	public static final String COMPANY = "1";
+	public static final String DEPARTMENT = "2";
+	public static final String EMPLOYEE = "3";
 }

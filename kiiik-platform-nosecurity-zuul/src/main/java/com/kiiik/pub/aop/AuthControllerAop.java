@@ -49,7 +49,7 @@ import com.kiiik.web.log.bean.SystemLog;
 public class AuthControllerAop {
 	Log log = LogFactory.getLog(AuthControllerAop.class);
 
-	@Pointcut("execution(* com.kiiik.web.system.controller.*.*(..))")
+	@Pointcut("execution(* com.kiiik.web.*.controller.*.*(..))")
 	public void executeService() {
 	}
 
@@ -156,7 +156,9 @@ public class AuthControllerAop {
 		Object[] args = proceedingJoinPoint.getArgs();//参数 
 		List<Object> args_new= new ArrayList<Object>();
 		for(int i=0;i<args.length;i++){
-			
+			if(args[i]==null){
+				continue;
+			}
 			if(!args[i].toString().contains("RequestWrapper")&&
 				!args[i].toString().contains("ResponseWrapper")
 			){

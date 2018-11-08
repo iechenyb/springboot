@@ -16,7 +16,7 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.kiiik.web.system.service.MenuServiceImpl;
+import com.kiiik.web.system.service.impl.MenuServiceImpl;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>

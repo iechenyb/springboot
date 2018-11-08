@@ -41,6 +41,7 @@ public class KiiikCustomizationFilter implements Filter {
 		paths.add("/user/logout");
 		paths.add("/**/*.jpg");
 		paths.add("/**/*.css");
+		paths.add("/user/getImage");
 		if(!KiiikContants.PROD.equals(env.getProperty("spring.profiles.active"))){
 			String[] pathArr=pathsstrs.split(",");
 			for(int i=0;i<pathArr.length;i++){

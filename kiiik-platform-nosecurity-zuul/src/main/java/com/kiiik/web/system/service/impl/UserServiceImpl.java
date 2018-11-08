@@ -1,4 +1,4 @@
-package com.kiiik.web.system.service;
+package com.kiiik.web.system.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -6,12 +6,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import com.cyb.computer.ComputerUtil;
 import com.kiiik.pub.service.BaseService;
+import com.kiiik.utils.ConcurrentDateUtil;
 import com.kiiik.web.system.mapper.UserMapper;
 import com.kiiik.web.system.po.Menu;
+import com.kiiik.web.system.po.User;
 import com.kiiik.web.system.po.UserRole;
 import com.kiiik.web.system.utils.TreeUtils;
+import com.kiiik.web.system.vo.SystemUser;
 import com.kiiik.web.system.vo.UserRoleVo;
 /**
  *作者 : iechenyb<br>
@@ -53,13 +58,59 @@ public class UserServiceImpl extends BaseService {
 	@Autowired
 	UserMapper userMapper;
 	
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 说点啥<br>
+	 *创建时间: 2018年11月8日
+	 *@param userId
+	 *@return
+	 */
 	public List<UserRoleVo> getUserRoles(Integer userId){
 		return userMapper.getUserRoles(userId);
 	}
+	
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 说点啥<br>
+	 *创建时间: 2018年11月8日
+	 *@param userId
+	 *@return
+	 */
 	public Menu getUserMenus(Integer userId){
 		List<Menu> menusAll = userMapper.getUserMenus(userId);
 		Menu root = TreeUtils.getRoot();
 		TreeUtils.madeTree(menusAll,root);
 		return root;
+	}
+	
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 记录用户登录状态<br>
+	 *创建时间: 2018年11月8日10:13:46
+	 *@param user
+	 */
+	public void recordLoginStatus(SystemUser user) {
+		try {
+			// 1 查询当前用户
+			User newUserInfo = new User();
+			newUserInfo.setId(user.getId());
+			User oldUserInfor = this.genericDao.queryDBEntitySingle(newUserInfo);
+			if (oldUserInfor != null) {
+				newUserInfo.setLastLoginIp(oldUserInfor.getLoginIp());
+				newUserInfo.setLoginIp(ComputerUtil.getRealIP());
+				if(StringUtils.isEmpty(oldUserInfor.getLoginSum())){
+					oldUserInfor.setLoginSum(0);//第一次登录 进行初始化
+				}
+				newUserInfo.setLoginSum( oldUserInfor.getLoginSum()+ 1);
+				newUserInfo.setLastLoginTime(oldUserInfor.getLoginTime());
+				newUserInfo.setLoginTime(ConcurrentDateUtil.date2long14());
+				this.genericDao.updateDBEntityByKey(newUserInfo);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -33,7 +33,7 @@ public class KiiikSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/user/toLogin").permitAll()
         .antMatchers("/static/**").permitAll()
         .antMatchers("/swagger-ui.html").permitAll()
-        .antMatchers("/js/**").permitAll()
+        .antMatchers("/user/getImage").permitAll()
         .antMatchers("/css/**").permitAll()
         .antMatchers("/bootstrap/**").permitAll()
         .antMatchers("/fonts/**").permitAll()
