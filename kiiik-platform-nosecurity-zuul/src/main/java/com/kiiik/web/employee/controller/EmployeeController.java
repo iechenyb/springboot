@@ -6,10 +6,13 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.kiiik.pub.bean.Page;
 import com.kiiik.pub.bean.ResultBean;
@@ -28,7 +31,7 @@ import com.kiiik.web.employee.service.EmployeeService;
  */
 @RestController
 @RequestMapping("employee")
-@Api
+@Api(value = "职工信息查询", description = "职工基本信息操作API", tags = "EmployeeApi")
 public class EmployeeController {
 
 	Log log = LogFactory.getLog(EmployeeController.class);
@@ -71,7 +74,7 @@ public class EmployeeController {
     @SuppressWarnings("unchecked")
 	@GetMapping("listPage")
 	@ApiOperation("分页查询")
-	public ResultBean<List<EmployeeEntity>> listUsersPage(EmployeeEntity entity, Page page) {
+	public ResultBean<List<EmployeeEntity>> listUsersPage(EmployeeEntity entity, @ModelAttribute @Validated Page page) {
 		List<EmployeeEntity> entitys = genericService.queryDBEntityList(entity, page.getPageNum(), page.getPageSize(), " id asc");
 		return new ResultBean<List<EmployeeEntity>>(entitys).success();
 	}
@@ -115,8 +118,8 @@ public class EmployeeController {
      */
 	@GetMapping("deleteById")
 	@ApiOperation("根据主键删除信息")
-	public ResultBean<String> delEmployeeEntity(Integer id){
-		return employeeService.delEmployeeEntity(id);
+	public ResultBean<String> delEmployeeEntity(@RequestParam("ids") List<Integer> ids){
+		return employeeService.delEmployeeEntity(ids);
 	}
 
 }

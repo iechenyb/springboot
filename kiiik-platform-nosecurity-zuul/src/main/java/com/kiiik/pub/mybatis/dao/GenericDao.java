@@ -19,6 +19,8 @@ public interface GenericDao {
 	
 	public int deleteDBEntity(Object Object);//根据所有的属性值删除记录
 	
+	public int deleteDBEntityByKeyBatchs(Object entityInfo,List<Integer> ids);
+	
 	int insertDBEntityBatch(List<Object> entitys);
 
 	

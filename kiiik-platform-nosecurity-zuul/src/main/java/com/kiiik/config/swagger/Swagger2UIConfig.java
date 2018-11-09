@@ -86,7 +86,7 @@ public class Swagger2UIConfig {
    public  Map<String,String> ignoreController = null;
    public  synchronized void  initIngoreControllers() {
     	ignoreController=new HashMap<>();
-    	if(KiiikContants.DEV.equals(env.getProperty("spring.profiles.active"))){
+    	if(!KiiikContants.DEV.equals(env.getProperty("spring.profiles.active"))){
 	    	ignoreController.put("GenericController",KiiikContants.BLANK);
 	    	ignoreController.put("JSRController", KiiikContants.BLANK);
 	    	ignoreController.put("ApiController", KiiikContants.BLANK);

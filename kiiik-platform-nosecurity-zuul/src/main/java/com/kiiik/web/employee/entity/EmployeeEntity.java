@@ -50,12 +50,12 @@ public class EmployeeEntity implements Serializable {
 			
 	@DBColumn("departmentid")
 	@ApiModelProperty(value="仅更新或者查询时，传参数！")
-	private String departmentid;
+	private Integer departmentid;
 	
 			
 	@DBColumn("subcompanyid1")
 	@ApiModelProperty(value="仅更新或者查询时，传参数！")
-	private String subcompanyid1;
+	private Integer subcompanyid1;
 	
 	
 	//设置值方法
@@ -107,19 +107,19 @@ public class EmployeeEntity implements Serializable {
 		return email;
 	}
 	//设置值方法
-	public void setDepartmentid(String departmentid) {
+	public void setDepartmentid(Integer departmentid) {
 		this.departmentid = departmentid;
 	}
 	//获取值方法
-	public String getDepartmentid() {
+	public Integer getDepartmentid() {
 		return departmentid;
 	}
 	//设置值方法
-	public void setSubcompanyid1(String subcompanyid1) {
+	public void setSubcompanyid1(Integer subcompanyid1) {
 		this.subcompanyid1 = subcompanyid1;
 	}
 	//获取值方法
-	public String getSubcompanyid1() {
+	public Integer getSubcompanyid1() {
 		return subcompanyid1;
 	}
 }

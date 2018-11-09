@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kiiik.pub.bean.ResultBean;
@@ -24,7 +25,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("role")
-@Api("角色管理模块")
+@Api(value = "角色管理模块", description = "角色基本信息操作API", tags = "RoleApi")
 public class RoleController {
 	Log log = LogFactory.getLog(RoleController.class);
 	
@@ -62,18 +63,16 @@ public class RoleController {
 		int count = 0 ;
 		if(role_tmp==null){
 			count = genericService.insertDBEntity(role);
-			return new ResultBean<Integer>(count).fail("角色插入成功!");
+			return new ResultBean<Integer>(count).success("角色插入成功!");
 		}
-		return new ResultBean<Integer>(count).success("角色名称已经存在！");
+		return new ResultBean<Integer>(count).fail("角色名称已经存在！");
 	}
 	
 	@SuppressWarnings("unchecked")
-	@GetMapping("deleteById")
+	@GetMapping("deleteByIds")
 	@ApiOperation("根据主键删除角色信息")
-	public ResultBean<String> delRole(Integer id){
-		Role role = new Role();
-		role.setId(id);
-		int count = genericService.deleteDBEntityByKey(role);
+	public ResultBean<String> delRole(@RequestParam("ids") List<Integer> ids){
+		int count = genericService.deleteDBEntityByKeyBatchs(new Role(),ids);
 		return new ResultBean<String>("删除"+count+"记录！").success();
 		
 	}
@@ -86,7 +85,7 @@ public class RoleController {
 		role_tmp = genericService.queryDBEntitySingleComplex(Role.class, 
 				new ComplexCondition().col("id").notIn(role.getId()).and().col("rolename").eq(role.getRoleName()));
 		if(role_tmp!=null){
-			return new ResultBean<String>().success("角色名已经存在！");
+			return new ResultBean<String>().fail("角色名已经存在！");
 		}else{
 			int count = genericService.updateDBEntityByKey(role);
 			return new ResultBean<String>().success("更新成功！更新记录数"+count);

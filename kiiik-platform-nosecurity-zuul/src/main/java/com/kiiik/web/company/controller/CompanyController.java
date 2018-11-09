@@ -6,18 +6,23 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.kiiik.pub.bean.Page;
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.mybatis.service.GenericService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import com.kiiik.web.company.entity.CompanyEntity;
 import com.kiiik.web.company.service.CompanyService;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 请求控制层
@@ -28,7 +33,7 @@ import com.kiiik.web.company.service.CompanyService;
  */
 @RestController
 @RequestMapping("company")
-@Api
+@Api(value = "公司信息查询", description = "公司基本信息操作API", tags = "CompanyApi")
 public class CompanyController {
 
 	Log log = LogFactory.getLog(CompanyController.class);
@@ -54,7 +59,7 @@ public class CompanyController {
      */
     @SuppressWarnings("unchecked")
     @PostMapping("/list")
-    @ApiOperation("列表信息")
+    //@ApiOperation(value = "/list",notes="列表信息")
     public ResultBean<List<CompanyEntity>> list(@RequestBody CompanyEntity entity){
        List<CompanyEntity> entitys = genericService.queryDBEntityList(entity);
         return new ResultBean<List<CompanyEntity>>(entitys).success();
@@ -71,7 +76,7 @@ public class CompanyController {
     @SuppressWarnings("unchecked")
 	@GetMapping("listPage")
 	@ApiOperation("分页查询")
-	public ResultBean<List<CompanyEntity>> listUsersPage(CompanyEntity entity, Page page) {
+	public ResultBean<List<CompanyEntity>> listUsersPage(CompanyEntity entity, @ModelAttribute @Validated Page page) {
 		List<CompanyEntity> entitys = genericService.queryDBEntityList(entity, page.getPageNum(), page.getPageSize(), " id asc");
 		return new ResultBean<List<CompanyEntity>>(entitys).success();
 	}
@@ -113,10 +118,10 @@ public class CompanyController {
      *@param 
      *@return
      */
-	@GetMapping("deleteById")
+	@GetMapping("deleteByIds")
 	@ApiOperation("根据主键删除信息")
-	public ResultBean<String> delCompanyEntity(Integer id){
-		return companyService.delCompanyEntity(id);
+	public ResultBean<String> delCompanyEntity(@RequestParam("ids") List<Integer> ids){
+		return companyService.delCompanyEntity(ids);
 	}
 
 }

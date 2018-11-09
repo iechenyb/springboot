@@ -115,6 +115,11 @@ public class ComplexCondition {
 		return this;
 	}
 	
+	public ComplexCondition inList(List<?> objects){
+		nodes.add(new ComplexConditionNode("in",objects.toArray()));
+		return this;
+	}
+	
 	public ComplexCondition notIn(Object... objects){
 		nodes.add(new ComplexConditionNode("ni",objects));
 		return this;

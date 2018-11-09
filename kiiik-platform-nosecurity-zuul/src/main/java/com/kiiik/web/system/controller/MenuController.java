@@ -4,13 +4,16 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.system.po.Menu;
 import com.kiiik.web.system.service.impl.MenuServiceImpl;
@@ -24,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("menu")
-@Api("菜单管理模块")
+@Api(value = "菜单管理模块", description = "菜单基本信息操作API", tags = "MenuApi")
 public class MenuController {
 	Log log = LogFactory.getLog(MenuController.class);
 	
@@ -56,12 +59,19 @@ public class MenuController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@GetMapping("deleteById")
+	@GetMapping("deleteByIds")
 	@ApiOperation(value="根据主键删除菜单")
-	public ResultBean<String> delMenu(Integer id){
-		Menu menu = new Menu();
-		menu.setId(id);
-		int count = genericService.deleteDBEntityByKey(menu);
+	public ResultBean<String> delMenu(@RequestParam("ids") List<Integer> ids){
+		//查询子菜单或者目录
+		if(!CollectionUtils.isEmpty(
+				genericService.queryDBEntityListComplex(Menu.class,
+	    		new ComplexCondition()
+	    		.and()
+	    		.col("parentId").inList(ids))
+	    		)){
+			return new ResultBean<String>().fail("存在子菜单信息，不能删除！");
+		}
+		int count = genericService.deleteDBEntityByKeyBatchs(new Menu(),ids);
 		if(count>0){
 			return new ResultBean<String>().success("删除记录成功！");
 		}else{

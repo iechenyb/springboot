@@ -37,7 +37,6 @@ public class KiiikSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/css/**").permitAll()
         .antMatchers("/bootstrap/**").permitAll()
         .antMatchers("/fonts/**").permitAll()
-        .antMatchers("/favicon.ico").permitAll()
         .anyRequest().authenticated()
         .and().formLogin()                    //  定义当需要用户登录时候，转到的登录页面。
 		          .loginPage("/user/toLogin") // usernameParameter("username").passwordParameter("password").defaultSuccessUrl("/") // 设置登录页面

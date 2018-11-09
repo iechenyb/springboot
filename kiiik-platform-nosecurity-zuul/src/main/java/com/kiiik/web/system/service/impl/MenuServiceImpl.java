@@ -130,9 +130,9 @@ public class MenuServiceImpl extends BaseService {
 				.eq(menu.getUrl()));
 		if(menu_tmp==null){
 			genericDao.insertDBEntity(menu);
-			return new ResultBean<String>().fail("菜单插入成功!");
+			return new ResultBean<String>().success("菜单插入成功!");
 		}else{
-			return new ResultBean<String>().success("菜单地址已经存在！");
+			return new ResultBean<String>().fail("菜单地址已经存在！");
 		}
 	}
 	
@@ -142,7 +142,7 @@ public class MenuServiceImpl extends BaseService {
 		menu_tmp = genericDao.queryDBEntitySingleComplex(Menu.class, 
 				new ComplexCondition().col("id").notIn(menu.getId()).and().col("url").eq(menu.getUrl()));
 		if(menu_tmp!=null){
-			return new ResultBean<String>().success("角色名已经存在！");
+			return new ResultBean<String>().fail("角色名已经存在！");
 		}else{
 			int count = genericDao.updateDBEntityByKey(menu);
 			return new ResultBean<String>().success("更新成功！更新记录数"+count);

@@ -17,6 +17,7 @@ import com.kiiik.web.employee.entity.EmployeeEntity;
 import com.kiiik.web.system.service.impl.OrganizationServiceImpl;
 import com.kiiik.web.system.utils.TreeNode;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 /**
  *作者 : iechenyb<br>
@@ -25,6 +26,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("org")
+@Api(value = "组织机构管理模块", description = "组织机构基本信息操作API", tags = "OrganizationApi")
 public class OrganizationController {
 	Log log = LogFactory.getLog(OrganizationController.class);
 	@Autowired

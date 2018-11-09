@@ -32,6 +32,7 @@ public class KiiikCustomizationFilter implements Filter {
 	Log log = LogFactory.getLog(KiiikCustomizationFilter.class);
 	List<String> paths= new ArrayList<String>();
 	AntPathMatcher antPathMatcher = new AntPathMatcher();
+	boolean checkSession = true;
 	@Autowired
 	Environment env;
 	@Override
@@ -54,12 +55,14 @@ public class KiiikCustomizationFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		//过滤器掉静态资源  
-		Object auth = ((HttpServletRequest)request).getSession().getAttribute("SPRING_SECURITY_CONTEXT");
-    	if(auth==null&&!isAccess( ((HttpServletRequest)request).getRequestURI())){
-	        ResultBean<String> result = new ResultBean<String>();
-	        result.sessionTimeOut("会话过期，请重新登陆！");
-	        ResponseUtils.writeResult((HttpServletResponse)response, result);
-	        return ;
+		if(checkSession){
+			Object auth = ((HttpServletRequest)request).getSession().getAttribute(KiiikContants.SPRING_CONTEXT_KEY);
+	    	if(auth==null&&!isAccess( ((HttpServletRequest)request).getRequestURI())){
+		        ResultBean<String> result = new ResultBean<String>();
+		        result.sessionTimeOut("会话过期，请重新登陆！");
+		        ResponseUtils.writeResult((HttpServletResponse)response, result);
+		        return ;
+	    	}
     	}
     	chain.doFilter(request, response);
 	}

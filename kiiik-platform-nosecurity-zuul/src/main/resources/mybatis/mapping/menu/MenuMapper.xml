@@ -9,5 +9,6 @@
        ,t_sys_role r,t_sys_menu m 
        where rm.menuid=m.id 
        and rm.roleId=r.id
+       order by m.ordor asc
     </select>
 </mapper>

@@ -20,7 +20,7 @@ public class ResponseUtils {
     	view.addObject("timestamp",new Date().getTime());
     	view.addObject("status",response.getStatus());
     	view.addObject("message", ExceptionCode.ERRORCODE.get(response.getStatus()));
-		view.setViewName("error1");
+		view.setViewName("/error1");
 		return view;
 	}
 }

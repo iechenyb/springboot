@@ -96,5 +96,10 @@ public class GenericServiceImpl implements GenericService {
 			String... orderBys) {
 		return genericDao.queryDBEntityListComplex(clazz, condition, pageNum, pageSize,orderBys);
 	}
+
+	@Override
+	public int deleteDBEntityByKeyBatchs(Object object, List<Integer> ids) {
+		return genericDao.deleteDBEntityByKeyBatchs(object, ids);
+	}
 	
 }

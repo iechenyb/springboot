@@ -24,4 +24,5 @@ public class KiiikContants {
 	public static final String COMPANY = "1";
 	public static final String DEPARTMENT = "2";
 	public static final String EMPLOYEE = "3";
+	public static final Integer ZERO = 0;
 }

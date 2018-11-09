@@ -58,6 +58,7 @@ public class ErrorControllerAdvice implements ErrorController {
 	    @RequestMapping(value = ERROR_PATH, produces = {MediaType.APPLICATION_JSON_VALUE})
 	    @ResponseBody
 	    public Object error(HttpServletRequest request ,HttpServletResponse response,Exception e) {
+	    	 log.info(e.toString());
 	    	 if(!isProduction) {
 	             return buildBody(request,response,true);
 	         }else{

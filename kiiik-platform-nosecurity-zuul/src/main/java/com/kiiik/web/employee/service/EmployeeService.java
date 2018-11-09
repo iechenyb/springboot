@@ -1,6 +1,9 @@
 package com.kiiik.web.employee.service;
 
 import com.kiiik.web.employee.entity.EmployeeEntity;
+
+import java.util.List;
+
 import com.kiiik.pub.bean.ResultBean;
 
 /**
@@ -39,6 +42,6 @@ public interface EmployeeService  {
  *@param 
  *@return
  */
- ResultBean<String> delEmployeeEntity(Integer id);
+ ResultBean<String> delEmployeeEntity(List<Integer> ids);
 }
 

@@ -143,6 +143,17 @@
 		</where>
 	</delete>
 	
+	<delete id="deleteDBEntityByKeyBatchs" >
+		delete from <if test="entityInfo.database!=null">${entityInfo.database}.</if>${entityInfo.tableName}
+		<where>
+			 id in (
+	        <foreach collection="ids" item="id" separator=",">
+	            #{id}
+	        </foreach>
+        )  
+		</where>
+	</delete>
+	
 	<delete id="deleteDBEntity" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" >
 		delete from <if test="database!=null">${database}.</if>${tableName}
 		<where>

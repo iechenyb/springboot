@@ -25,6 +25,6 @@
 		FROM
 			t_sys_department t
 		ORDER BY
-			showorder ASC;
+			showorder ASC
     </select>
 </mapper>

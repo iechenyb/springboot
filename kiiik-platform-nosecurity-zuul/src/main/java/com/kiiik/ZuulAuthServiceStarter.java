@@ -11,8 +11,8 @@ import org.springframework.session.data.redis.RedisFlushMode;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.kiiik.pub.filter.AccessFilter;
@@ -26,6 +26,7 @@ import com.kiiik.utils.req.RequestParamAnalysis;
 @EnableRedisHttpSession(redisFlushMode = RedisFlushMode.IMMEDIATE)
 @Controller
 @EnableWebMvc
+//@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 public class ZuulAuthServiceStarter {
 	
 	
@@ -52,11 +53,15 @@ public class ZuulAuthServiceStarter {
 		filter.setAnalysis(analysis);
 		return filter;
 	}
-
-	@GetMapping("/")
+	
+	@RequestMapping(value = "/")
+    public String index() {
+       return "redirect:swagger-ui.html";
+	}
+	/*@GetMapping("/")
 	public ModelAndView toLogin() {
 		ModelAndView view = new ModelAndView();
 		view.setViewName("/index");
 		return view;
-	}
+	}*/
 }

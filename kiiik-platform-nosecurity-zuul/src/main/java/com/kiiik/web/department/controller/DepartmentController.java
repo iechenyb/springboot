@@ -6,18 +6,23 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.kiiik.pub.bean.Page;
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.mybatis.service.GenericService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import com.kiiik.web.department.entity.DepartmentEntity;
 import com.kiiik.web.department.service.DepartmentService;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 请求控制层
@@ -28,7 +33,7 @@ import com.kiiik.web.department.service.DepartmentService;
  */
 @RestController
 @RequestMapping("department")
-@Api
+@Api(value = "部门信息查询", description = "部门基本信息操作API", tags = "DepartmentApi")
 public class DepartmentController {
 
 	Log log = LogFactory.getLog(DepartmentController.class);
@@ -71,7 +76,7 @@ public class DepartmentController {
     @SuppressWarnings("unchecked")
 	@GetMapping("listPage")
 	@ApiOperation("分页查询")
-	public ResultBean<List<DepartmentEntity>> listUsersPage(DepartmentEntity entity, Page page) {
+	public ResultBean<List<DepartmentEntity>> listUsersPage(DepartmentEntity entity,@ModelAttribute @Validated Page page) {
 		List<DepartmentEntity> entitys = genericService.queryDBEntityList(entity, page.getPageNum(), page.getPageSize(), " id asc");
 		return new ResultBean<List<DepartmentEntity>>(entitys).success();
 	}
@@ -113,10 +118,9 @@ public class DepartmentController {
      *@param 
      *@return
      */
-	@GetMapping("deleteById")
+	@GetMapping("deleteByIds")
 	@ApiOperation("根据主键删除信息")
-	public ResultBean<String> delDepartmentEntity(Integer id){
-		return departmentService.delDepartmentEntity(id);
+	public ResultBean<String> delDepartmentEntity(@RequestParam(value = "ids") List<Integer> ids){
+		return departmentService.delDepartmentEntity(ids);
 	}
-
 }

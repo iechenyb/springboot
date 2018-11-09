@@ -1,6 +1,9 @@
 package com.kiiik.web.department.service;
 
 import com.kiiik.web.department.entity.DepartmentEntity;
+
+import java.util.List;
+
 import com.kiiik.pub.bean.ResultBean;
 
 /**
@@ -39,6 +42,6 @@ public interface DepartmentService  {
  *@param 
  *@return
  */
- ResultBean<String> delDepartmentEntity(Integer id);
+ ResultBean<String> delDepartmentEntity(List<Integer> ids);
 }
 

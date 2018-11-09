@@ -4,6 +4,8 @@ import java.io.Serializable;
 import com.kiiik.pub.mybatis.annotation.DBEntity;
 import com.kiiik.pub.mybatis.annotation.DBColumn;
 import com.kiiik.pub.mybatis.annotation.KeyColumn;
+
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -14,6 +16,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 日期: 2018-11-08 09:34:39
  */
 @DBEntity("t_sys_company")
+@ApiModel(value = "Company", description = "公司信息描述")
 public class CompanyEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 

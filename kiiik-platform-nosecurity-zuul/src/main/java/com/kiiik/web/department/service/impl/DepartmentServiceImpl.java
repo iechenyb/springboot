@@ -1,16 +1,20 @@
 package com.kiiik.web.department.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.dao.GenericDao;
 import com.kiiik.web.company.entity.CompanyEntity;
 import com.kiiik.web.department.dao.DepartmentDao;
 import com.kiiik.web.department.entity.DepartmentEntity;
 import com.kiiik.web.department.service.DepartmentService;
+import com.kiiik.web.employee.entity.EmployeeEntity;
 
 /**
  * 业务处理层
@@ -52,15 +56,17 @@ public class DepartmentServiceImpl  implements DepartmentService {
 			 return new ResultBean<String>().fail("部门所在的公司信息不存在!");
 		 }
 		 //校验所在部门是否为空
-		 tmp = new DepartmentEntity();
-		 tmp.setId(entity.getSupdepid());//上级部门
-		 tmp = genericDao.queryDBEntitySingle(tmp);
-		 if(tmp==null){
-			 return new ResultBean<String>().fail("上级部门不存在!");
-		 }
+		if(entity.getSupdepid().intValue()!=KiiikContants.ZERO){//非根节点
+			 tmp = new DepartmentEntity();
+			 tmp.setId(entity.getSupdepid());//上级部门
+			 tmp = genericDao.queryDBEntitySingle(tmp);
+			 if(tmp==null){
+				 return new ResultBean<String>().fail("上级部门不存在!");
+			 }
+		}
 	 	int count = genericDao.insertDBEntity(entity);
 		if(count==0){
-			return new ResultBean<String>().success("新增记录失败!");
+			return new ResultBean<String>().fail("新增记录失败!");
 		}else{
 			return new ResultBean<String>().success("新增记录成功!");
 		}
@@ -93,15 +99,18 @@ public class DepartmentServiceImpl  implements DepartmentService {
 			 return new ResultBean<String>().fail("部门所在的公司信息不存在!");
 		 }
 		 //校验所在部门是否为空
-		 tmp = new DepartmentEntity();
-		 tmp.setId(entity.getSupdepid());//上级部门
-		 tmp = genericDao.queryDBEntitySingle(tmp);
-		 if(tmp==null){
-			 return new ResultBean<String>().fail("上级部门不存在!");
-		 }
+		if(entity.getSupdepid().intValue()!=KiiikContants.ZERO){//非根节点
+			 //校验所在部门是否为空
+			 tmp = new DepartmentEntity();
+			 tmp.setId(entity.getSupdepid());//上级部门
+			 tmp = genericDao.queryDBEntitySingle(tmp);
+			 if(tmp==null){
+				 return new ResultBean<String>().fail("上级部门不存在!");
+			 }
+		}
 	 	int count = genericDao.updateDBEntityByKey(entity);
 		if(count==0){
-			return new ResultBean<String>().success("更新记录失败!");
+			return new ResultBean<String>().fail("更新记录失败!");
 		}else{
 			return new ResultBean<String>().success("更新记录成功!");
 		}
@@ -116,10 +125,23 @@ public class DepartmentServiceImpl  implements DepartmentService {
 	 *@return
 	 */
 	 @SuppressWarnings("unchecked")
-	 public ResultBean<String> delDepartmentEntity(Integer id){
+	 public ResultBean<String> delDepartmentEntity(List<Integer> ids){
+	    if(!CollectionUtils.isEmpty(
+	    		 genericDao.queryDBEntityListComplex(DepartmentEntity.class,
+	    		new ComplexCondition()
+	    		.and()
+	    		.col("supdepid").inList(ids))
+	    		)){
+	    	return new ResultBean<String>().success("存在子部门信息，不能删除!");
+	    }
+	    if(!CollectionUtils.isEmpty(genericDao.queryDBEntityListComplex(EmployeeEntity.class,
+	    		new ComplexCondition()
+	    		.and()
+	    		.col("departmentid").inList(ids)))){
+	    	return new ResultBean<String>().success("存在员工信息，不能删除!");
+	    }	    
 	    DepartmentEntity entity = new DepartmentEntity();
-		entity.setId(id);
-		int count = genericDao.deleteDBEntityByKey(entity);
+		int count = genericDao.deleteDBEntityByKeyBatchs(entity,ids);
 		if(count==0){
 			return new ResultBean<String>().success("删除记录失败!");
 		}else{

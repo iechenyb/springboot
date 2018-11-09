@@ -2,7 +2,6 @@ package com.kiiik.web.system.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,7 +33,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cyb.date.DateUtil;
 import com.kiiik.pub.bean.Page;
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.bean.SessionUser;
@@ -43,7 +40,7 @@ import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.pub.controller.BaseController;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
-import com.kiiik.utils.RandomUtils;
+import com.kiiik.utils.ReflectionUtils;
 import com.kiiik.utils.VerifyCodeUtils;
 import com.kiiik.web.system.po.User;
 import com.kiiik.web.system.service.impl.UserServiceImpl;
@@ -52,47 +49,15 @@ import com.kiiik.web.system.vo.UserRoleVo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("user")
-@Api("用户管理模块")
+@Api(value = "用户管理模块", description = "用户基本信息操作API", tags = "UserApi")
 public class UserController extends BaseController {
 	Log log = LogFactory.getLog(UserController.class);
 
 	@Autowired
 	GenericService genericService;
-
-	@SuppressWarnings("unchecked")
-	@PostMapping("genUsers")
-	@ApiOperation("模拟生成用户信息，仅供测试使用")
-	public ResultBean<String> genUsers(@ApiParam("生成用户数量") Integer theNumbersOfToGen) {
-		User po = null;
-		if (theNumbersOfToGen == null) {
-			theNumbersOfToGen = 10;
-		}
-		List<Object> users = new ArrayList<Object>();
-		for (int i = 0; i < theNumbersOfToGen; i++) {
-			po = new User();
-			// po.setId(i); 不设置 采用自增长方式
-			po.setUserName(RandomUtils.getChineaseName());
-			po.setEmpNo(RandomUtils.getPingYin(po.getUserName()));
-			po.setPassword("111111");// RandomUtils.getPassWord(8)
-			po.setIsEffect(i % 2);
-			po.setLastLoginIp(RandomUtils.getIp());
-			po.setLoginIp(RandomUtils.getIp());
-			po.setLastLoginTime(Long.valueOf(DateUtil.date2long14()));
-			// genericService.insertDBEntity(po);
-			try {
-				users.add(po);
-			} catch (Exception e) {
-				// 忽略生产中文乱码的问题
-			}
-		}
-		genericService.insertDBEntityBatch(users);
-		return new ResultBean<String>("生成" + theNumbersOfToGen + "个用户信息！").success();
-	}
-
 	/**
 	 * 
 	 * 作者 : iechenyb<br>
@@ -102,20 +67,23 @@ public class UserController extends BaseController {
 	 * 
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
 	@SuppressWarnings("unchecked")
 	@PostMapping("list")
 	@ApiOperation("用户列表")
-	public ResultBean<List<User>> listUsers(@RequestBody User user) {
+	public ResultBean<List<User>> listUsers(@RequestBody User user) throws Exception {
 		List<User> users = genericService.queryDBEntityList(user);
+		ReflectionUtils.modifyListFieldValue(users, "password", KiiikContants.BLANK);
 		return new ResultBean<List<User>>(users).success();
 	}
 
 	@SuppressWarnings("unchecked")
 	@GetMapping("listPage")
 	@ApiOperation("用户列表分页查询")
-	public ResultBean<List<User>> listUsersPage(User user, Page page) {
+	public ResultBean<List<User>> listUsersPage(User user, Page page) throws Exception {
 		List<User> users = genericService.queryDBEntityList(user, page.getPageNum(), page.getPageSize(), " id asc");
+		ReflectionUtils.modifyListFieldValue(users, "password", KiiikContants.BLANK);
 		return new ResultBean<List<User>>(users).success();
 	}
 
@@ -135,13 +103,15 @@ public class UserController extends BaseController {
 	}
 
 	@SuppressWarnings("unchecked")
-	@GetMapping("deleteById")
+	@GetMapping("deleteByIds")
 	@ApiOperation("根据主键删除用户信息")
-	public ResultBean<String> delUser(Integer id) {
-		User user = new User();
-		user.setId(id);
-		int count = genericService.deleteDBEntityByKey(user);
-		return new ResultBean<String>("删除" + count + "记录！").success();
+	public ResultBean<String> delUser(@RequestParam("ids") List<Integer> ids) {
+		int count = genericService.deleteDBEntityByKeyBatchs(new User(),ids);
+		if(count==0){
+			return new ResultBean<String>().success("删除失败！");
+		}else{
+			return new ResultBean<String>().success("删除成功！");
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -214,7 +184,7 @@ public class UserController extends BaseController {
 		session.removeAttribute("verCode");
 		session.removeAttribute("codeTime");
 		session.setAttribute("verCode", verifyCode.toLowerCase());
-		session.setAttribute("codeTime", LocalDateTime.now());
+		session.setAttribute("codeTime", System.currentTimeMillis());
 		// 生成图片
 		int w = 100, h = 30;
 		OutputStream out = response.getOutputStream();

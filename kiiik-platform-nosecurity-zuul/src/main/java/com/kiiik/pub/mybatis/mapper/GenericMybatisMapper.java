@@ -22,6 +22,8 @@ public interface GenericMybatisMapper {
 	
 	public int deleteDBEntityByKey(EntityInfo entityInfo);
 	
+	public int deleteDBEntityByKeyBatchs(@Param("entityInfo") EntityInfo entityInfo,@Param("ids") List<Integer> ids);
+	
 	public int deleteDBEntity(EntityInfo entityInfo);
 
 	public Page<Map<String, Object>> queryDBEntity(EntityInfo info);

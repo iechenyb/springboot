@@ -23,6 +23,7 @@
 			ur.roleid = rm.roleid
 		AND rm.menuid = m.id
 		AND ur.userid =  #{userId}
+		order by m.ordor asc
     </select>
   
 </mapper>

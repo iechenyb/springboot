@@ -1,5 +1,7 @@
 package com.kiiik.web.company.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -10,6 +12,8 @@ import com.kiiik.pub.service.BaseService;
 import com.kiiik.web.company.dao.CompanyDao;
 import com.kiiik.web.company.entity.CompanyEntity;
 import com.kiiik.web.company.service.CompanyService;
+import com.kiiik.web.department.entity.DepartmentEntity;
+import com.kiiik.web.employee.entity.EmployeeEntity;
 
 /**
  * 业务处理层
@@ -42,13 +46,13 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 		 
 		 tmp = new CompanyEntity();
 		 tmp.setId(entity.getSupsubcomid());//查询上级公司是否存在
-		 if(!CollectionUtils.isEmpty(this.genericDao.queryDBEntityList(tmp))){
+		 if(CollectionUtils.isEmpty(this.genericDao.queryDBEntityList(tmp))){
 			 return  new ResultBean<String>().fail("上级公司不存在!");
 		 }
 		 
 	 	int count = genericDao.insertDBEntity(entity);
 		if(count==0){
-			return new ResultBean<String>().success("新增记录失败!");
+			return new ResultBean<String>().fail("新增记录失败!");
 		}else{
 			return new ResultBean<String>().success("新增记录成功!");
 		}
@@ -77,13 +81,13 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 		 
 		 tmp = new CompanyEntity();
 		 tmp.setId(entity.getSupsubcomid());//查询上级公司是否存在
-		 if(!CollectionUtils.isEmpty(this.genericDao.queryDBEntityList(tmp))){
+		 if(CollectionUtils.isEmpty(this.genericDao.queryDBEntityList(tmp))){
 			 return  new ResultBean<String>().fail("上级公司不存在!");
 		 }
 		 
 	 	int count = genericDao.updateDBEntityByKey(entity);
 		if(count==0){
-			return new ResultBean<String>().success("更新记录失败!");
+			return new ResultBean<String>().fail("更新记录失败!");
 		}else{
 			return new ResultBean<String>().success("更新记录成功!");
 		}
@@ -98,12 +102,39 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 	 *@return
 	 */
 	 @SuppressWarnings("unchecked")
-	 public ResultBean<String> delCompanyEntity(Integer id){
+	 public ResultBean<String> delCompanyEntity(List<Integer> ids){
+	    //公司是否存在子公司
+		 if(!CollectionUtils.isEmpty(
+	    		 genericDao.queryDBEntityListComplex(CompanyEntity.class,
+	    		new ComplexCondition()
+	    		.and()
+	    		.col("supsubcomid").inList(ids))
+	    		)){
+	    	return new ResultBean<String>().fail("存在子公司信息，不能删除！");
+	    }
+	    //公司是否存在子部门
+	    if(!CollectionUtils.isEmpty(
+	    		 genericDao.queryDBEntityListComplex(DepartmentEntity.class,
+	    		new ComplexCondition()
+	    		.and()
+	    		.col("subcompanyid1").inList(ids))
+	    		)){
+	    	return new ResultBean<String>().fail("存在子部门信息，不能删除！");
+	    }
+	    //公司是否存在员工
+	    if(!CollectionUtils.isEmpty(
+	    		 genericDao.queryDBEntityListComplex(EmployeeEntity.class,
+	    		new ComplexCondition()
+	    		.and()
+	    		.col("subcompanyid1").inList(ids))
+	    		)){
+	    	return new ResultBean<String>().success("存在员工信息，不能删除!");
+	    }
+	    
 	    CompanyEntity entity = new CompanyEntity();
-		entity.setId(id);
-		int count = genericDao.deleteDBEntityByKey(entity);
+		int count = genericDao.deleteDBEntityByKeyBatchs(entity,ids);
 		if(count==0){
-			return new ResultBean<String>().success("删除记录失败!");
+			return new ResultBean<String>().fail("删除记录失败!");
 		}else{
 			return new ResultBean<String>().success("删除记录成功!");
 		}

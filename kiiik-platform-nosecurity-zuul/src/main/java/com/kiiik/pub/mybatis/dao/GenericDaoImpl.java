@@ -407,6 +407,16 @@ public class GenericDaoImpl implements GenericDao {
 		}
 		return result;
 	}
+
+	@Override
+	public int deleteDBEntityByKeyBatchs(Object entity, List<Integer> ids) {
+		EntityInfo info = getInfoWithValue(entity);
+		if (!info.hasKeyCol()) {
+			throw new IllegalArgumentException("update cannot done when key property is null");
+		}
+		int rows = genericDao.deleteDBEntityByKeyBatchs(info,ids);
+		return rows;
+	}
 	
 	
 

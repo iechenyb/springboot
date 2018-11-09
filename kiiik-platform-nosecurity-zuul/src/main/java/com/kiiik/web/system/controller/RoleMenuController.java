@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("rolemenu")
-@Api("角色菜单管理模块")
+@Api(value = "角色菜单管理模块", description = "角色菜单基本信息操作API", tags = "RoleMenuApi")
 public class RoleMenuController {
 	Log log = LogFactory.getLog(RoleMenuController.class);
 	
@@ -67,12 +67,10 @@ public class RoleMenuController {
 	}
 	
 	@SuppressWarnings("unchecked")
-	@GetMapping("deleteById")
+	@GetMapping("deleteByIds")
 	@ApiOperation(value="根据主键删除角色菜单")
-	public ResultBean<String> delMenu(Integer id){
-		RoleMenu rmenu = new RoleMenu();
-		rmenu.setId(id);
-		int count = genericService.deleteDBEntityByKey(rmenu);
+	public ResultBean<String> delMenu(@RequestParam("ids") List<Integer> ids){
+		int count = genericService.deleteDBEntityByKeyBatchs(new RoleMenu(),ids);
 		if(count>0){
 			return new ResultBean<String>().success("记录删除成功！");
 		}else{
@@ -110,7 +108,7 @@ public class RoleMenuController {
 		if(count>0){
 			return new ResultBean<String>().success("角色菜单信息保存成功！");
 		}else{
-			return new ResultBean<String>().success("角色菜单信息保存失败！");	
+			return new ResultBean<String>().fail("角色菜单信息保存失败！");	
 		}
 	}
 	

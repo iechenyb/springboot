@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,7 +56,7 @@ public class VerityCodeController {
 		session.removeAttribute("verCode");
 		session.removeAttribute("codeTime");
 		session.setAttribute("verCode", verifyCode.toLowerCase());
-		session.setAttribute("codeTime", LocalDateTime.now());
+		session.setAttribute("codeTime", System.currentTimeMillis());
 		// 生成图片
 		int w = 100, h = 30;
 		OutputStream out = response.getOutputStream();

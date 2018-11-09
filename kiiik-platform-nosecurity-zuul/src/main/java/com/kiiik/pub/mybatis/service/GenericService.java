@@ -18,6 +18,8 @@ public interface GenericService {
 	public int deleteDBEntityByKey(Object Object);
 	
 	public int deleteDBEntity(Object Object);//根据所有的属性值删除记录
+	
+	public int deleteDBEntityByKeyBatchs( Object object,List<Integer> ids);
 
 	public int updateDBEntityByKey(Object Object);
 	

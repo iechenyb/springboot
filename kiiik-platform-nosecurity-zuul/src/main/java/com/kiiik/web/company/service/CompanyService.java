@@ -1,7 +1,9 @@
 package com.kiiik.web.company.service;
 
-import com.kiiik.web.company.entity.CompanyEntity;
+import java.util.List;
+
 import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.web.company.entity.CompanyEntity;
 
 /**
  * 服务接口定义
@@ -39,6 +41,6 @@ public interface CompanyService  {
  *@param 
  *@return
  */
- ResultBean<String> delCompanyEntity(Integer id);
+ ResultBean<String> delCompanyEntity(List<Integer> ids);
 }
 
