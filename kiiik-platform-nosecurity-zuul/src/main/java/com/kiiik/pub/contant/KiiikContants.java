@@ -25,4 +25,5 @@ public class KiiikContants {
 	public static final String DEPARTMENT = "2";
 	public static final String EMPLOYEE = "3";
 	public static final Integer ZERO = 0;
+	public static final String DEFAULT_PASSWORD = "96E79218965EB72C92A549DD5A330112";
 }

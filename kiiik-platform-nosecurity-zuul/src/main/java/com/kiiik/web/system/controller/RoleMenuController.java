@@ -78,6 +78,21 @@ public class RoleMenuController {
 		}
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping("deleteById")
+	@ApiOperation(value="根据主键删除角色菜单")
+	public ResultBean<String> delMenu(Integer id){
+		RoleMenu rm = new RoleMenu();
+		rm.setId(id);
+		int count = genericService.deleteDBEntityByKey(rm);
+		if(count>0){
+			return new ResultBean<String>().success("记录删除成功！");
+		}else{
+			return new ResultBean<String>().fail("记录删除失败！");
+		}
+		
+	}
 	/**
 	 * 
 	 *作者 : iechenyb<br>

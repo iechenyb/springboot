@@ -22,7 +22,7 @@ public class ReflectionUtils {
 	
 	public static void modifyListFieldValue(List<?> data,String fieldName,String value) throws Exception{
 		if(CollectionUtils.isEmpty(data)){
-			throw new Exception("数据不能为空");
+			return ;
 		}
 		for(Object obj:data){
 			modifyObjectFiledValue(obj,fieldName,value);

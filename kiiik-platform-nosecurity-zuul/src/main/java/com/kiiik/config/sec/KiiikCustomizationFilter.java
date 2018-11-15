@@ -40,6 +40,7 @@ public class KiiikCustomizationFilter implements Filter {
 		String pathsstrs ="/**/v2/api-docs/**,/**/configuration/ui/**,/**/swagger-resources/**,/**/configuration/security/**,/swagger-ui.html,/**webjars/**,/**/swagger-resources/configuration/ui/**";
 		paths.add("/user/login");
 		paths.add("/user/logout");
+		paths.add("/rsa/**");
 		paths.add("/**/*.jpg");
 		paths.add("/**/*.css");
 		paths.add("/user/getImage");

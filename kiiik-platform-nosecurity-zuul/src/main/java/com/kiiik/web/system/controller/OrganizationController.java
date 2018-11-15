@@ -42,7 +42,6 @@ public class OrganizationController {
 		return new ResultBean<TreeNode>(orgService.getOranizationTree()).success();
 	}
 	
-	
 	@SuppressWarnings("unchecked")
 	@ApiOperation("查询员工信息")
 	@PostMapping("findEmp")

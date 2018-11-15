@@ -31,6 +31,7 @@ public class KiiikSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/user/login").permitAll()
         .antMatchers("/user/toLogin").permitAll()
+        .antMatchers("/rsa/**").permitAll()//禁止session限制
         .antMatchers("/static/**").permitAll()
         .antMatchers("/swagger-ui.html").permitAll()
         .antMatchers("/user/getImage").permitAll()

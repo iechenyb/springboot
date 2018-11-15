@@ -59,6 +59,26 @@ public class MenuController {
 	}
 	
 	@SuppressWarnings("unchecked")
+	@GetMapping("deleteById")
+	@ApiOperation("根据主键删除信息")
+	public ResultBean<String> delMenu(Integer id){
+		Menu menu = new Menu();
+		menu.setParentId(id);
+		if(!CollectionUtils.isEmpty(genericService.queryDBEntityList(menu))){
+			return new ResultBean<String>().fail("当前菜单存在子菜单，不能删除！");
+		}
+		menu = new Menu();
+		menu.setId(id);
+		int count = genericService.deleteDBEntityByKey(menu);
+		if(count>0){
+			return new ResultBean<String>().success("删除记录成功！");
+		}else{
+			return new ResultBean<String>().fail("删除记录失败！");
+		}
+	}
+	
+	
+	@SuppressWarnings("unchecked")
 	@GetMapping("deleteByIds")
 	@ApiOperation(value="根据主键删除菜单")
 	public ResultBean<String> delMenu(@RequestParam("ids") List<Integer> ids){

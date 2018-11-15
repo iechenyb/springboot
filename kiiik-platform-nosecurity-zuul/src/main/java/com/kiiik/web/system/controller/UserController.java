@@ -40,8 +40,10 @@ import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.pub.controller.BaseController;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
+import com.kiiik.utils.PasswordUtils;
 import com.kiiik.utils.ReflectionUtils;
 import com.kiiik.utils.VerifyCodeUtils;
+import com.kiiik.web.employee.entity.EmployeeEntity;
 import com.kiiik.web.system.po.User;
 import com.kiiik.web.system.service.impl.UserServiceImpl;
 import com.kiiik.web.system.vo.PasswordVo;
@@ -73,7 +75,7 @@ public class UserController extends BaseController {
 	@PostMapping("list")
 	@ApiOperation("用户列表")
 	public ResultBean<List<User>> listUsers(@RequestBody User user) throws Exception {
-		List<User> users = genericService.queryDBEntityList(user);
+		List<User> users = genericService.queryDBEntityList(user," empNo asc");
 		ReflectionUtils.modifyListFieldValue(users, "password", KiiikContants.BLANK);
 		return new ResultBean<List<User>>(users).success();
 	}
@@ -96,10 +98,17 @@ public class UserController extends BaseController {
 				new ComplexCondition().and().col("empno").eq(user.getEmpNo()));
 		int count = 0;
 		if (user_tmp == null) {
+			user.setPassword(KiiikContants.DEFAULT_PASSWORD);//设置默认密码
 			count = genericService.insertDBEntity(user);
-			return new ResultBean<Integer>(count).fail("用户插入成功!");
+			EmployeeEntity emp = new EmployeeEntity();
+			emp.setLoginid(user.getEmpNo());
+			emp = genericService.queryDBEntitySingle(emp);
+			if(emp!=null){
+				user.setUserName(emp.getLastname());
+			}
+			return new ResultBean<Integer>(count).success("用户插入成功!");
 		}
-		return new ResultBean<Integer>(count).success("用户已经存在！");
+		return new ResultBean<Integer>(count).fail("用户已经存在！");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -108,7 +117,21 @@ public class UserController extends BaseController {
 	public ResultBean<String> delUser(@RequestParam("ids") List<Integer> ids) {
 		int count = genericService.deleteDBEntityByKeyBatchs(new User(),ids);
 		if(count==0){
-			return new ResultBean<String>().success("删除失败！");
+			return new ResultBean<String>().fail("删除失败！");
+		}else{
+			return new ResultBean<String>().success("删除成功！");
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping("deleteById")
+	@ApiOperation("根据主键删除用户信息")
+	public ResultBean<String> delUser(Integer id) {
+		User user = new User();
+		user.setId(id);
+		int count = genericService.deleteDBEntityByKey(user);
+		if(count==0){
+			return new ResultBean<String>().fail("删除失败！");
 		}else{
 			return new ResultBean<String>().success("删除成功！");
 		}
@@ -117,19 +140,26 @@ public class UserController extends BaseController {
 	@SuppressWarnings("unchecked")
 	@PostMapping("update")
 	@ApiOperation("更新用户信息")
-	public ResultBean<String> updUser(@RequestBody User user) {
+	public ResultBean<String> updUser(@RequestBody User user) throws Exception {
 		user.setEmpNo(null);//一旦新增不可以修改，如果传递值，则置为无效
+		user.setUserName(null);//用户名不能修改！
+		//密码更新只有 重置密码使用 
+		if(!KiiikContants.DEFAULT_PASSWORD.equals(utils.getPassword(user.getPassword()))){
+			user.setPassword(null);
+		}
+		user.setPassword(null);//密码不可以修改
 		User user_tmp = null;
 		user_tmp = genericService.queryDBEntitySingleComplex(User.class, new ComplexCondition().col("id")
 				.notIn(user.getId()).and(new ComplexCondition().col("empno").eq(user.getEmpNo())));
 		if (user_tmp != null) {
-			return new ResultBean<String>().success("修改的用户名已经存在！");
+			return new ResultBean<String>().fail("修改的用户名已经存在！");
 		} else {
-			int count = genericService.updateDBEntityByKey(user);
-			return new ResultBean<String>().success("更新成功！更新记录数" + count);
+			genericService.updateDBEntityByKey(user);
+			return new ResultBean<String>().success("更新成功！更新记录数!");
 		}
 	}
 
+	
 	@SuppressWarnings("unchecked")
 	@GetMapping("getUserRoles")
 	@ApiOperation("获取用户的角色信息")
@@ -156,7 +186,7 @@ public class UserController extends BaseController {
 	public ResultBean<String> saveUserRole(@RequestParam(value = "roleIds[]") Integer[] roleIds,
 			@RequestParam(value = "userId") Integer userId) {
 		if (roleIds.length == 0 || userId == null) {
-			return new ResultBean<String>().success("角色或者用户信息不能为空！");
+			return new ResultBean<String>().fail("角色或者用户信息不能为空！");
 		}
 		int total = roleIds.length;
 		if (total > 0) {
@@ -191,6 +221,10 @@ public class UserController extends BaseController {
 		VerifyCodeUtils.outputImage(w, h, out, verifyCode);
 	}
 
+	@Autowired
+	PasswordUtils utils;
+	
+	
 	@SuppressWarnings("unchecked")
 	@PostMapping(value = "/login", produces = { MediaType.APPLICATION_JSON_VALUE })
 	@ApiOperation("用户登陆，ajax请求用")
@@ -210,7 +244,7 @@ public class UserController extends BaseController {
 				if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
 					return new ResultBean<String>().fail("用户名或者密码不能为空！");
 				}
-				Authentication request = new UsernamePasswordAuthenticationToken(username, password);
+				Authentication request = new UsernamePasswordAuthenticationToken(username, utils.getPassword(password));
 				Authentication result = authenticationManager.authenticate(request);
 				SecurityContextHolder.getContext().setAuthentication(result);
 				req.getSession().setAttribute(KiiikContants.SPRING_CONTEXT_KEY, SecurityContextHolder.getContext()); // 这个非常重要，否则验证后将无法登陆
@@ -238,9 +272,8 @@ public class UserController extends BaseController {
 				view.setViewName("/user/login_page");
 				return view;
 			}
-			Authentication request = new UsernamePasswordAuthenticationToken(username, password);
+			Authentication request = new UsernamePasswordAuthenticationToken(username,utils.getPassword(password));
 			Authentication result = authenticationManager.authenticate(request);
-			System.out.println("result:" + result);
 			SecurityContextHolder.getContext().setAuthentication(result);
 			req.getSession().setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext()); // 这个非常重要，否则验证后将无法登陆
 		} catch (Exception e) {
@@ -314,14 +347,14 @@ public class UserController extends BaseController {
 	@PostMapping("/updatePassword")
 	@ResponseBody
 	@ApiOperation("用户密码修改")
-	public ResultBean<String> updatePassword(@RequestBody @Validated PasswordVo passvo) {
+	public ResultBean<String> updatePassword(@RequestBody @Validated PasswordVo passvo) throws Exception {
 		if (passvo.getNewPassword().equals(passvo.getOldPassword())) {
 			return new ResultBean<String>().fail("密码相同，无需更新！");
 		}
 		SessionUser su = this.getSessionUser();
 		User user = new User();
 		user.setEmpNo(su.getEmpNo());
-		user.setPassword(passvo.getOldPassword());
+		user.setPassword(utils.getPassword(passvo.getOldPassword()));//获取密码明文
 		User dbUser = genericService.queryDBEntitySingle(user);
 		if (dbUser != null) {
 			user.setId(dbUser.getId());

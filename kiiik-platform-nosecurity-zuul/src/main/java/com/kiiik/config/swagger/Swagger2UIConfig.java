@@ -2,6 +2,10 @@ package com.kiiik.config.swagger;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 /**
  *作者 : iechenyb<br>
@@ -14,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
+import org.springframework.ui.ModelMap;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
@@ -62,8 +67,12 @@ public class Swagger2UIConfig {
     public Docket createRestApi() {
     	initIngoreControllers();
         return new Docket(DocumentationType.SWAGGER_2)
-        	.apiInfo(apiInfo()).select()
+        	.apiInfo(apiInfo()).ignoredParameterTypes(HttpServletRequest.class
+        			,HttpServletResponse.class
+        			,HttpSession.class,
+        			ModelMap.class).select()
             .apis(basePackage("com.kiiik.web"))
+            
             .paths(PathSelectors.any()).build();
     }
     

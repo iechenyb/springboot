@@ -76,6 +76,17 @@ public class RoleController {
 		return new ResultBean<String>("删除"+count+"记录！").success();
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+	@GetMapping("deleteById")
+	@ApiOperation("根据主键删除角色信息")
+	public ResultBean<String> delRole(Integer id){
+		Role role = new Role();
+		role.setId(id);
+		genericService.deleteDBEntityByKey(role);
+		return new ResultBean<String>().success("记录删除成功");
+		
+	}
 
 	@SuppressWarnings("unchecked")
 	@PostMapping("update")

@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
  *创建时间: 2018年9月10日
  */
 
+import com.github.pagehelper.Page;
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.utils.RandomUtils;
 import com.kiiik.web.example.bean.TestBean;
+
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("generic")
@@ -92,12 +95,6 @@ public class GenericController {
 		return new ResultBean<String>("执行成功！").success();
 	}
 	
-	
-	
-	
-	
-	
-	
 
 	@SuppressWarnings("unchecked")
 	@GetMapping("queryMapping")
@@ -116,12 +113,13 @@ public class GenericController {
 
 	// 分页查询
 	@SuppressWarnings("unchecked")
+	@ApiOperation("根据分页查询(单表),排序参数 为password asc,name desc")
 	@GetMapping("queryByPage")
-	public ResultBean<List<TestBean>> queryUserByPage(String account, int page, int pageSize) {
+	public ResultBean<Page<TestBean>> queryUserByPage(String account, int page, int pageSize,String[] orders) {
 		TestBean po = new TestBean();
 		po.setAccount(account);
-		List<TestBean> data = genericService.queryDBEntityList(po, page, pageSize, "password asc", "name desc");
-		return new ResultBean<List<TestBean>>(data).success();
+		Page<TestBean> page1 = genericService.queryDBEntityList(po, page, pageSize,orders);// "password asc", "name desc"
+		return new ResultBean<List<TestBean>>(page1).success();
 	}
 
 	@SuppressWarnings({ "unchecked", "unused" })

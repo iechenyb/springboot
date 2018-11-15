@@ -1,6 +1,7 @@
 package com.kiiik.web.employee.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -116,9 +117,17 @@ public class EmployeeController {
      *@param 
      *@return
      */
-	@GetMapping("deleteById")
+	@GetMapping("deleteByIds")
 	@ApiOperation("根据主键删除信息")
 	public ResultBean<String> delEmployeeEntity(@RequestParam("ids") List<Integer> ids){
+		return employeeService.delEmployeeEntity(ids);
+	}
+	
+	@GetMapping("deleteById")
+	@ApiOperation("根据主键删除信息")
+	public ResultBean<String> delCompanyEntity(Integer id){
+		List<Integer> ids = new ArrayList<Integer>();
+		ids.add(id);
 		return employeeService.delEmployeeEntity(ids);
 	}
 

@@ -1,6 +1,7 @@
 package com.kiiik.web.department.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -121,6 +122,22 @@ public class DepartmentController {
 	@GetMapping("deleteByIds")
 	@ApiOperation("根据主键删除信息")
 	public ResultBean<String> delDepartmentEntity(@RequestParam(value = "ids") List<Integer> ids){
+		return departmentService.delDepartmentEntity(ids);
+	}
+	
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 单个删除<br>
+	 *创建时间: 2018年11月12日
+	 *@param id
+	 *@return
+	 */
+	@GetMapping("deleteById")
+	@ApiOperation("根据主键删除信息")
+	public ResultBean<String> delDepartmentEntity(Integer id){
+		List<Integer> ids = new ArrayList<Integer>();
+		ids.add(id);
 		return departmentService.delDepartmentEntity(ids);
 	}
 }
