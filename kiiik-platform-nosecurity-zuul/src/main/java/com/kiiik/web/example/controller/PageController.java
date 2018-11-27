@@ -27,7 +27,6 @@ public class PageController {
 	@Autowired
 	GenericService genericService;
 	// 分页查询  每次重新查询时都需要设置成第一页   ，更具当前条件查询进行翻页
-	@SuppressWarnings("unchecked")
 	@ApiOperation("根据分页查询(单表表属性),排序参数 为password asc,name desc")
 	@GetMapping("queryByPage1")
 	public ResultBean<Page<TestBean>> queryUserByPage1(int page, int pageSize,String[] orders) {
@@ -39,7 +38,6 @@ public class PageController {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
 	@ApiOperation("根据分页查询(单表自定义属性),排序参数 为password asc,name desc")
 	@GetMapping("queryByPage2")
 	public ResultBean<Page<TestBean>> queryUserByPage2(int page, int pageSize,String[] orders) {

@@ -39,7 +39,6 @@ public class EmployeeServiceImpl  implements EmployeeService {
 	 *@param 
 	 *@return
 	 */
-	 @SuppressWarnings("unchecked")
 	 public ResultBean<String> addEmployeeEntity(EmployeeEntity entity){
 	    EmployeeEntity tmp = new EmployeeEntity();
 		tmp.setLoginid(entity.getLoginid());
@@ -75,7 +74,6 @@ public class EmployeeServiceImpl  implements EmployeeService {
 	 *@param 
 	 *@return
 	 */
-	 @SuppressWarnings("unchecked")
 	 public ResultBean<String> updEmployeeEntity(EmployeeEntity entity){
 		EmployeeEntity tmp = new EmployeeEntity();
 		tmp = genericDao.queryDBEntitySingleComplex(EmployeeEntity.class, 
@@ -115,7 +113,6 @@ public class EmployeeServiceImpl  implements EmployeeService {
 	 *@param 
 	 *@return
 	 */
-	 @SuppressWarnings("unchecked")
 	 public ResultBean<String> delEmployeeEntity(List<Integer> ids){
 		int count = genericDao.deleteDBEntityByKeyBatchs(new EmployeeEntity(),ids);
 		if(count==0){

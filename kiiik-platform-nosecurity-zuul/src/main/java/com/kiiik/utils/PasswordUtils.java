@@ -7,7 +7,6 @@ import java.security.interfaces.RSAPublicKey;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.cyb.file.FileUtils;
@@ -17,7 +16,7 @@ import com.kiiik.pub.contant.KiiikContants;
  *类描述: 说点啥<br>
  *创建时间: 2018年11月12日
  */
-@Component
+//@Component
 public class PasswordUtils {
 	 Log log = LogFactory.getLog(PasswordUtils.class);
 	private  String PrivateKeyStore = System.getProperty("user.dir")+"/prikey.ser";

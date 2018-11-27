@@ -24,6 +24,12 @@ import net.sf.json.JSONObject;
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
  *创建时间: 2018年5月15日
+ *  定制白板提示
+ *  Whitelabel Error Page
+	This application has no explicit mapping for /error, so you are seeing this as a fallback.
+	Fri Nov 23 14:00:52 CST 2018
+	There was an unexpected error (type=Not Found, status=404).
+	No message available
  */
 @Controller
 public class ErrorControllerAdvice implements ErrorController {

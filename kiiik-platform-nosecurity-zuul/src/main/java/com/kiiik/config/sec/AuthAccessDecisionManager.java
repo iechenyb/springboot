@@ -44,7 +44,7 @@ public class AuthAccessDecisionManager implements AccessDecisionManager {
 				}
 			}
 		}
-		throw new AccessDeniedException("no right");
+		throw new AccessDeniedException("无权限访问！");
 	}
 
 	@Override

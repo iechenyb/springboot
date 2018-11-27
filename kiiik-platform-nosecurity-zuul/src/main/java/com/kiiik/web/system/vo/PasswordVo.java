@@ -1,16 +1,20 @@
 package com.kiiik.web.system.vo;
 
-import org.hibernate.validator.constraints.NotBlank;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
  *创建时间: 2018年11月1日
  */
+@ApiModel
 public class PasswordVo{
-	@NotBlank(message="旧密码不能为空！")
+	
+	@ApiModelProperty("旧密码，rsa加密串")
 	String oldPassword;
-	@NotBlank(message="新密码不能为空！")
+	
+	@ApiModelProperty("新密码，rsa加密串")
 	String newPassword;
 
 	public String getOldPassword() {

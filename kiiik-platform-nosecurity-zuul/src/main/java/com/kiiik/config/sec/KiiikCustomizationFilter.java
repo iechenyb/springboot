@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.utils.ResponseUtils;
+import com.kiiik.web.property.KiiikProperties;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
@@ -30,37 +30,56 @@ import com.kiiik.utils.ResponseUtils;
 @Component
 public class KiiikCustomizationFilter implements Filter {
 	Log log = LogFactory.getLog(KiiikCustomizationFilter.class);
-	List<String> paths= new ArrayList<String>();
+	public static List<String> paths= new ArrayList<String>();
 	AntPathMatcher antPathMatcher = new AntPathMatcher();
-	boolean checkSession = true;
+	boolean checkSession = true;//前后端分离，未登录时重定向（关键问题解决思路）
+	
 	@Autowired
-	Environment env;
+	KiiikProperties kiiik;
+	static String[] pathsstrs =new String[]{"/v2/api-docs","/v2/api-docs","/swagger-resources",
+			"/**/v2/api-docs/**",
+			"/**/configuration/ui/**","/**/swagger-resources/**","/**/configuration/security/**",
+			"/swagger-ui.html","/**/webjars/**/*.*","/**/swagger-resources/configuration/ui/**"};
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		String pathsstrs ="/**/v2/api-docs/**,/**/configuration/ui/**,/**/swagger-resources/**,/**/configuration/security/**,/swagger-ui.html,/**webjars/**,/**/swagger-resources/configuration/ui/**";
 		paths.add("/user/login");
 		paths.add("/user/logout");
 		paths.add("/rsa/**");
-		paths.add("/**/*.jpg");
+		paths.add("/favicon.ico");
+		paths.add("/**/*.jpg");//:
 		paths.add("/**/*.css");
 		paths.add("/user/getImage");
-		if(!KiiikContants.PROD.equals(env.getProperty("spring.profiles.active"))){
-			String[] pathArr=pathsstrs.split(",");
-			for(int i=0;i<pathArr.length;i++){
-				paths.add(pathArr[i]);
+		
+		paths.add("/fonts/**");
+		paths.add("/css/**");
+		paths.add("/js/**");
+		paths.add("/img/**");
+		paths.add("/index.html");
+		
+		//屏蔽swagger-ui接口页面
+		if(!KiiikContants.PROD.equals(kiiik.environment)){
+			for(int i=0;i<pathsstrs.length;i++){
+				paths.add(pathsstrs[i]);
 			}
 		}
+		//开发环境免登陆
+        if(KiiikContants.DEV.equals(kiiik.environment)){
+        	for(int i=0;i<KiiikContants.reqs.length;i++){
+        		paths.add("/"+KiiikContants.reqs[i]+"/**");
+        	}
+        }
 	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		//过滤器掉静态资源  
+		
 		if(checkSession){
 			Object auth = ((HttpServletRequest)request).getSession().getAttribute(KiiikContants.SPRING_CONTEXT_KEY);
 	    	if(auth==null&&!isAccess( ((HttpServletRequest)request).getRequestURI())){
 		        ResultBean<String> result = new ResultBean<String>();
-		        result.sessionTimeOut("会话过期，请重新登陆！");
+		        result.sessionTimeOut("会话过期，请重新登陆!");
 		        ResponseUtils.writeResult((HttpServletResponse)response, result);
 		        return ;
 	    	}
@@ -71,6 +90,7 @@ public class KiiikCustomizationFilter implements Filter {
 	private boolean isAccess(String uri) {
 		for(String path:paths){
 			if(antPathMatcher.match(path, uri)){//准入
+				System.err.println("match:"+path);
 				return true;//不需要session也能访问
 			}
 		}

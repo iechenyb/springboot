@@ -8,7 +8,14 @@
 	resultType="java.util.HashMap">
 		select 
 		<foreach collection="cols" item="eachCol" separator=",">
-			`${eachCol.dbColName}` as ${eachCol.entityColName}
+		   <choose>
+				<when test="eachCol.needTimestamp">
+					cast(UNIX_TIMESTAMP(`${eachCol.dbColName}`) as decimal(50)) as ${eachCol.entityColName}
+				</when>
+				<otherwise>
+					`${eachCol.dbColName}` as ${eachCol.entityColName}
+				</otherwise>
+			</choose>
 		</foreach>
 		from <if test="database!=null">${database}.</if>${tableName}
 		<where>
@@ -29,10 +36,50 @@
 		<!-- 排序  aaa asc,bbb desc -->
 	</select>
 	
+	<!-- 模糊查询 -->
+	<select id="queryDBEntityLike" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" flushCache="true"
+	resultType="java.util.HashMap">
+		select 
+		<foreach collection="cols" item="eachCol" separator=",">
+			 <choose>
+				<when test="eachCol.needTimestamp">
+					cast(UNIX_TIMESTAMP(`${eachCol.dbColName}`) as decimal(50)) as ${eachCol.entityColName}
+				</when>
+				<otherwise>
+					`${eachCol.dbColName}` as ${eachCol.entityColName}
+				</otherwise>
+			</choose>
+		</foreach>
+		from <if test="database!=null">${database}.</if>${tableName}
+		<where>
+			<foreach collection="cols" item="eachCol" separator="and">
+				<if test="eachCol.value!=null">
+						${eachCol.dbColName} like '%${eachCol.value}%'
+				</if>
+			</foreach>	
+		</where>
+		<if test="orderCols!=null">
+		     order by 
+			<foreach collection="orderCols" item="eachCol" separator=",">
+				<if test="eachCol!=null">
+						${eachCol}
+				</if>
+			</foreach>
+		</if>
+		<!-- 排序  aaa asc,bbb desc -->
+	</select>
+	
     <select id="queryDBEntityComplex" resultType="java.util.HashMap" flushCache="true">
 		select 
 		<foreach collection="entityInfo.cols" item="eachCol" separator=",">
-			`${eachCol.dbColName}` as ${eachCol.entityColName}
+			 <choose>
+				<when test="eachCol.needTimestamp">
+					cast(UNIX_TIMESTAMP(`${eachCol.dbColName}`) as decimal(50)) as ${eachCol.entityColName}
+				</when>
+				<otherwise>
+					`${eachCol.dbColName}` as ${eachCol.entityColName}
+				</otherwise>
+			</choose>
 		</foreach>
 		from <if test="entityInfo.database!=null">${entityInfo.database}.</if>${entityInfo.tableName}
 		<where>
@@ -72,6 +119,10 @@
 			</foreach>	
 		</where>
 	</select>
+	<!-- 根据具体的参数执行sql -->
+	<!-- <select id="executeSql"  parameterType="java.util.Map">
+	    ${sql}
+	</select> -->
 	
 	<insert id="insertDBEntity" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" flushCache="true" useGeneratedKeys="true" keyProperty="generatedKey">
 		insert into <if test="database!=null">${database}.</if>${tableName} 
@@ -112,6 +163,24 @@
 			</foreach>
 		</foreach>
 	</insert>
+	<!-- 根据指定的value对象和条件对象更新数据 -->
+	<update id="updateDBEntity"  flushCache="true">
+			update <if test="value.database!=null">${value.database}.</if>${value.tableName} 
+			<set>
+				<foreach collection="value.cols" item="eachCol" separator=",">
+					<if test="eachCol.value!=null">
+						${eachCol.dbColName} = #{eachCol.value}
+					</if>
+				</foreach>
+			</set>				
+			<where>
+				<foreach collection="condition.cols" item="eachCol" separator="and">
+					<if test="eachCol.value!=null">
+						${eachCol.dbColName} = #{eachCol.value}
+					</if>
+				</foreach>
+			</where>
+	</update>
 	
 	<update id="updateDBEntityByKey" parameterType="com.kiiik.pub.mybatis.bean.EntityInfo" flushCache="true">
 			update <if test="database!=null">${database}.</if>${tableName} 
@@ -120,9 +189,9 @@
 					<if test="eachCol.value!=null and eachCol.isKeyColumn == false">
 						${eachCol.dbColName} = #{eachCol.value},				
 					</if>
-					<if test="eachCol.value==null and eachCol.updateIfNull!=null and eachCol.isKeyColumn == false">
+					<!-- <if test="eachCol.value==null and eachCol.updateIfNull!=null and eachCol.isKeyColumn == false">
 						${eachCol.dbColName} = ${eachCol.updateIfNull},
-					</if>
+					</if> -->
 				</foreach>
 			</set>
 				

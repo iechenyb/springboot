@@ -1,5 +1,6 @@
 package com.kiiik.web.example.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -15,14 +16,22 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 import com.github.pagehelper.Page;
+import com.kiiik.pub.bean.KiiikPage;
+import com.kiiik.pub.bean.PageData;
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.utils.RandomUtils;
+import com.kiiik.web.company.entity.CompanyEntity;
 import com.kiiik.web.example.bean.TestBean;
+import com.kiiik.web.log.bean.SystemLog;
 
 import io.swagger.annotations.ApiOperation;
-
+/**
+ * 
+ * @author DHUser
+ *通用的单元测试用例，测试dao层的逻辑
+ */
 @RestController
 @RequestMapping("generic")
 public class GenericController {
@@ -30,27 +39,48 @@ public class GenericController {
 
 	@Autowired
 	GenericService genericService;
-
-	@SuppressWarnings("unchecked")
-	@GetMapping("/add")
-	public ResultBean<String> addUser(Integer total) {
+	
+	
+	@ApiOperation("菜单信息查询-分页查询，包含全量查询")
+	@GetMapping("listLogs")
+	public ResultBean<PageData<SystemLog>> listMenus(SystemLog log,KiiikPage page){
+		if(page.needAll()){//当分页参数不传时传回所有记录
+		    return new ResultBean<PageData<SystemLog>>(new PageData<SystemLog>(genericService.queryDBEntityListLike(log))).success();
+	   }else{
+			Page<SystemLog> datas = genericService.queryDBEntityListLike(log, page);
+			return new ResultBean<PageData<SystemLog>>(new PageData<SystemLog>(datas,page)).success();
+	   }
+	}
+	
+	
+	public TestBean getRandomBean(){
 		TestBean po = null;
-		if (total == null) {
-			total = 10;
-		}
-		for (int i = 0; i < total; i++) {
-			po = new TestBean();
-			// po.setId(i); 不设置 采用自增长方式
-			po.setName(RandomUtils.getChineaseName());
-			po.setAccount(RandomUtils.getPingYin(po.getName()));
-			po.setPassword(RandomUtils.getPassWord(8));
-			genericService.insertDBEntity(po);
-			try {
-
-			} catch (Exception e) {
-				// 忽略生产中文乱码的问题
-			}
-		}
+		po = new TestBean();
+		// po.setId(i); 不设置 采用自增长方式
+		po.setName(RandomUtils.getChineaseName());
+		po.setAccount(RandomUtils.getPingYin(po.getName()));
+		po.setPassword(RandomUtils.getPassWord(8));
+		return po;
+	}
+	
+	@GetMapping("/add")
+	@ApiOperation("数据生成")
+	public ResultBean<String> addUser(Integer total) {
+		
+		genericService.insertDBEntity(getRandomBean());//单个插入测试
+		
+		genericService.insertDBEntityT(getRandomBean());
+		
+		List<TestBean> lstTB = new ArrayList<TestBean>(1);
+		lstTB.add(getRandomBean());
+		genericService.insertDBEntityBatchT(lstTB);//根据泛型批量插入
+		
+		
+		List<Object> lstTBObj = new ArrayList<Object>(1);
+		lstTBObj.add(getRandomBean());
+		genericService.insertDBEntityBatch(lstTBObj);//根据对象插入
+		
+		
 		return new ResultBean<String>("执行成功！").success();
 	}
 
@@ -62,78 +92,85 @@ public class GenericController {
 	 * 
 	 * @param id
 	 * @return
+	 * @throws Exception 
 	 */
-	@SuppressWarnings("unchecked")
-	@GetMapping("delByKey")
-	public ResultBean<String> delUserByKey(Integer id) {
+	@GetMapping("delete")
+	public ResultBean<String> delUserByKey() throws Exception {
+		Integer id =RandomUtils.getNum(1,1000);
 		TestBean po = new TestBean();
-		po.setId(id);
-		genericService.deleteDBEntityByKey(po);
+		po.setId(id.toString());
+		genericService.deleteDBEntityByKey(po);//根据主键进行删除
+		genericService.deleteDBEntityByKeyT(po);//根据泛型删除
+		
+		List<Integer> ids = new ArrayList<Integer>();
+		ids.add(1000);ids.add(2000);
+		genericService.deleteDBEntityByKeyBatchs(po, ids);
+		genericService.deleteDBEntityByKeyBatchsT(po, ids);
+		genericService.deleteDBEntityByKeyBatchs(CompanyEntity.class, ids);
+		
+		po.setName("iechenyb");//根据非空属性进行删除
+		genericService.deleteDBEntity(po);
+		genericService.deleteDBEntityT(po);
 		return new ResultBean<String>("执行成功！").success();
 	}
-
 	/**
 	 * 
-	 * 作者 : iechenyb<br>
-	 * 方法描述: 根据属性删除记录<br>
-	 * 创建时间: 2017年7月15日hj12
-	 * 
-	 * @param po
-	 * @return
+	 *作者 : iechenyb<br>
+	 *方法描述: page参数可以不传<br>
+	 *创建时间: 2018年11月20日
+	 *@param bean
+	 *@param page
+	 *@return
 	 */
-	@SuppressWarnings("unchecked")
-	@GetMapping("del")
-	public ResultBean<Integer> delUser(TestBean po) {
-		int count = genericService.deleteDBEntity(po);
-		return new ResultBean<Integer>(count).success();
-	}
-
-	@GetMapping("upd")
-	@SuppressWarnings("unchecked")
-	public ResultBean<String> updUser(TestBean po) {
-		genericService.updateDBEntityByKey(po);
-		return new ResultBean<String>("执行成功！").success();
-	}
-	
-
-	@SuppressWarnings("unchecked")
-	@GetMapping("queryMapping")
-	public ResultBean<List<TestBean>> queryUser(TestBean po) {
-		List<TestBean> data = genericService.queryDBEntityList(po);
-		return new ResultBean<List<TestBean>>(data).success();
-	}
-
-	// 排序查询
-	@SuppressWarnings("unchecked")
-	@GetMapping("queryMappingOrder")
-	public ResultBean<List<TestBean>> queryUserOrder(TestBean po) {
-		List<TestBean> data = genericService.queryDBEntityList(po, "password asc", "name desc");
-		return new ResultBean<List<TestBean>>(data).success();
-	}
-
-	// 分页查询
-	@SuppressWarnings("unchecked")
 	@ApiOperation("根据分页查询(单表),排序参数 为password asc,name desc")
 	@GetMapping("queryByPage")
-	public ResultBean<Page<TestBean>> queryUserByPage(String account, int page, int pageSize,String[] orders) {
-		TestBean po = new TestBean();
-		po.setAccount(account);
-		Page<TestBean> page1 = genericService.queryDBEntityList(po, page, pageSize,orders);// "password asc", "name desc"
-		return new ResultBean<List<TestBean>>(page1).success();
+	public ResultBean<PageData<TestBean>> queryUserByPage(TestBean entity, KiiikPage page) {
+		
+		Page<TestBean> pageData = null;
+		List<TestBean> data;
+		if(page.needAll()){
+			data = genericService.queryDBEntityList(entity);
+			data = genericService.queryDBEntityList(entity, "id asc");
+			data = genericService.queryDBEntityListLike(entity);
+			data = genericService.queryDBEntityListLike(entity,"id asc");
+			System.out.println(new ResultBean<PageData<TestBean>>(new PageData<TestBean>(data)).success());
+		}else{
+			pageData = genericService.queryDBEntityList(entity,page);
+			pageData = genericService.queryDBEntityList(entity, page,"id asc");
+			pageData = genericService.queryDBEntityList(entity, page.getCurPage(),page.getPageSize(),"id asc"); 
+			pageData = genericService.queryDBEntityListLike(entity,page);
+			pageData = genericService.queryDBEntityListLike(entity, page,"id asc");
+			pageData = genericService.queryDBEntityListLike(entity, page.getCurPage(),page.getPageSize(),"id asc");
+			System.out.println(new ResultBean<PageData<TestBean>>(new PageData<TestBean>(pageData)).success());
+		}
+		return new ResultBean<PageData<TestBean>>().success("执行成功！");
 	}
 
-	@SuppressWarnings({ "unchecked", "unused" })
 	@GetMapping("queryComplex")
-	public ResultBean<List<TestBean>> queryUserComplex() {
+	public ResultBean<List<TestBean>> queryUserComplex(KiiikPage page) {
+		
+		ComplexCondition condition = new ComplexCondition().col("id").gt(5);
+		condition = new ComplexCondition().col("id").gt(5)
+				.or(new ComplexCondition().col("name").eq("123").and().col("id").notNull());
 		// 复杂查询
 		// 查出 id > 5 且 buy_date <= 当前 的 list .and().col("buyDate").lte(new
 		// Date())
-		List<TestBean> list4 = genericService.queryDBEntityListComplex(TestBean.class, new ComplexCondition().col("id").gt(5));
+		List<TestBean> data = null;
+		Page<TestBean> paged = null;
+		if(page.needAll()){
+			data = genericService.queryDBEntityListComplex(TestBean.class, condition);
+			TestBean obj = genericService.queryDBEntitySingleComplex(TestBean.class, condition);
+			System.out.println(obj+"\n"+data);
+		}else{
+			paged = genericService.queryDBEntityListComplex(TestBean.class, condition,page);
+			paged = genericService.queryDBEntityListComplex(TestBean.class, condition,page,"id asc");
+			paged = genericService.queryDBEntityListComplex(TestBean.class, condition,page.getCurPage(),page.getPageSize(),"id asc");
+			paged= genericService.queryDBEntityListComplexTop(TestBean.class, condition,100,"id asc");
+			System.out.println(paged);
+		}
 		// 查出 id>5 或(test = 123 且 uid = null)
 		// or 和 and 都有 or() or(Object)/ and() and(Object) 两种可以嵌套使用
-		List<TestBean> list5 = genericService.queryDBEntityListComplex(TestBean.class, new ComplexCondition().col("id").gt(5)
-				.or(new ComplexCondition().col("name").eq("123").and().col("id").notNull()));
-		return  new ResultBean<List<TestBean>>(list4).success();
+		return  new ResultBean<List<TestBean>>().success();
 
 	}
 }

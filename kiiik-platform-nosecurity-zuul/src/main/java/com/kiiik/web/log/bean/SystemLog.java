@@ -19,21 +19,27 @@ public class SystemLog {
 	@DBColumn(value = "id", insertIfNull = "default")
 	@ApiModelProperty(value = "主键，请求时参数忽略")
 	public Integer id;
+	
 	@ApiModelProperty(value="客户端IP地址")
 	@DBColumn("client_ip")
 	public String clientIp;// 客户端ip
+	
 	@ApiModelProperty(value="访问时间")
-	@DBColumn("visit_time")
+	@DBColumn(value="visit_time",needTimestamp=true)
 	public String visitorTime;// 访问时间
+	
 	@ApiModelProperty(value="访问地址")
 	@DBColumn("uri")
 	public String uri;// 请求路径
+	
 	@ApiModelProperty(value="操作员信息")
 	@DBColumn("operator")
 	public String operator;// 操作员 //操作员职工号 必须唯一！！！！
+	
 	@ApiModelProperty(value="模块名称")
 	@DBColumn("module")
 	public String module;// 模块名称 module为uri的前缀 比如 uri /system/user 则 // module为/system
+	
 	@ApiModelProperty(value="请求参数")
 	@DBColumn("param")
 	public String param;

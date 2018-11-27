@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.kiiik.utils.PasswordUtils;
+import com.kiiik.web.rsa.service.RsaService;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
@@ -15,18 +15,18 @@ import com.kiiik.utils.PasswordUtils;
 public class ScheduledService {
 	Log log = LogFactory.getLog(ScheduledService.class);
 	@Autowired
-	PasswordUtils utils;
+	RsaService rsaService;
 	@Scheduled(cron = "0 0 23 * * *")
     public void scheduled(){
 		try {
-			utils.genRSASer();
+			rsaService.genRSASer();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
         log.info("=====>>>>>使用cron "+System.currentTimeMillis());
     }
 	
-   /* @Scheduled(fixedRate = 5000)
+    /*@Scheduled(fixedRate = 5000)
     public void scheduled1() {
         log.info("=====>>>>>使用fixedRate "+System.currentTimeMillis());
     }

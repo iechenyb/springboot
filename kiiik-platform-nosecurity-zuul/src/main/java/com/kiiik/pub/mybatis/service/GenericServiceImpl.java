@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.github.pagehelper.Page;
+import com.kiiik.pub.bean.KiiikPage;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.dao.GenericDao;
 
@@ -98,8 +100,102 @@ public class GenericServiceImpl implements GenericService {
 	}
 
 	@Override
-	public int deleteDBEntityByKeyBatchs(Object object, List<Integer> ids) {
+	public int deleteDBEntityByKeyBatchs(Object object, List<Integer> ids) throws Exception {
+		if(CollectionUtils.isEmpty(ids)){
+			throw new Exception("ids不能为空！");
+		}
 		return genericDao.deleteDBEntityByKeyBatchs(object, ids);
+	}
+
+	@Override
+	public <T> T queryDBEntitySingleLike(T entity) {
+		return genericDao.queryDBEntitySingleLike(entity);
+	}
+
+	@Override
+	public <T> List<T> queryDBEntityListLike(T entity) {
+		return genericDao.queryDBEntityListLike(entity);
+	}
+
+	@Override
+	public <T> List<T> queryDBEntityListLike(T entity, String... orderBys) {
+		return genericDao.queryDBEntityListLike(entity, orderBys);
+	}
+
+	@Override
+	public <T> Page<T> queryDBEntityListLike(T entity, int pageNum, int pageSize, String... orderBys) {
+		return genericDao.queryDBEntityListLike(entity, pageNum, pageSize, orderBys);
+	}
+
+	@Override
+	public <T> int insertDBEntityT(T entity) {
+		// TODO Auto-generated method stub
+		return genericDao.insertDBEntityT(entity);
+	}
+
+	@Override
+	public <T> int updateDBEntityByKeyT(T entity) {
+		// TODO Auto-generated method stub
+		return genericDao.updateDBEntityByKeyT(entity);
+	}
+
+	@Override
+	public <T> int deleteDBEntityByKeyT(T entity) {
+		// TODO Auto-generated method stub
+		return genericDao.deleteDBEntityByKeyT(entity);
+	}
+
+	@Override
+	public <T> int deleteDBEntityT(T entity) {
+		// TODO Auto-generated method stub
+		return genericDao.deleteDBEntityT(entity);
+	}
+
+	@Override
+	public <T> int deleteDBEntityByKeyBatchsT(T entity, List<Integer> ids) {
+		// TODO Auto-generated method stub
+		return genericDao.deleteDBEntityByKeyBatchsT(entity, ids);
+	}
+
+	@Override
+	public <T> int insertDBEntityBatchT(List<T> entitys) {
+		// TODO Auto-generated method stub
+		return genericDao.insertDBEntityBatchT(entitys);
+	}
+
+	@Override
+	public <T> int updateDBEntity(T values, T condition) {
+		return genericDao.updateDBEntity(values, condition);
+	}
+
+	@Override
+	public <T> Page<T> queryDBEntityList(T entity, KiiikPage page, String... orderBys) {
+		// TODO Auto-generated method stub
+		return genericDao.queryDBEntityList(entity, page, orderBys);
+	}
+
+	@Override
+	public <T> Page<T> queryDBEntityListLike(T entity, KiiikPage page, String... orderBys) {
+		// TODO Auto-generated method stub
+		return genericDao.queryDBEntityListLike(entity, page, orderBys);
+	}
+
+	@Override
+	public <T> Page<T> queryDBEntityListComplex(Class<T> clazz, ComplexCondition condition, KiiikPage page) {
+		// TODO Auto-generated method stub
+		return genericDao.queryDBEntityListComplex(clazz, condition, page);
+	}
+
+	@Override
+	public <T> Page<T> queryDBEntityListComplex(Class<T> clazz, ComplexCondition condition, KiiikPage page,
+			String... orderBys) {
+		// TODO Auto-generated method stub
+		return genericDao.queryDBEntityListComplex(clazz, condition, page,orderBys);
+	}
+
+	@Override
+	public <T> int deleteDBEntityByKeyBatchs(Class<T> clazz, List<Integer> ids) throws InstantiationException, IllegalAccessException {
+		return genericDao.deleteDBEntityByKeyBatchs(clazz, ids);
 	}
 	
 }

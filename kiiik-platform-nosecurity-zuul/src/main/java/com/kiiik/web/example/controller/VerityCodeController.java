@@ -63,7 +63,6 @@ public class VerityCodeController {
 		VerifyCodeUtils.outputImage(w, h, out, verifyCode);
     }
 	
-	@SuppressWarnings("unchecked")
 	@GetMapping(value="validImage")
 	@ResponseBody
 	@ApiOperation("验证码校验")

@@ -1,6 +1,7 @@
 package com.kiiik.pub.bean;
 
 import java.io.Serializable;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -18,7 +19,7 @@ public class ResultBean<T> implements Serializable {
 	private String es = "";
 	
 	@ApiModelProperty(value="执行状态",name="code",example="0 失败 1成功 ")
-	private String ec = ResponseStatus.FAIL;//默认失败
+	private String ec = ResponseStatus.SUCCESS;//默认成功
 	
 	@ApiModelProperty(value="数据体",name="data",example="任意类型数据集合")
 	protected  T d;
@@ -31,43 +32,42 @@ public class ResultBean<T> implements Serializable {
 		super();
 		this.d = d;
 	}
+	
+   /*public ResultBean(PageData<T> d) {
+		super();
+		this.d = d;
+	}*/
 
 	public ResultBean(Throwable e) {
 		super();
 		this.es = e.toString();
 		this.ec = ResponseStatus.FAIL;
 	}
-	@SuppressWarnings("rawtypes")
-	public ResultBean success() {
+	public ResultBean<T> success() {
 		this.ec = ResponseStatus.SUCCESS;
 		return this;
 	}
-	@SuppressWarnings("rawtypes")
-	public ResultBean success(String msg) {
+	public ResultBean<T> success(String msg) {
 		this.ec = ResponseStatus.SUCCESS;
 		this.es = msg;
 		return this;
 	}
-	@SuppressWarnings("rawtypes")
-	public ResultBean data(T data) {
+	public ResultBean<T> data(T data) {
 		this.d = data;
 		return this;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ResultBean fail() {
+	public ResultBean<T> fail() {
 		this.ec = ResponseStatus.FAIL;
 		return this;
 	}
-	@SuppressWarnings("rawtypes")
-	public ResultBean fail(String msg) {
+	public ResultBean<T> fail(String msg) {
 		this.ec = ResponseStatus.FAIL;
 		this.es = msg;
 		return this;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ResultBean fail(Throwable e) {
+	public ResultBean<T> fail(Throwable e) {
 		this.ec = ResponseStatus.FAIL;
 		this.es = e.toString();
 		
@@ -99,6 +99,17 @@ public class ResultBean<T> implements Serializable {
 	
 	public ResultBean<T> refuse(String msg){
 		this.ec = ResponseStatus.NO_PERMISSION;
+		this.es = msg;
+		return this;
+	}
+	
+	public ResultBean<T> needToModifyPassword(){
+		this.ec = ResponseStatus.USE_DEFAULT_PASSWORD;
+		return this;
+	}
+	
+	public ResultBean<T> needToModifyPassword(String msg){
+		this.ec = ResponseStatus.USE_DEFAULT_PASSWORD;
 		this.es = msg;
 		return this;
 	}

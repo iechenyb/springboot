@@ -1,22 +1,34 @@
 package com.kiiik.web.system.service.impl;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.cyb.computer.ComputerUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.kiiik.pub.bean.KiiikPage;
+import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.contant.RedisKeyContants;
+import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.service.BaseService;
 import com.kiiik.utils.ConcurrentDateUtil;
+import com.kiiik.web.employee.entity.EmployeeEntity;
 import com.kiiik.web.system.mapper.UserMapper;
 import com.kiiik.web.system.po.Menu;
 import com.kiiik.web.system.po.User;
 import com.kiiik.web.system.po.UserRole;
 import com.kiiik.web.system.utils.TreeUtils;
 import com.kiiik.web.system.vo.SystemUser;
+import com.kiiik.web.system.vo.UserCompanyInfor;
 import com.kiiik.web.system.vo.UserRoleVo;
 /**
  *作者 : iechenyb<br>
@@ -113,4 +125,80 @@ public class UserServiceImpl extends BaseService {
 			e.printStackTrace();
 		}
 	}
+	
+	@Cacheable(value=RedisKeyContants.EMPNOUSERNAMEMAP,keyGenerator=RedisKeyContants.KEYGENERATOR)
+	public Map<String,String> getUserNameEmpNoMap() {
+		System.err.println("查询数据库");
+		List<EmployeeEntity> data = this.genericDao.queryDBEntityList(new EmployeeEntity());//查询所有
+		Map<String,String> map = new HashMap<String,String>();
+		if(CollectionUtils.isEmpty(data)){
+			return null;//返回空不缓存
+		}else{
+			for(EmployeeEntity e:data){
+				map.put(e.getLoginid(), e.getLastname());
+			}
+			return map;
+		}
+	}
+	
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 分页查询用户信息<br>
+	 *创建时间: 2018年11月23日
+	 *@param user
+	 *@param page
+	 *@return
+	 */
+	public Page<User> getUsers(User user,KiiikPage page){
+		if(page.needAll()){
+			PageHelper.startPage(1, 0);
+		}else{
+			PageHelper.startPage(page.getCurPage(), page.getPageSize());
+		}
+		Page<User> users = userMapper.getUsers(user);
+		return users;
+	}
+	
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 获取职工公司相关的信息<br>
+	 *创建时间: 2018年11月27日
+	 *@param empNo
+	 *@return
+	 */
+	public UserCompanyInfor getUserCompanyInfor(String empNo){
+		UserCompanyInfor infor = userMapper.getUserCompanyInfor(empNo);
+		if(infor == null){
+			return new UserCompanyInfor();
+		}else{
+			return infor;
+		}
+	}
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 删除用户，将角色进行删除<br>
+	 *创建时间: 2018年11月27日
+	 *@param ids
+	 *@return
+	 */
+	public  ResultBean<String> deleteUsers(List<Integer> ids){
+		List<UserRole> urs = genericDao.queryDBEntityListComplex(
+				UserRole.class,
+				new ComplexCondition().col("userId").inList(ids));
+		List<Integer> urIds = new ArrayList<Integer>();
+		for(UserRole ur_ :urs){
+			urIds.add(ur_.getId());
+		}
+		genericDao.deleteDBEntityByKeyBatchs(new UserRole(),urIds);//先删除用户角色信息
+		int count = genericDao.deleteDBEntityByKeyBatchs(new User(),ids);
+		if(count==0){
+			return new ResultBean<String>().fail("删除失败！");
+		}else{
+			return new ResultBean<String>().success("删除成功！");
+		}
+	}
+	
 }

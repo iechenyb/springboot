@@ -30,36 +30,36 @@ public class User implements Serializable{
 	@ApiModelProperty("主键")
 	private Integer id;  
 	
-	@ApiModelProperty("用户名称")
-	@DBColumn("username")
+	@ApiModelProperty(value="用户名称",hidden=true)
+	@DBColumn(value="username")
     private String userName;  
 	
-	@ApiModelProperty("用户编号")
-	@DBColumn("empno")
+	@ApiModelProperty(value="用户编号",hidden=true)
+	@DBColumn(value="empno")
     private String empNo;  
 	
-	@ApiModelProperty("密码")
+	@ApiModelProperty(value="密码",hidden=true)
 	@DBColumn("password")
     private String password; 
 	
-    @ApiModelProperty("上次登录时间，忽略")
-    @DBColumn("lastLoginTime")
+    @ApiModelProperty(value="上次登录时间，忽略",hidden=true)
+    @DBColumn(value="lastLoginTime",needTimestamp=true)
     public Long lastLoginTime;
     
-    @ApiModelProperty("登录时间，忽略")
-    @DBColumn("loginTime")
+    @ApiModelProperty(value="登录时间，忽略",hidden=true)
+    @DBColumn(value="loginTime",needTimestamp=true)
     public Long loginTime;
     
     @DBColumn("lastLoginIp")
-    @ApiModelProperty(value="上次登录ip，忽略")
+    @ApiModelProperty(value="上次登录ip，忽略",hidden=true)
     public String lastLoginIp;
     
     @DBColumn("loginIp")
-    @ApiModelProperty(value="最新登录ip，忽略")
+    @ApiModelProperty(value="最新登录ip，忽略",hidden=true)
     public String loginIp;
     
     @DBColumn("loginSum")
-    @ApiModelProperty(value="登录次数，忽略")
+    @ApiModelProperty(value="登录次数，忽略",hidden=true)
     public Integer loginSum;
     
     @DBColumn("isEffect")
@@ -67,7 +67,7 @@ public class User implements Serializable{
     public Integer isEffect;
     
     @DBColumn("operateID")
-    @ApiModelProperty(value="记录操作人员id,忽略")
+    @ApiModelProperty(value="记录操作人员id,忽略",hidden=true)
     Integer operateID;
     
     public User() {  

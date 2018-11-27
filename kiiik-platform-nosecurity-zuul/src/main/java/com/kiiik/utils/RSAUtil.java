@@ -9,11 +9,16 @@ import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Map;
 
 import javax.crypto.Cipher;
+
+import com.kiiik.pub.contant.KiiikContants;
+import com.kiiik.web.rsa.bean.RsaSer;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -77,25 +82,23 @@ public class RSAUtil {
 	/** */
 	/**
 	 * <p>
-	 * 生成密钥对(公钥和私钥)
+	 * 生成密钥对(公钥和私钥),存入map
 	 * </p>
 	 * 
 	 * @return
 	 * @throws Exception
 	 */
-	/*public static Map<String, Object> genKeyPair() throws Exception {
+	public synchronized static void genKeyPairMap() throws Exception {
 		KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
 		keyPairGen.initialize(1024);
 		KeyPair keyPair = keyPairGen.generateKeyPair();
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
 		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-		Map<String, Object> keyMap = new HashMap<String, Object>(2);
-		keyMap.put(PUBLIC_KEY, publicKey);
-		keyMap.put(PRIVATE_KEY, privateKey);
-		return keyMap;
-	}*/
+		KiiikContants.RSASER = new RsaSer(publicKey,privateKey);
+		System.out.println(KiiikContants.RSASER);
+	}
 	
-	public static KeyPair genKeyPair() throws Exception {
+	public synchronized static KeyPair genKeyPair() throws Exception {
 		KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
 		keyPairGen.initialize(1024);
 		KeyPair keyPair = keyPairGen.generateKeyPair();
@@ -354,26 +357,29 @@ public class RSAUtil {
 
 	/**
 	 * java端公钥加密
+	 * @throws Exception 
 	 */
-	public static String encryptedDataOnJava(String data, String PUBLICKEY) {
-		try {
+	public static String encryptedDataOnJava(String data, String PUBLICKEY) throws Exception {
+		//try {
 			data = Base64Utils.encode(encryptByPublicKey(data.getBytes(), PUBLICKEY));
-		} catch (Exception e) {
+		/*} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		return data;
 	}
 
 	/**
 	 * java端私钥解密
+	 * @throws Exception 
 	 */
-	public static String decryptDataOnJava(String data, String PRIVATEKEY) {
+	public static String decryptDataOnJava(String data, String PRIVATEKEY) throws Exception {
 		String temp = "";
 		try {
 			byte[] rs = Base64Utils.decode(data);
 			temp = new String(RSAUtil.decryptByPrivateKey(rs, PRIVATEKEY),"UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception("解密失败，请更新密文！");
 		}
 		return temp;
 	}

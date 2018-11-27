@@ -1,23 +1,18 @@
 package com.kiiik.web.system.service.impl;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.ConfigAttribute;
-import org.springframework.security.access.SecurityConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.contant.Contants_Test;
 import com.kiiik.pub.contant.KiiikContants;
+import com.kiiik.pub.contant.RedisKeyContants;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.service.BaseService;
 import com.kiiik.web.system.mapper.MenuMapper;
@@ -41,7 +36,7 @@ public class MenuServiceImpl extends BaseService {
 	 *@param roleId
 	 */
 	public Menu getSystemMenuTree(){
-		List<Menu> menusAll = this.genericDao.queryDBEntityList(new Menu());
+		List<Menu> menusAll = this.genericDao.queryDBEntityList(new Menu(),"ordor asc");
 		Menu root = TreeUtils.getRoot();
 		TreeUtils.madeTree(menusAll,root);
 		return root;
@@ -75,25 +70,17 @@ public class MenuServiceImpl extends BaseService {
 		rm.setRoleId(roleId);
 		return this.genericDao.queryDBEntityList(rm);
 	}
-	
-	public Map<String, Collection<ConfigAttribute>> systemRoleMenus(){
-			Map<String, Collection<ConfigAttribute>> resourceMap = new HashMap<>();
+	/**
+	 * 当角色菜单信息发生变化时，通知缓存更新
+	 * */
+	@Cacheable(value =RedisKeyContants.RoleMenus,keyGenerator="cacheKeyGenerator")
+	public List<RoleMenuVo> systemRoleMenus(){
+			System.err.println("查询系统的角色菜单关系！");
 			List<RoleMenuVo> auths = menuMapper.systemRoleMenus();
 			auths.addAll(Contants_Test.testRoleMenu());
-			if(!CollectionUtils.isEmpty(auths)){
-				for(RoleMenuVo rm:auths){
-					//同一个url对应多个角色
-					if(!StringUtils.isEmpty(rm.getUrl())){
-						if(resourceMap.get(rm.getUrl())==null){
-							resourceMap.put(rm.getUrl(), new HashSet<ConfigAttribute>());
-						}
-						ConfigAttribute configAttribute = new SecurityConfig(rm.getRoleName());// 角色标记
-						resourceMap.get(rm.getUrl()).add(configAttribute);
-					}
-				}
-			}
-			return resourceMap;
+			return auths;
 	}
+	
 	
 	public int saveRMBatch(Integer[] menuIds,Integer roleId){
 		RoleMenu rm = new RoleMenu();
@@ -111,7 +98,6 @@ public class MenuServiceImpl extends BaseService {
 		return this.genericDao.insertDBEntityBatch(entitys);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public ResultBean<String> saveMenu(Menu menu){
 		Menu menu_tmp = null;
 		if(KiiikContants.ROOTID!=menu.getParentId()){//不是根节点id值
@@ -136,7 +122,6 @@ public class MenuServiceImpl extends BaseService {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public ResultBean<String> updMenu(Menu menu){
 		Menu menu_tmp = null;
 		menu_tmp = genericDao.queryDBEntitySingleComplex(Menu.class, 
@@ -148,5 +133,30 @@ public class MenuServiceImpl extends BaseService {
 			return new ResultBean<String>().success("更新成功！更新记录数"+count);
 		}
 	}
-	
+
+
+	public ResultBean<String> delMenu(List<Integer> ids) {
+		// 查询子菜单或者目录
+		if (!CollectionUtils.isEmpty(genericDao.queryDBEntityListComplex(Menu.class,
+				new ComplexCondition()
+				.and()
+				.col("parentId")
+				.inList(ids)))) {
+			return new ResultBean<String>().fail("存在子菜单信息，不能删除！");
+		}
+
+		if (!CollectionUtils.isEmpty(genericDao.queryDBEntityListComplex(RoleMenu.class,
+				new ComplexCondition()
+				.and()
+				.col("menuId")
+				.inList(ids)))) {
+			return new ResultBean<String>().fail("菜单正在被角色使用，不能删除！");
+		}
+		int count = genericDao.deleteDBEntityByKeyBatchs(new Menu(), ids);
+		if (count > 0) {
+			return new ResultBean<String>().success("删除记录成功！");
+		} else {
+			return new ResultBean<String>().fail("删除记录失败！");
+		}
+	}
 }

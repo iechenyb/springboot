@@ -6,7 +6,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import com.kiiik.utils.PasswordUtils;
 import com.kiiik.utils.RequestUtils;
 /**
  * @author iechenyb
@@ -18,16 +17,9 @@ public class CenterAuthApplicationStartListener implements ApplicationListener<C
 	@Autowired
 	Environment env;
 	
-	@Autowired
-	PasswordUtils utils;
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent arg0) {
 		RequestUtils.initPatternList(env.getProperty("path.neednot.to.record.log"));
-		try {
-			//utils.genRSASer();//应用启动时创建一秘钥和私钥
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }

@@ -21,8 +21,8 @@
             <property name="dialect" value="mysql"/>
             <property name="offsetAsPageNum" value="false"/>
             <property name="rowBoundsWithCount" value="false"/>
-            <property name="pageSizeZero" value="true"/>
-            <property name="reasonable" value="false"/>
+            <property name="pageSizeZero" value="false"/>
+            <property name="reasonable" value="true"/>
             <property name="supportMethodsArguments" value="false"/>
             <property name="returnPageInfo" value="none"/>
         </plugin>

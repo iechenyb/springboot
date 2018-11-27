@@ -4,16 +4,26 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.Page;
+import com.kiiik.pub.ann.KiiikCachesParam;
+import com.kiiik.pub.ann.KiiikCachesParams;
+import com.kiiik.pub.bean.KiiikPage;
+import com.kiiik.pub.bean.PageData;
 import com.kiiik.pub.bean.ResultBean;
-import com.kiiik.pub.mybatis.bean.ComplexCondition;
+import com.kiiik.pub.contant.RedisKeyContants;
+import com.kiiik.pub.controller.BaseController;
+import com.kiiik.pub.exception.UserSessionTimeoutException;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.system.po.Menu;
 import com.kiiik.web.system.service.impl.MenuServiceImpl;
@@ -28,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("menu")
 @Api(value = "菜单管理模块", description = "菜单基本信息操作API", tags = "MenuApi")
-public class MenuController {
+public class MenuController extends BaseController{
 	Log log = LogFactory.getLog(MenuController.class);
 	
 	@Autowired
@@ -43,63 +53,34 @@ public class MenuController {
      *@param user
      *@return
      */
-	@SuppressWarnings("unchecked")
 	@ApiOperation("菜单信息查询")
-	@PostMapping("list")
-	public ResultBean<List<Menu>> listMenus(@RequestBody Menu menu){
-		List<Menu> menus = genericService.queryDBEntityList(menu);
-		return new ResultBean<List<Menu>>(menus).success();
+	@GetMapping("list")
+	public ResultBean<PageData<Menu>> listMenus(Menu menu,KiiikPage page){
+		if(page.needAll()){//当分页参数不传时传回所有记录
+		    return new ResultBean<PageData<Menu>>(new PageData<Menu>(genericService.queryDBEntityListLike(menu))).success();
+	   }else{
+			Page<Menu> datas = genericService.queryDBEntityListLike(menu, page);
+			return new ResultBean<PageData<Menu>>(new PageData<Menu>(datas,page)).success();
+	   }
 	}
 	
 
 	@PostMapping("add")
 	@ApiOperation("菜单信息新增")
-	public ResultBean<String> addMenu(@RequestBody Menu menu){
+	public ResultBean<String> addMenu(@RequestBody @Validated Menu menu){
 		return menuService.saveMenu(menu); 
 	}
 	
-	@SuppressWarnings("unchecked")
-	@GetMapping("deleteById")
-	@ApiOperation("根据主键删除信息")
-	public ResultBean<String> delMenu(Integer id){
-		Menu menu = new Menu();
-		menu.setParentId(id);
-		if(!CollectionUtils.isEmpty(genericService.queryDBEntityList(menu))){
-			return new ResultBean<String>().fail("当前菜单存在子菜单，不能删除！");
-		}
-		menu = new Menu();
-		menu.setId(id);
-		int count = genericService.deleteDBEntityByKey(menu);
-		if(count>0){
-			return new ResultBean<String>().success("删除记录成功！");
-		}else{
-			return new ResultBean<String>().fail("删除记录失败！");
-		}
-	}
-	
-	
-	@SuppressWarnings("unchecked")
-	@GetMapping("deleteByIds")
+	@DeleteMapping("deleteByIds")
 	@ApiOperation(value="根据主键删除菜单")
-	public ResultBean<String> delMenu(@RequestParam("ids") List<Integer> ids){
-		//查询子菜单或者目录
-		if(!CollectionUtils.isEmpty(
-				genericService.queryDBEntityListComplex(Menu.class,
-	    		new ComplexCondition()
-	    		.and()
-	    		.col("parentId").inList(ids))
-	    		)){
-			return new ResultBean<String>().fail("存在子菜单信息，不能删除！");
-		}
-		int count = genericService.deleteDBEntityByKeyBatchs(new Menu(),ids);
-		if(count>0){
-			return new ResultBean<String>().success("删除记录成功！");
-		}else{
-			return new ResultBean<String>().fail("删除记录失败！");
-		}
+	public ResultBean<String> delMenu(@RequestParam("ids") List<Integer> ids) throws Exception{
+		return menuService.delMenu(ids);
 	}
 
-	@PostMapping("update")
+	@PutMapping("update")
+	@KiiikCachesParams(caches={
+			@KiiikCachesParam(clazz=MenuServiceImpl.class,cacheName=RedisKeyContants.RoleMenus)
+	})
 	@ApiOperation(value="更新菜单信息")
 	public ResultBean<String> updMenu(@RequestBody Menu menu){
 		return menuService.updMenu(menu);
@@ -115,7 +96,6 @@ public class MenuController {
 	 *创建时间: 2017年7月15日
 	 *@param roleId
 	 */
-	@SuppressWarnings("unchecked")
 	@GetMapping("getSystemMenuTree")
 	@ApiOperation(value="系统菜单树")
 	public ResultBean<Menu> getSystemMenuTree(){
@@ -129,11 +109,15 @@ public class MenuController {
 	 *方法描述: 获取用户的系统菜单<br>
 	 *创建时间: 2017年7月15日
 	 *@param roleId
+	 * @throws Exception 
 	 */
 	@GetMapping("getUserSystemMenuTree")
 	@ApiOperation(value="用户系统菜单")
-	public ResultBean<Menu> getUserSystemMenuTree(Integer userId){
-		return new ResultBean<Menu>(menuService.getUserSystemMenuTree(userId));
+	public ResultBean<Menu> getUserSystemMenuTree(Integer userId) throws UserSessionTimeoutException{
+		if(StringUtils.isEmpty(userId)){
+			userId = getSystemUser().getId();
+		}
+		return new ResultBean<Menu>(menuService.getUserSystemMenuTree(userId)).success();
 	}
 	
 }

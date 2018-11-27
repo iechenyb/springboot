@@ -16,5 +16,5 @@ public @interface DBColumn {
 	String value() default ""; //数据库中的字段名
 	String insertIfNull() default "";  // 示例   100,'abc' --字符串注意带引号, defalut ,now() 
 	String updateIfNull() default "";
-	
+	boolean needTimestamp() default false;//日期格式的数据采用此属性，
 }

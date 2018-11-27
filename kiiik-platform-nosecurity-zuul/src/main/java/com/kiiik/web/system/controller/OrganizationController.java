@@ -1,16 +1,13 @@
 package com.kiiik.web.system.controller;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.employee.entity.EmployeeEntity;
@@ -35,21 +32,27 @@ public class OrganizationController {
 	@Autowired
 	GenericService genericService;
 	
-	@SuppressWarnings("unchecked")
 	@ApiOperation("组织结构树")
 	@GetMapping("tree")
 	public ResultBean<TreeNode> orgTree(){
 		return new ResultBean<TreeNode>(orgService.getOranizationTree()).success();
 	}
 	
-	@SuppressWarnings("unchecked")
+	/**
+	 * 
+	 *作者 : iechenyb<br>
+	 *方法描述: 根据员工信息获取公司和部门信息<br>
+	 *创建时间: 2018年11月26日
+	 *@param emp
+	 *@return
+	 */
 	@ApiOperation("查询员工信息")
-	@PostMapping("findEmp")
-	public ResultBean<List<EmployeeEntity>> listEmp(@RequestBody EmployeeEntity emp){
+	@GetMapping("findEmp")
+	public ResultBean<JSONArray> listEmp(EmployeeEntity emp){
 		if(!StringUtils.isEmpty(emp.getPassword())){
 			emp.setPassword(null);//密码查询禁用
 		}
-		return new ResultBean<List<EmployeeEntity>>(genericService.queryDBEntityList(emp)).success();
+		return orgService.listEmp(emp);
 	}
 	
 }

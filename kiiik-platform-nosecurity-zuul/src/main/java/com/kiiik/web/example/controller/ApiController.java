@@ -76,7 +76,7 @@ public class ApiController extends BaseController{
 	}
 	@ResponseBody
 	@GetMapping("curUserInfor") 
-	public Map<String,Object> curUserInfor() {
+	public Map<String,Object> curUserInfor() throws Exception {
 		Map<String,Object> ret = new HashMap<>();
 		ret.put("sessionUser",getSessionUser());
 		ret.put("systemUser",getSystemUser());
@@ -103,7 +103,6 @@ public class ApiController extends BaseController{
         return "parse date is " + date+"--->"+a+","+str;
     }
 	
-	@SuppressWarnings("unchecked")
 	@PostMapping("validateBean")
 	@ResponseBody
 	public ResultBean<String> validateBean(@RequestBody @Validated ValidateBean bean){
@@ -111,7 +110,6 @@ public class ApiController extends BaseController{
 		return new ResultBean<String>("").success();
 	}
 	
-	@SuppressWarnings("unchecked")
 	@GetMapping("validateParam")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="param1",value="参数1",dataType="String",paramType="query")
@@ -124,7 +122,6 @@ public class ApiController extends BaseController{
 	@Autowired
 	GenericService genericService;
 
-	@SuppressWarnings("unchecked")
 	@PostMapping("genUsers")
 	@ApiOperation("模拟生成用户信息，仅供测试使用")
 	public ResultBean<String> genUsers(@ApiParam("生成用户数量") Integer theNumbersOfToGen) {

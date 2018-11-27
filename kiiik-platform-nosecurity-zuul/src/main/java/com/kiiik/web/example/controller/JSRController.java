@@ -18,7 +18,6 @@ import com.kiiik.web.example.jsr.bean.ValidateBean;
 @RequestMapping("jsr")
 public class JSRController {
 	Log log = LogFactory.getLog(JSRController.class);
-	@SuppressWarnings("unchecked")
 	@PostMapping("validate")
 	public ResultBean<String> validateBean(@RequestBody @Validated ValidateBean bean){
 		System.out.println(bean);

@@ -1,22 +1,23 @@
 package com.kiiik.web.company.controller;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kiiik.pub.bean.Page;
+import com.github.pagehelper.Page;
+import com.kiiik.pub.bean.KiiikPage;
+import com.kiiik.pub.bean.PageData;
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.company.entity.CompanyEntity;
@@ -58,29 +59,17 @@ public class CompanyController {
      *@param 
      *@return
      */
-    @SuppressWarnings("unchecked")
-    @PostMapping("/list")
-    //@ApiOperation(value = "/list",notes="列表信息")
-    public ResultBean<List<CompanyEntity>> list(@RequestBody CompanyEntity entity){
-       List<CompanyEntity> entitys = genericService.queryDBEntityList(entity);
-        return new ResultBean<List<CompanyEntity>>(entitys).success();
+    @ApiOperation("分页查询")
+    @GetMapping(value="/list")
+    public ResultBean<PageData<CompanyEntity>> list(CompanyEntity entity,KiiikPage page){
+    	if(page.needAll()){//当分页参数不传时传回所有记录
+		    return new ResultBean<PageData<CompanyEntity>>(new PageData<CompanyEntity>(genericService.queryDBEntityListLike(entity))).success();
+	   }else{
+			Page<CompanyEntity> datas = genericService.queryDBEntityListLike(entity, page);
+			return new ResultBean<PageData<CompanyEntity>>(new PageData<CompanyEntity>(datas,page)).success();
+	   }
     }
     
-     /**
-     * 
-     *作者 : iechenyb<br>
-     *数据列表分页查询<br>
-     *创建时间: 2018-11-08 09:34:39
-     *@param 
-     *@return
-     */
-    @SuppressWarnings("unchecked")
-	@GetMapping("listPage")
-	@ApiOperation("分页查询")
-	public ResultBean<List<CompanyEntity>> listUsersPage(CompanyEntity entity, @ModelAttribute @Validated Page page) {
-		List<CompanyEntity> entitys = genericService.queryDBEntityList(entity, page.getPageNum(), page.getPageSize(), " id asc");
-		return new ResultBean<List<CompanyEntity>>(entitys).success();
-	}
     
     /**
      * 
@@ -105,7 +94,7 @@ public class CompanyController {
      *@param 
      *@return
      */
-	@PostMapping("update")
+	@PutMapping("update")
 	@ApiOperation("更新信息")
 	public ResultBean<String> updCompanyEntity(@RequestBody CompanyEntity entity){
 		return companyService.updCompanyEntity(entity);
@@ -119,26 +108,9 @@ public class CompanyController {
      *@param 
      *@return
      */
-	@GetMapping("deleteByIds")
+	@DeleteMapping("deleteByIds")
 	@ApiOperation("根据主键删除信息")
 	public ResultBean<String> delCompanyEntity(@RequestParam("ids") List<Integer> ids){
 		return companyService.delCompanyEntity(ids);
 	}
-	
-	/**
-	 * 
-	 *作者 : iechenyb<br>
-	 *方法描述: 单个删除<br>
-	 *创建时间: 2018年11月12日
-	 *@param id
-	 *@return
-	 */
-	@GetMapping("deleteById")
-	@ApiOperation("根据主键删除信息")
-	public ResultBean<String> delCompanyEntity(Integer id){
-		List<Integer> ids = new ArrayList<Integer>();
-		ids.add(id);
-		return companyService.delCompanyEntity(ids);
-	}
-
 }

@@ -4,17 +4,24 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.Page;
+import com.kiiik.pub.bean.KiiikPage;
+import com.kiiik.pub.bean.PageData;
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.system.po.Role;
+import com.kiiik.web.system.po.UserRole;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,25 +39,28 @@ public class RoleController {
 	@Autowired
 	GenericService genericService;
 	
-	
-    /**
+	/**
      * 
      *作者 : iechenyb<br>
-     *<br>
-     *创建时间: 2017年7月15日
+     *方法描述: 分页数据查询<br>
+     *创建时间: 2018年11月19日
      *@param user
+     *@param page
      *@return
+     *@throws Exception
      */
-	@SuppressWarnings("unchecked")
-	@PostMapping("list")
 	@ApiOperation("角色列表信息")
-	public ResultBean<List<Role>> listRoles(@RequestBody Role role){
-		List<Role> roles = genericService.queryDBEntityList(role);
-		return new ResultBean<List<Role>>(roles).success();
+	@GetMapping("list")
+	public ResultBean<PageData<Role>> listMenus(Role role,KiiikPage page){
+		if(page.needAll()){//当分页参数不传时传回所有记录
+		    return new ResultBean<PageData<Role>>(new PageData<Role>(genericService.queryDBEntityListLike(role))).success();
+	   }else{
+			Page<Role> datas = genericService.queryDBEntityListLike(role, page);
+			return new ResultBean<PageData<Role>>(new PageData<Role>(datas,page)).success();
+	   }
 	}
 	
 
-	@SuppressWarnings({ "unchecked"})
 	@PostMapping("add")
 	@ApiOperation("新增角色信息")
 	public ResultBean<String> addRole(@RequestBody Role role){
@@ -60,36 +70,44 @@ public class RoleController {
 				.and()
 				.col("rolename")
 				.eq(role.getRoleName()));
-		int count = 0 ;
 		if(role_tmp==null){
-			count = genericService.insertDBEntity(role);
-			return new ResultBean<Integer>(count).success("角色插入成功!");
+			genericService.insertDBEntity(role);
+			return new ResultBean<String>().success("角色插入成功!");
 		}
-		return new ResultBean<Integer>(count).fail("角色名称已经存在！");
+		return new ResultBean<String>().fail("角色名称已经存在！");
 	}
 	
-	@SuppressWarnings("unchecked")
-	@GetMapping("deleteByIds")
+	@DeleteMapping("deleteByIds")
 	@ApiOperation("根据主键删除角色信息")
-	public ResultBean<String> delRole(@RequestParam("ids") List<Integer> ids){
+	public ResultBean<String> delRole(@RequestParam("ids") List<Integer> ids) throws Exception{
+		//查询是否存在当前角色在用
+		List<UserRole> data = genericService.queryDBEntityListComplex(UserRole.class, new ComplexCondition().and().col("roleid").inList(ids));
+		if(!CollectionUtils.isEmpty(data)){
+			return new ResultBean<String>().fail("删除的角色正在使用，不能删除！");
+		}
 		int count = genericService.deleteDBEntityByKeyBatchs(new Role(),ids);
 		return new ResultBean<String>("删除"+count+"记录！").success();
-		
 	}
 	
-	@SuppressWarnings("unchecked")
-	@GetMapping("deleteById")
+	/*@DeleteMapping("deleteById")
 	@ApiOperation("根据主键删除角色信息")
 	public ResultBean<String> delRole(Integer id){
+		//查询是否存在当前角色在用
+		List<Integer> ids = new ArrayList<Integer>();
+		ids.add(id);
+		List<UserRole> data = genericService.queryDBEntityListComplex(UserRole.class, 
+				new ComplexCondition().and()
+				.col("roleid").inList(ids));
+		if(!CollectionUtils.isEmpty(data)){
+			return new ResultBean<String>().fail("删除的角色正在使用，不能删除！");
+		}
 		Role role = new Role();
 		role.setId(id);
 		genericService.deleteDBEntityByKey(role);
 		return new ResultBean<String>().success("记录删除成功");
-		
-	}
+	}*/
 
-	@SuppressWarnings("unchecked")
-	@PostMapping("update")
+	@PutMapping("update")
 	@ApiOperation("更新角色信息")
 	public ResultBean<String> updRole(@RequestBody Role role){
 		Role role_tmp = null;

@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
  *创建时间: 2018年5月11日
  */
 public class KiiikException extends RuntimeException {
+	public Integer status;//异常状态
 	private static final long serialVersionUID = 1L;
 	Log log = LogFactory.getLog(KiiikException.class);
 	public KiiikException() {
@@ -21,7 +22,10 @@ public class KiiikException extends RuntimeException {
 	}
 	public KiiikException(String arg0) {
 		super(arg0);
-		
+	}
+	public KiiikException(String arg0,Integer status) {
+		super(arg0);
+		this.status = status;
 	}
 	public KiiikException(Throwable arg0) {
 		super(arg0);

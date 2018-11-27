@@ -1,13 +1,17 @@
 package com.kiiik.web.department.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.pub.contant.KiiikContants;
+import com.kiiik.pub.contant.RedisKeyContants;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.dao.GenericDao;
 import com.kiiik.web.company.entity.CompanyEntity;
@@ -40,7 +44,6 @@ public class DepartmentServiceImpl  implements DepartmentService {
 	 *@param 
 	 *@return
 	 */
-	 @SuppressWarnings("unchecked")
 	 public ResultBean<String> addDepartmentEntity(DepartmentEntity entity){
 		 //校验名称是否重复
 		 DepartmentEntity tmp = new DepartmentEntity();
@@ -80,7 +83,6 @@ public class DepartmentServiceImpl  implements DepartmentService {
 	 *@param 
 	 *@return
 	 */
-	 @SuppressWarnings("unchecked")
 	 public ResultBean<String> updDepartmentEntity(DepartmentEntity entity){
 		 DepartmentEntity tmp = null;
 		 //校验名称是否重复
@@ -124,7 +126,6 @@ public class DepartmentServiceImpl  implements DepartmentService {
 	 *@param 
 	 *@return
 	 */
-	 @SuppressWarnings("unchecked")
 	 public ResultBean<String> delDepartmentEntity(List<Integer> ids){
 	    if(!CollectionUtils.isEmpty(
 	    		 genericDao.queryDBEntityListComplex(DepartmentEntity.class,
@@ -132,21 +133,35 @@ public class DepartmentServiceImpl  implements DepartmentService {
 	    		.and()
 	    		.col("supdepid").inList(ids))
 	    		)){
-	    	return new ResultBean<String>().success("存在子部门信息，不能删除!");
+	    	return new ResultBean<String>().fail("存在子部门信息，不能删除!");
 	    }
 	    if(!CollectionUtils.isEmpty(genericDao.queryDBEntityListComplex(EmployeeEntity.class,
 	    		new ComplexCondition()
 	    		.and()
 	    		.col("departmentid").inList(ids)))){
-	    	return new ResultBean<String>().success("存在员工信息，不能删除!");
+	    	return new ResultBean<String>().fail("存在员工信息，不能删除!");
 	    }	    
 	    DepartmentEntity entity = new DepartmentEntity();
 		int count = genericDao.deleteDBEntityByKeyBatchs(entity,ids);
 		if(count==0){
-			return new ResultBean<String>().success("删除记录失败!");
+			return new ResultBean<String>().fail("删除记录失败!");
 		}else{
 			return new ResultBean<String>().success("删除记录成功!");
 		}
+	 }
+	 
+	 @Cacheable(value={RedisKeyContants.DempartmentNameMap},keyGenerator=RedisKeyContants.KEYGENERATOR)
+	 public Map<String,String> getDepartmentNameById(){
+		System.err.println("查询部门名称信息！");
+		List<DepartmentEntity> data = genericDao.queryDBEntityList(new DepartmentEntity());
+		Map<String,String> cnMap = null;
+		if(!CollectionUtils.isEmpty(data)){
+			cnMap = new HashMap<String, String>();
+			for(DepartmentEntity com:data){
+				cnMap.put(com.getId().toString(), com.getDepartmentname());
+			}	
+		}
+		return cnMap;
 	 }
  
 }

@@ -1,27 +1,34 @@
 package com.kiiik.web.employee.controller;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.kiiik.pub.bean.Page;
+
+import com.github.pagehelper.Page;
+import com.kiiik.pub.ann.KiiikCachesParam;
+import com.kiiik.pub.ann.KiiikCachesParams;
+import com.kiiik.pub.bean.KiiikPage;
+import com.kiiik.pub.bean.PageData;
 import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.contant.RedisKeyContants;
 import com.kiiik.pub.mybatis.service.GenericService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import com.kiiik.web.employee.entity.EmployeeEntity;
 import com.kiiik.web.employee.service.EmployeeService;
+import com.kiiik.web.system.service.impl.UserServiceImpl;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 请求控制层
@@ -47,23 +54,6 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-   
-    /**
-     * 
-     *作者 : iechenyb<br>
-     *数据列表<br>
-     *创建时间: 2018-11-08 09:34:39
-     *@param 
-     *@return
-     */
-    @SuppressWarnings("unchecked")
-    @PostMapping("/list")
-    @ApiOperation("列表信息")
-    public ResultBean<List<EmployeeEntity>> list(@RequestBody EmployeeEntity entity){
-       List<EmployeeEntity> entitys = genericService.queryDBEntityList(entity);
-        return new ResultBean<List<EmployeeEntity>>(entitys).success();
-    }
-    
      /**
      * 
      *作者 : iechenyb<br>
@@ -72,12 +62,15 @@ public class EmployeeController {
      *@param 
      *@return
      */
-    @SuppressWarnings("unchecked")
-	@GetMapping("listPage")
+	@GetMapping("list")
 	@ApiOperation("分页查询")
-	public ResultBean<List<EmployeeEntity>> listUsersPage(EmployeeEntity entity, @ModelAttribute @Validated Page page) {
-		List<EmployeeEntity> entitys = genericService.queryDBEntityList(entity, page.getPageNum(), page.getPageSize(), " id asc");
-		return new ResultBean<List<EmployeeEntity>>(entitys).success();
+	public ResultBean<PageData<EmployeeEntity>> listUsersPage(EmployeeEntity entity,KiiikPage page) {
+		if(page.needAll()){//当分页参数不传时传回所有记录
+		    return new ResultBean<PageData<EmployeeEntity>>(new PageData<EmployeeEntity>(genericService.queryDBEntityListLike(entity))).success();
+	   }else{
+			Page<EmployeeEntity> datas = genericService.queryDBEntityListLike(entity, page);
+			return new ResultBean<PageData<EmployeeEntity>>(new PageData<EmployeeEntity>(datas,page)).success();
+	   }
 	}
     
     /**
@@ -90,6 +83,11 @@ public class EmployeeController {
      */
 	@PostMapping("add")
 	@ApiOperation("新增信息")
+	@KiiikCachesParams(
+	  caches = { 
+		@KiiikCachesParam(cacheName=RedisKeyContants.EMPNOUSERNAMEMAP,clazz=UserServiceImpl.class)
+	  }
+	)
 	public ResultBean<String> addEmployeeEntity(@RequestBody EmployeeEntity entity){
 		return employeeService.addEmployeeEntity(entity);
 		
@@ -103,8 +101,13 @@ public class EmployeeController {
      *@param 
      *@return
      */
-	@PostMapping("update")
+	@PutMapping("update")
 	@ApiOperation("更新信息")
+	@KiiikCachesParams(
+	  caches = { 
+		@KiiikCachesParam(cacheName=RedisKeyContants.EMPNOUSERNAMEMAP,clazz=UserServiceImpl.class)
+	  }
+	)
 	public ResultBean<String> updEmployeeEntity(@RequestBody EmployeeEntity entity){
 		return employeeService.updEmployeeEntity(entity);
 	}
@@ -117,18 +120,14 @@ public class EmployeeController {
      *@param 
      *@return
      */
-	@GetMapping("deleteByIds")
+	@DeleteMapping("deleteByIds")
 	@ApiOperation("根据主键删除信息")
+	@KiiikCachesParams(
+	  caches = { 
+		@KiiikCachesParam(cacheName=RedisKeyContants.EMPNOUSERNAMEMAP,clazz=UserServiceImpl.class)
+	  }
+	)
 	public ResultBean<String> delEmployeeEntity(@RequestParam("ids") List<Integer> ids){
 		return employeeService.delEmployeeEntity(ids);
 	}
-	
-	@GetMapping("deleteById")
-	@ApiOperation("根据主键删除信息")
-	public ResultBean<String> delCompanyEntity(Integer id){
-		List<Integer> ids = new ArrayList<Integer>();
-		ids.add(id);
-		return employeeService.delEmployeeEntity(ids);
-	}
-
 }

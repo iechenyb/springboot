@@ -1,21 +1,11 @@
 package com.kiiik.config.sec;
-import java.io.IOException;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.security.web.session.SessionInformationExpiredEvent;
-import org.springframework.security.web.session.SessionInformationExpiredStrategy;
-import org.springframework.stereotype.Component;
-
-import com.alibaba.fastjson.JSONObject;
 /**
  *作者 : iechenyb<br>
  *类描述: 说点啥<br>
  *创建时间: 2018年11月3日
  */
-@Component
+/*@Component
 public class AjaxSessionInformationExpiredStrategy  implements SessionInformationExpiredStrategy{
 	Log log = LogFactory.getLog(AjaxSessionInformationExpiredStrategy.class);
 	 @Override
@@ -28,4 +18,4 @@ public class AjaxSessionInformationExpiredStrategy  implements SessionInformatio
 	    response.getWriter().print(returnObj.toJSONString());
 	    response.flushBuffer();
 	  }
-}
+}*/

@@ -3,6 +3,7 @@ package com.kiiik.web.department.service;
 import com.kiiik.web.department.entity.DepartmentEntity;
 
 import java.util.List;
+import java.util.Map;
 
 import com.kiiik.pub.bean.ResultBean;
 
@@ -43,5 +44,6 @@ public interface DepartmentService  {
  *@return
  */
  ResultBean<String> delDepartmentEntity(List<Integer> ids);
+ Map<String,String> getDepartmentNameById();
 }
 

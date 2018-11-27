@@ -20,6 +20,8 @@ public interface GenericMybatisMapper {
 	
 	public int updateDBEntityByKey(EntityInfo entityInfo);
 	
+	public int updateDBEntity(@Param("value") EntityInfo value,@Param("condition") EntityInfo condition);
+	
 	public int deleteDBEntityByKey(EntityInfo entityInfo);
 	
 	public int deleteDBEntityByKeyBatchs(@Param("entityInfo") EntityInfo entityInfo,@Param("ids") List<Integer> ids);
@@ -27,6 +29,7 @@ public interface GenericMybatisMapper {
 	public int deleteDBEntity(EntityInfo entityInfo);
 
 	public Page<Map<String, Object>> queryDBEntity(EntityInfo info);
+	public Page<Map<String, Object>> queryDBEntityLike(EntityInfo info);//模糊查询
 	
 	public Page<Map<String, Object>> queryDBEntityComplex(@Param("entityInfo") EntityInfo entityInfo,@Param("complexCond")ComplexCondition complexCond);
 

@@ -14,9 +14,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.kiiik.pub.bean.KiiikPage;
 import com.kiiik.pub.mybatis.annotation.DBColumn;
 import com.kiiik.pub.mybatis.annotation.DBEntity;
 import com.kiiik.pub.mybatis.annotation.KeyColumn;
@@ -77,6 +79,7 @@ public class GenericDaoImpl implements GenericDao {
 			String dbColName = dbColumn.value(); // db字段名
 			String insertIfNull = dbColumn.insertIfNull().trim();
 			String updateIfNull = dbColumn.updateIfNull().trim();
+			boolean needTimestamp = dbColumn.needTimestamp();
 			// 表字段默认与class字段相同
 			if (StringUtils.isBlank(dbColName)) {
 				dbColName = entityColName;
@@ -90,7 +93,7 @@ public class GenericDaoImpl implements GenericDao {
 			if (StringUtils.isNotBlank(updateIfNull)) {
 				curCol.setUpdateIfNull(updateIfNull);
 			}
-
+			curCol.setNeedTimestamp(needTimestamp);
 			KeyColumn keyColumn = eachField.getAnnotation(KeyColumn.class);
 			if (keyColumn != null) {
 				curCol.setIsKeyColumn(true);
@@ -110,6 +113,7 @@ public class GenericDaoImpl implements GenericDao {
 		EntityInfo config = getInfoNoValue(entity.getClass());
 		for (EntityInfoCol colConfg : config.getCols()) {
 			try {
+				//如果value是空值，则将值设置为null，配置文件只判断空值
 				colConfg.setValue(PropertyUtils.getProperty(entity, colConfg.getEntityColName()));
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -177,6 +181,9 @@ public class GenericDaoImpl implements GenericDao {
 		List<EntityInfo> infos = new LinkedList<EntityInfo>();
 		for (Object each : entitys) {
 			infos.add(getInfoWithValue(each));
+		}
+		if(CollectionUtils.isEmpty(infos)){
+			return 0;
 		}
 		int rows = genericDao.insertDBEntityBatch(infos);
 		return rows;
@@ -414,14 +421,148 @@ public class GenericDaoImpl implements GenericDao {
 		if (!info.hasKeyCol()) {
 			throw new IllegalArgumentException("update cannot done when key property is null");
 		}
+		if(CollectionUtils.isEmpty(ids)){
+			return 0;
+		}
+		int rows = genericDao.deleteDBEntityByKeyBatchs(info,ids);
+		return rows;
+	}
+
+	@Override
+	public <T> T queryDBEntitySingleLike(T entity) {
+		return getFirst(queryDBEntityListLike(entity));
+	}
+
+	@Override
+	public <T> List<T> queryDBEntityListLike(T entity) {
+		return queryDBEntityListLike(entity,1,0,"").getResult();
+	}
+
+	@Override
+	public <T> List<T> queryDBEntityListLike(T entity, String... orderBys) {
+		return queryDBEntityListLike(entity, 1, 0, orderBys).getResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> Page<T> queryDBEntityListLike(T entity, int pageNum, int pageSize, String... orderBys) {
+		EntityInfo info=getInfoWithValue(entity);
+		if(orderBys!=null&&!"".equals(orderBys)&&orderBys.length>0&&!"".equals(orderBys[0])){
+			List<String> orderCols = new ArrayList<String>();
+			for(int i=0;i<orderBys.length;i++){
+				if(!org.springframework.util.StringUtils.isEmpty(orderBys[i])){
+					String a = orderBys[i];
+					if(a.toUpperCase().contains("ASC")||a.toUpperCase().contains("DESC")){
+						orderCols.add(orderBys[i]);//非空字段进行查询
+				    }
+				}
+			}
+			info.setOrderCols(orderCols);
+		}
+		//分页
+		/**
+		 * 如果当前的pageNum>总数且小于1,如何处理！
+		 */
+		PageHelper.startPage(pageNum, pageSize);
+		
+		Page<Map<String, Object>> list = genericDao.queryDBEntityLike(info);
+		Page<T> result= (Page<T>) list.clone();
+		result.clear();
+		for(Map<String, Object> eachBeanMap:list){
+			T eachObject = null;
+			try {
+				eachObject = (T)(entity.getClass().newInstance());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			} 
+			
+			try {
+				BeanUtils.copyProperties(eachObject, eachBeanMap);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+			result.add(eachObject);
+		}
+		return result;
+	}
+
+	@Override
+	public <T> int insertDBEntityT(T entity) {
+		return insertDBEntity(entity);
+	}
+
+	@Override
+	public <T> int updateDBEntityByKeyT(T entity) {
+		return updateDBEntityByKey(entity);
+	}
+
+	@Override
+	public <T> int deleteDBEntityByKeyT(T entity) {
+		return deleteDBEntityByKey(entity);
+	}
+
+	@Override
+	public <T> int deleteDBEntityT(T entity) {
+		return deleteDBEntity(entity);
+	}
+
+	@Override
+	public <T> int deleteDBEntityByKeyBatchsT(T entity, List<Integer> ids) {
+		return deleteDBEntityByKeyBatchs(entity, ids);
+	}
+
+	@Override
+	public <T> int insertDBEntityBatchT(List<T> entitys) {
+		List<EntityInfo> infos = new LinkedList<EntityInfo>();
+		for (T each : entitys) {
+			infos.add(getInfoWithValue(each));
+		}
+		int rows = genericDao.insertDBEntityBatch(infos);
+		return rows;
+	}
+    /**
+     * 根据指定的条件和值进行更新
+     */
+	@Override
+	public <T> int updateDBEntity(T values, T condition) {
+		return genericDao.updateDBEntity(getInfoWithValue(values), getInfoWithValue(condition));
+	}
+
+	@Override
+	public <T> Page<T> queryDBEntityList(T entity, KiiikPage page, String... orderBys) {
+		return queryDBEntityList(entity,page.getCurPage(),page.getPageSize());
+	}
+
+	@Override
+	public <T> Page<T> queryDBEntityListComplex(Class<T> clazz, ComplexCondition condition, KiiikPage page) {
+		return queryDBEntityListComplex(clazz, condition, page.getCurPage(), page.getPageSize(),"");
+	}
+
+	@Override
+	public <T> Page<T> queryDBEntityListComplex(Class<T> clazz, ComplexCondition condition, KiiikPage page,
+			String... orderBys) {
+		return queryDBEntityListComplex(clazz,condition,page.getCurPage(),page.getPageSize(),orderBys);
+	}
+
+	@Override
+	public <T> Page<T> queryDBEntityListLike(T entity, KiiikPage page, String... orderBys) {
+		return queryDBEntityListLike(entity, page.getCurPage(), page.getPageSize(),orderBys);
+	}
+
+	/*@Override
+	public <T> int deleteDBEntityByKeyBatchsT(Class<T> clazz, List<Integer> ids) {
+		EntityInfo info=getInfoWithValue(clazz);
+		return deleteDBEntityByKeyBatchs(info, ids);
+	}*/
+
+	@Override
+	public <T> int deleteDBEntityByKeyBatchs(Class<T> clazz, List<Integer> ids) throws InstantiationException, IllegalAccessException {
+		EntityInfo info=getInfoNoValue(clazz);
+		if (!info.hasKeyCol()) {
+			throw new IllegalArgumentException("update cannot done when key property is null");
+		}
 		int rows = genericDao.deleteDBEntityByKeyBatchs(info,ids);
 		return rows;
 	}
 	
-	
-
-	/*@Override
-	public Page<Map<String, Object>> queryDBEntity(EntityInfo entityInfo) {
-		return genericDao.queryDBEntity(entityInfo);
-	}*/
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,10 +13,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.Page;
+import com.kiiik.pub.ann.KiiikCachesParam;
+import com.kiiik.pub.ann.KiiikCachesParams;
+import com.kiiik.pub.bean.KiiikPage;
+import com.kiiik.pub.bean.PageData;
 import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.contant.RedisKeyContants;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.system.po.RoleMenu;
 import com.kiiik.web.system.service.impl.MenuServiceImpl;
+import com.kiiik.web.system.vo.RoleMenuVo2;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,21 +41,25 @@ public class RoleMenuController {
 	@Autowired
 	GenericService genericService;
 	
-	
-    /**
+	/**
      * 
      *作者 : iechenyb<br>
-     *<br>
-     *创建时间: 2017年7月15日
+     *方法描述: 分页数据查询<br>
+     *创建时间: 2018年11月19日
      *@param user
+     *@param page
      *@return
+     *@throws Exception
      */
-	@SuppressWarnings("unchecked")
 	@ApiOperation("菜单信息查询")
-	@PostMapping("list")
-	public ResultBean<List<RoleMenu>> listMenus(@RequestBody RoleMenu rmenu){
-		List<RoleMenu> rmenus = genericService.queryDBEntityList(rmenu);
-		return new ResultBean<List<RoleMenu>>(rmenus).success();
+	@GetMapping("list")
+	public ResultBean<PageData<RoleMenu>> listRoleMenus(RoleMenu rmenu,KiiikPage page){
+		if(page.needAll()){//当分页参数不传时传回所有记录
+		    return new ResultBean<PageData<RoleMenu>>(new PageData<RoleMenu>(genericService.queryDBEntityListLike(rmenu))).success();
+	   }else{
+			Page<RoleMenu> datas = genericService.queryDBEntityListLike(rmenu, page);
+			return new ResultBean<PageData<RoleMenu>>(new PageData<RoleMenu>(datas,page)).success();
+	   }
 	}
 	
     /**
@@ -57,19 +70,24 @@ public class RoleMenuController {
      *@param rmenu
      *@return
      */
-	@SuppressWarnings({ "unchecked"})
 	@PostMapping("add")
 	@ApiOperation("角色菜单信息新增")
-	public ResultBean<String> addMenu(@RequestBody RoleMenu rmenu){
+	@KiiikCachesParams(caches={
+		@KiiikCachesParam(clazz=MenuServiceImpl.class,cacheName=RedisKeyContants.RoleMenus)
+	})
+	public ResultBean<String> addRoleMenu(@RequestBody RoleMenu rmenu){
 		genericService.deleteDBEntity(rmenu);
 		genericService.insertDBEntity(rmenu);
 		return new ResultBean<String>().success("新增成功！");
 	}
 	
-	@SuppressWarnings("unchecked")
-	@GetMapping("deleteByIds")
+	@DeleteMapping("deleteByIds")
 	@ApiOperation(value="根据主键删除角色菜单")
-	public ResultBean<String> delMenu(@RequestParam("ids") List<Integer> ids){
+	@KiiikCachesParams(caches={
+			@KiiikCachesParam(clazz=MenuServiceImpl.class,cacheName=RedisKeyContants.RoleMenus)
+	})
+	public ResultBean<String> delRoleMenu(@RequestParam("ids") List<Integer> ids) throws Exception{
+		//查询菜单是否被某个角色使用，若使用则不能删除
 		int count = genericService.deleteDBEntityByKeyBatchs(new RoleMenu(),ids);
 		if(count>0){
 			return new ResultBean<String>().success("记录删除成功！");
@@ -78,21 +96,6 @@ public class RoleMenuController {
 		}
 		
 	}
-	
-	@SuppressWarnings("unchecked")
-	@GetMapping("deleteById")
-	@ApiOperation(value="根据主键删除角色菜单")
-	public ResultBean<String> delMenu(Integer id){
-		RoleMenu rm = new RoleMenu();
-		rm.setId(id);
-		int count = genericService.deleteDBEntityByKey(rm);
-		if(count>0){
-			return new ResultBean<String>().success("记录删除成功！");
-		}else{
-			return new ResultBean<String>().fail("记录删除失败！");
-		}
-		
-	}
 	/**
 	 * 
 	 *作者 : iechenyb<br>
@@ -101,25 +104,16 @@ public class RoleMenuController {
 	 *@param leafIds
 	 *@param roleId
 	 */
-	@GetMapping("saveRoleMenu")
-	@ApiOperation("预留方法，暂时未开发。")
-	public void saveRM(@RequestParam(value = "leafIds[]") String[] leafIds,String roleId){
-		//根据叶子节点查询所有父类目录，将不重复节点存入，保证每角色读取的都会一颗子树。
-	}
-	
-	/**
-	 * 
-	 *作者 : iechenyb<br>
-	 *方法描述: 只保存叶子节点<br>
-	 *创建时间: 2017年7月15日
-	 *@param leafIds
-	 *@param roleId
-	 */
-	@SuppressWarnings("unchecked")
-	@GetMapping("saveRoleMenuBatch")
+	@PostMapping("saveRoleMenuBatch")
 	@ApiOperation("批量保存角色菜单信息")
-	public ResultBean<String> saveRMBatch(@RequestParam(value = "menuIds[]") Integer[] menuIds,Integer roleId){
-		int count = menuService.saveRMBatch(menuIds, roleId);
+	@KiiikCachesParams(caches={
+			@KiiikCachesParam(clazz=MenuServiceImpl.class,cacheName=RedisKeyContants.RoleMenus)
+	})
+	public ResultBean<String> saveRMBatch(@RequestBody RoleMenuVo2 vo){
+		if(StringUtils.isEmpty(vo.getRoleId())){
+			return new ResultBean<String>().fail("角色信息不能为空！");//菜单为空时，说明删除角色权限
+		}
+		int count = menuService.saveRMBatch(vo.getMenuIds(), vo.getRoleId());
 		if(count>0){
 			return new ResultBean<String>().success("角色菜单信息保存成功！");
 		}else{
@@ -134,7 +128,6 @@ public class RoleMenuController {
 	 *创建时间: 2017年7月15日
 	 *@param roleId
 	 */
-	@SuppressWarnings({"unchecked" })
 	@GetMapping("getRoleMenu")
 	@ApiOperation("获取当前角色的菜单信息")
 	public ResultBean<List<RoleMenu>> getAssignedRoleMenu(Integer roleId){

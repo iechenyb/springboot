@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.Min;
+
 import com.kiiik.pub.mybatis.annotation.DBColumn;
 import com.kiiik.pub.mybatis.annotation.DBEntity;
 import com.kiiik.pub.mybatis.annotation.KeyColumn;
@@ -55,6 +57,7 @@ public class Menu implements Serializable{
 	private String modifyPerson;//修改人员
 	@DBColumn("ordor")
 	@ApiModelProperty(value="菜单排序权重值(兄弟菜单排序)")
+	@Min(0)
 	private Integer ordor ;//菜单排序
 	@ApiModelProperty(value="子节点，请求时参数忽略")
 	private List<Menu> children = new ArrayList<Menu>();

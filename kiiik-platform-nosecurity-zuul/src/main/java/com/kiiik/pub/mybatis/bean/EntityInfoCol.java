@@ -13,6 +13,7 @@ public class EntityInfoCol implements Cloneable{
 	private String insertIfNull;
 	private String updateIfNull;
 	private Boolean isKeyColumn;
+	private Boolean needTimestamp;
 	private Boolean useGeneratedKeys;
 	private Object value;
 	public String getEntityColName() {
@@ -56,6 +57,13 @@ public class EntityInfoCol implements Cloneable{
 	}
 	public void setValue(Object value) {
 		this.value = value;
+	}
+	
+	public Boolean getNeedTimestamp() {
+		return needTimestamp;
+	}
+	public void setNeedTimestamp(Boolean needTimestamp) {
+		this.needTimestamp = needTimestamp;
 	}
 	@Override
 	public String toString() {

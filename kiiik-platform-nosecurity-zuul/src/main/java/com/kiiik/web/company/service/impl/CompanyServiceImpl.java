@@ -1,12 +1,16 @@
 package com.kiiik.web.company.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.contant.RedisKeyContants;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.service.BaseService;
 import com.kiiik.web.company.dao.CompanyDao;
@@ -35,7 +39,6 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 	 *@param 
 	 *@return
 	 */
-	 @SuppressWarnings("unchecked")
 	 public ResultBean<String> addCompanyEntity(CompanyEntity entity){
 		 
 		 CompanyEntity tmp = new CompanyEntity();
@@ -66,7 +69,6 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 	 *@param 
 	 *@return
 	 */
-	 @SuppressWarnings("unchecked")
 	 public ResultBean<String> updCompanyEntity(CompanyEntity entity){
 		 CompanyEntity tmp = new CompanyEntity();
 		 tmp = genericDao.queryDBEntitySingleComplex(CompanyEntity.class, 
@@ -101,7 +103,6 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 	 *@param 
 	 *@return
 	 */
-	 @SuppressWarnings("unchecked")
 	 public ResultBean<String> delCompanyEntity(List<Integer> ids){
 	    //公司是否存在子公司
 		 if(!CollectionUtils.isEmpty(
@@ -138,6 +139,21 @@ public class CompanyServiceImpl extends BaseService implements CompanyService {
 		}else{
 			return new ResultBean<String>().success("删除记录成功!");
 		}
+	 }
+	 
+	 
+	 @Cacheable(value={RedisKeyContants.CompanyNameMap},keyGenerator=RedisKeyContants.KEYGENERATOR)
+	 public Map<String,String> getCompanyNameById(){
+		System.err.println("查询公司名称信息！");
+		List<CompanyEntity> data = genericDao.queryDBEntityList(new CompanyEntity());
+		Map<String,String> cnMap = null;
+		if(data!=null&&data.size()>0){
+			cnMap = new HashMap<String, String>();
+			for(CompanyEntity com:data){
+				cnMap.put(com.getId().toString(), com.getSubcompanyname());
+			}	
+		}
+		return cnMap;
 	 }
  
 }

@@ -11,7 +11,9 @@ import com.kiiik.pub.contant.KiiikContants;
  */
 public abstract class AbstractRequestParamAnalysis  implements RequestParamAnalysis{
 	public  String putParams(HttpServletRequest request){return KiiikContants.BLANK;}
+	
 	public  String deleteParams(HttpServletRequest request){ return KiiikContants.BLANK;}
+	
 	public  String parseParams(HttpServletRequest request){
 		String methodUpper = request.getMethod().toUpperCase();
 		if("GET".equals(methodUpper)){
@@ -19,9 +21,9 @@ public abstract class AbstractRequestParamAnalysis  implements RequestParamAnaly
 		}else if("POST".equals(methodUpper)){
 			return postParams(request);
 		}else if("PUT".equals(methodUpper)){
-			return putParams(request);
+			return postParams(request);
 		}else if("DELETE".equals(methodUpper)){
-			return deleteParams(request);
+			return getParams(request);
 		}
 		return KiiikContants.BLANK;
 		

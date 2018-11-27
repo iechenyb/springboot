@@ -1,5 +1,6 @@
 package com.kiiik.web.system.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.service.BaseService;
+import com.kiiik.web.company.service.CompanyService;
+import com.kiiik.web.department.service.DepartmentService;
+import com.kiiik.web.employee.entity.EmployeeEntity;
 import com.kiiik.web.system.mapper.OrganizationMapper;
 import com.kiiik.web.system.utils.OrganizationTreeUtils;
 import com.kiiik.web.system.utils.TreeNode;
@@ -17,7 +30,7 @@ import com.kiiik.web.system.utils.TreeNode;
  *创建时间: 2018年11月7日
  */
 @Service
-public class OrganizationServiceImpl {
+public class OrganizationServiceImpl extends BaseService {
 	
 	@Autowired
 	OrganizationMapper orgMapper;
@@ -44,4 +57,39 @@ public class OrganizationServiceImpl {
 		OrganizationTreeUtils.madeTree(companys, rootComp);//部门组装好
 		return rootComp;	
 	}
+	
+	@Autowired
+	CompanyService companyService;
+	
+	@Autowired
+	DepartmentService departmentService;
+	
+	public ResultBean<JSONArray> listEmp(EmployeeEntity emp){
+		emp.setPassword(null);//密码查询禁用e.
+		List<EmployeeEntity> es =  genericDao.queryDBEntityList(emp);
+		System.out.println(es);
+		if(es!=null&&es.size()>0){
+			JSONArray arr = (JSONArray) JSON.toJSON(es);
+			int total = arr.size();
+			for(int i=0;i<total;i++){
+				JSONObject em = (JSONObject) arr.get(i);
+				if(companyService.getCompanyNameById().get(em.getString("subcompanyid1"))!=null){
+					em.put("companyName", companyService.getCompanyNameById().get(em.getString("subcompanyid1")));
+				}
+				if(departmentService.getDepartmentNameById().get(em.getString("departmentid"))!=null){
+					em.put("departmentName", departmentService.getDepartmentNameById().get(em.getString("departmentid")));
+				}
+			}
+			return new ResultBean<JSONArray>(arr).success();
+		}else{
+			return new ResultBean<JSONArray>(new JSONArray()).success();
+		}
+	}
+	class TransferJsonSerializer extends JsonSerializer<Object> {  
+	    @Override  
+	    public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider)  
+	            throws IOException, JsonProcessingException {  
+	        jgen.writeString("");
+	    }  
+	} 
 }

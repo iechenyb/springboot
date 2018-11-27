@@ -17,13 +17,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
-import org.springframework.core.env.Environment;
 import org.springframework.ui.ModelMap;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.kiiik.pub.contant.KiiikContants;
+import com.kiiik.web.property.KiiikProperties;
 
 import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -50,7 +50,7 @@ ignoreResourceNotFound = true, encoding = "UTF-8") })
 @EnableSwagger2
 public class Swagger2UIConfig {
 	@Autowired
-	Environment env;
+	KiiikProperties kiiik;
     
     /**
      * 获取API标题
@@ -95,11 +95,12 @@ public class Swagger2UIConfig {
    public  Map<String,String> ignoreController = null;
    public  synchronized void  initIngoreControllers() {
     	ignoreController=new HashMap<>();
-    	if(!KiiikContants.DEV.equals(env.getProperty("spring.profiles.active"))){
+    	if(!KiiikContants.DEV.equals(kiiik.environment)){
 	    	ignoreController.put("GenericController",KiiikContants.BLANK);
 	    	ignoreController.put("JSRController", KiiikContants.BLANK);
 	    	ignoreController.put("ApiController", KiiikContants.BLANK);
-	    	ignoreController.put("RSAController", KiiikContants.BLANK);
+	    	ignoreController.put("CacheController", KiiikContants.BLANK);
+	    	//ignoreController.put("RSAController", KiiikContants.BLANK);
 	    	ignoreController.put("VerityCodeController", KiiikContants.BLANK);
     	}
     	
@@ -117,7 +118,7 @@ public class Swagger2UIConfig {
             @Override
             public Boolean apply(Class<?> input) {
             	//如果生产环境，直接返回false,不生成接口信息
-            	if(KiiikContants.PROD.equals(env.getProperty("spring.profiles.active"))){
+            	if(KiiikContants.PROD.equals(kiiik.environment)){
             		return false;
             	}
                 for (String strPackage : basePackage.split(",")) {

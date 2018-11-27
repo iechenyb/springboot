@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -18,6 +19,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.kiiik.pub.bean.SessionUser;
+import com.kiiik.pub.exception.UserSessionTimeoutException;
 import com.kiiik.web.system.vo.SystemUser;
 /**
  *作者 : iechenyb<br>
@@ -42,16 +44,31 @@ public class BaseController {
 	protected Authentication getCurrentAuthentication() {
 		return SecurityContextHolder.getContext().getAuthentication();
 	}
+	
+	protected HttpServletRequest getHttpServletRequest() {
+		//获取到当前线程绑定的请求对象
+		return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+	}
+	
+	protected HttpSession getHttpSession() {
+		//获取到当前线程绑定的请求对象
+		return getHttpServletRequest().getSession();
+	}
 	/**
 	 * 
 	 *作者 : iechenyb<br>
 	 *方法描述: 只获取用户名 使用本方法<br>
 	 *创建时间: 2017年7月15日hj12
 	 *@return
+	 * @throws Exception 
 	 */
-	protected SystemUser getSystemUser() {
-		UsernamePasswordAuthenticationToken principal = (UsernamePasswordAuthenticationToken) getCurrentRequest().getUserPrincipal();
-		return (SystemUser) principal.getPrincipal();
+	protected SystemUser getSystemUser () throws UserSessionTimeoutException {
+		try{
+			UsernamePasswordAuthenticationToken principal = (UsernamePasswordAuthenticationToken) getCurrentRequest().getUserPrincipal();
+			return (SystemUser) principal.getPrincipal();
+		}catch(Exception e){
+			throw new UserSessionTimeoutException("尚未登录，请先登录！");
+		}
 	}
 	
 	/**
@@ -60,8 +77,9 @@ public class BaseController {
 	 *方法描述: 获取用户名以外的信息比如角色，则需要用此方法<br>
 	 *创建时间: 2017年7月15日hj12
 	 *@return
+	 * @throws Exception 
 	 */
-	protected SessionUser getSessionUser() {
+	protected SessionUser getSessionUser() throws Exception {
 		SessionUser user = new SessionUser();
 		SystemUser sysUser = getSystemUser();
 		user.setUserId(sysUser.getId());

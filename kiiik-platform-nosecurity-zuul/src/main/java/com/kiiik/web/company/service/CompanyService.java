@@ -1,6 +1,7 @@
 package com.kiiik.web.company.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.kiiik.pub.bean.ResultBean;
 import com.kiiik.web.company.entity.CompanyEntity;
@@ -42,5 +43,7 @@ public interface CompanyService  {
  *@return
  */
  ResultBean<String> delCompanyEntity(List<Integer> ids);
+ 
+ Map<String,String> getCompanyNameById();
 }
 

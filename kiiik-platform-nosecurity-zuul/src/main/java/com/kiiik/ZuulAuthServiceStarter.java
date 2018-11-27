@@ -7,13 +7,10 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
-import org.springframework.session.data.redis.RedisFlushMode;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.kiiik.pub.filter.AccessFilter;
 import com.kiiik.pub.mybatis.service.GenericService;
@@ -23,9 +20,7 @@ import com.kiiik.utils.req.RequestParamAnalysis;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableZuulProxy
-@EnableRedisHttpSession(redisFlushMode = RedisFlushMode.IMMEDIATE)
 @Controller
-@EnableWebMvc
 //@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 public class ZuulAuthServiceStarter {
 	
@@ -56,12 +51,7 @@ public class ZuulAuthServiceStarter {
 	
 	@RequestMapping(value = "/")
     public String index() {
-       return "redirect:swagger-ui.html";
+       return "redirect:index.html";//swagger-ui
 	}
-	/*@GetMapping("/")
-	public ModelAndView toLogin() {
-		ModelAndView view = new ModelAndView();
-		view.setViewName("/index");
-		return view;
-	}*/
+	
 }

@@ -24,12 +24,6 @@ import org.thymeleaf.templateresolver.TemplateResolver;
 public class ThymeleafViewCoinfiguration {
 	Log log = LogFactory.getLog(ThymeleafViewCoinfiguration.class);
 
-	/**
-	 * 设置视图解析器
-	 * 
-	 * @param templateEngine
-	 * @return
-	 */
 	@Bean
 	public ViewResolver viewResolver(SpringTemplateEngine templateEngine) {
 		ThymeleafViewResolver resolver = new ThymeleafViewResolver();
@@ -37,12 +31,7 @@ public class ThymeleafViewCoinfiguration {
 		return resolver;
 	}
 
-	/**
-	 * 设置模板引擎
-	 * 
-	 * @param templateResolver
-	 * @return
-	 */
+	
 	@Bean
 	public SpringTemplateEngine templateEngine(TemplateResolver templateResolver) {
 		SpringTemplateEngine engine = new SpringTemplateEngine();
@@ -53,11 +42,7 @@ public class ThymeleafViewCoinfiguration {
 		return engine;
 	}
 
-	/**
-	 * 模板解析引擎
-	 * 
-	 * @return
-	 */
+
 	@Bean
 	public TemplateResolver templateResolver() {
 		TemplateResolver resolver = new SpringResourceTemplateResolver();

@@ -71,7 +71,7 @@ public class MD5Util {
 	 * @throws Exception
 	 */
 	public static void main(String args[]) throws Exception {
-		String str = new String("34091174");
+		String str = new String("111111");
 		System.out.println("原始：" + str);
 		System.out.println("MD5后：" + md5Encode(str));
 		System.out.println("MD5后：" + md5Encode(str));
