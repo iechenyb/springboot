@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.utils.ResponseUtils;
 import com.kiiik.web.property.KiiikProperties;
@@ -78,7 +78,7 @@ public class KiiikCustomizationFilter implements Filter {
 		if(checkSession){
 			Object auth = ((HttpServletRequest)request).getSession().getAttribute(KiiikContants.SPRING_CONTEXT_KEY);
 	    	if(auth==null&&!isAccess( ((HttpServletRequest)request).getRequestURI())){
-		        ResultBean<String> result = new ResultBean<String>();
+		        R<String> result = new R<String>();
 		        result.sessionTimeOut("会话过期，请重新登陆!");
 		        ResponseUtils.writeResult((HttpServletResponse)response, result);
 		        return ;

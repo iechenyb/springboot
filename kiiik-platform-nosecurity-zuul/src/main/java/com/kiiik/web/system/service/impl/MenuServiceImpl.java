@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.Contants_Test;
 import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.pub.contant.RedisKeyContants;
@@ -70,6 +70,10 @@ public class MenuServiceImpl extends BaseService {
 		rm.setRoleId(roleId);
 		return this.genericDao.queryDBEntityList(rm);
 	}
+	//缺省的权限信息
+	private static String[] defaultsPrivilegs = new String[]{
+				"/user/updatePassword:"+KiiikContants.DEFAULT_PASSWORD_MODIFY_ROLE
+				};
 	/**
 	 * 当角色菜单信息发生变化时，通知缓存更新
 	 * */
@@ -78,9 +82,19 @@ public class MenuServiceImpl extends BaseService {
 			System.err.println("查询系统的角色菜单关系！");
 			List<RoleMenuVo> auths = menuMapper.systemRoleMenus();
 			auths.addAll(Contants_Test.testRoleMenu());
+			RoleMenuVo vo = new RoleMenuVo();
+			try{
+				for(int i=0;i<defaultsPrivilegs.length;i++){//默认的密码修改权限
+					String url = defaultsPrivilegs[i].split(":")[0];
+					String role = defaultsPrivilegs[i].split(":")[1];
+					vo.setRoleName(role);
+					vo.setUrl(url);
+				}
+			}catch(Exception e){
+				e.printStackTrace();//添加默认权限错误
+			}
 			return auths;
 	}
-	
 	
 	public int saveRMBatch(Integer[] menuIds,Integer roleId){
 		RoleMenu rm = new RoleMenu();
@@ -95,18 +109,25 @@ public class MenuServiceImpl extends BaseService {
 			entitys.add(rm_tmp);
 			rm_tmp = null;
 		}
-		return this.genericDao.insertDBEntityBatch(entitys);
+		if(entitys.size()>0){
+			return this.genericDao.insertDBEntityBatch(entitys);
+		}else{
+			return 0;
+		}
 	}
 	
-	public ResultBean<String> saveMenu(Menu menu){
+	public R<String> saveMenu(Menu menu){
 		Menu menu_tmp = null;
+		if(menu.getParentId()==null){
+			menu.setParentId(KiiikContants.ROOTID);
+		}
 		if(KiiikContants.ROOTID!=menu.getParentId()){//不是根节点id值
 			//从数据库查询id值对应父菜单记录
 			menu_tmp = new Menu();
 			menu_tmp.setId(menu.getParentId());
 			menu_tmp = genericDao.queryDBEntitySingle(menu_tmp);
 			if(menu_tmp==null){
-				return new ResultBean<String>().fail("父菜单信息不存在！");
+				return new R<String>().fail("父菜单信息不存在！");
 			}
 		}
 		menu_tmp = genericDao.queryDBEntitySingleComplex(Menu.class, 
@@ -116,33 +137,33 @@ public class MenuServiceImpl extends BaseService {
 				.eq(menu.getUrl()));
 		if(menu_tmp==null){
 			genericDao.insertDBEntity(menu);
-			return new ResultBean<String>().success("菜单插入成功!");
+			return new R<String>().success("菜单插入成功!");
 		}else{
-			return new ResultBean<String>().fail("菜单地址已经存在！");
+			return new R<String>().fail("菜单地址已经存在！");
 		}
 	}
 	
-	public ResultBean<String> updMenu(Menu menu){
+	public R<String> updMenu(Menu menu){
 		Menu menu_tmp = null;
 		menu_tmp = genericDao.queryDBEntitySingleComplex(Menu.class, 
 				new ComplexCondition().col("id").notIn(menu.getId()).and().col("url").eq(menu.getUrl()));
 		if(menu_tmp!=null){
-			return new ResultBean<String>().fail("角色名已经存在！");
+			return new R<String>().fail("角色名已经存在！");
 		}else{
 			int count = genericDao.updateDBEntityByKey(menu);
-			return new ResultBean<String>().success("更新成功！更新记录数"+count);
+			return new R<String>().success("更新成功！更新记录数"+count);
 		}
 	}
 
 
-	public ResultBean<String> delMenu(List<Integer> ids) {
+	public R<String> delMenu(List<Integer> ids) {
 		// 查询子菜单或者目录
 		if (!CollectionUtils.isEmpty(genericDao.queryDBEntityListComplex(Menu.class,
 				new ComplexCondition()
 				.and()
 				.col("parentId")
 				.inList(ids)))) {
-			return new ResultBean<String>().fail("存在子菜单信息，不能删除！");
+			return new R<String>().fail("存在子菜单信息，不能删除！");
 		}
 
 		if (!CollectionUtils.isEmpty(genericDao.queryDBEntityListComplex(RoleMenu.class,
@@ -150,13 +171,13 @@ public class MenuServiceImpl extends BaseService {
 				.and()
 				.col("menuId")
 				.inList(ids)))) {
-			return new ResultBean<String>().fail("菜单正在被角色使用，不能删除！");
+			return new R<String>().fail("菜单正在被角色使用，不能删除！");
 		}
 		int count = genericDao.deleteDBEntityByKeyBatchs(new Menu(), ids);
 		if (count > 0) {
-			return new ResultBean<String>().success("删除记录成功！");
+			return new R<String>().success("删除记录成功！");
 		} else {
-			return new ResultBean<String>().fail("删除记录失败！");
+			return new R<String>().fail("删除记录失败！");
 		}
 	}
 }

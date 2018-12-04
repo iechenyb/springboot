@@ -15,7 +15,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.service.BaseService;
 import com.kiiik.web.company.service.CompanyService;
 import com.kiiik.web.department.service.DepartmentService;
@@ -64,7 +64,10 @@ public class OrganizationServiceImpl extends BaseService {
 	@Autowired
 	DepartmentService departmentService;
 	
-	public ResultBean<JSONArray> listEmp(EmployeeEntity emp){
+	@Autowired
+	UserServiceImpl userService;
+	
+	public R<JSONArray> listEmp(EmployeeEntity emp){
 		emp.setPassword(null);//密码查询禁用e.
 		List<EmployeeEntity> es =  genericDao.queryDBEntityList(emp);
 		System.out.println(es);
@@ -80,9 +83,9 @@ public class OrganizationServiceImpl extends BaseService {
 					em.put("departmentName", departmentService.getDepartmentNameById().get(em.getString("departmentid")));
 				}
 			}
-			return new ResultBean<JSONArray>(arr).success();
+			return new R<JSONArray>(arr).success();
 		}else{
-			return new ResultBean<JSONArray>(new JSONArray()).success();
+			return new R<JSONArray>(new JSONArray()).success();
 		}
 	}
 	class TransferJsonSerializer extends JsonSerializer<Object> {  

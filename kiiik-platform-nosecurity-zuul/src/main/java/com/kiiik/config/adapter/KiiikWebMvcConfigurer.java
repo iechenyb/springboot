@@ -21,7 +21,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.utils.ResponseUtils;
 import com.kiiik.web.example.anno.RequestDateParamMethodArgumentResolver;
@@ -48,9 +48,9 @@ public class KiiikWebMvcConfigurer extends WebMvcConfigurerAdapter {
             		HttpServletResponse response,
             		Object handler, 
             		Exception e) {
-            	ResultBean<String> result = new ResultBean<String>();
+            	R<String> result = new R<String>();
             	result.data(KiiikContants.BLANK);
-            	if(e.getMessage().contains("/favicon.ico")){return new ModelAndView();}
+            	if(e.getMessage()!=null&&e.getMessage().contains("/favicon.ico")){return new ModelAndView();}
             	logger.error("异常信息:"+e.toString());
                 if (handler instanceof HandlerMethod) {
                 	ResponseUtils.HandlerMethodExceptionDispatcher(request, response, handler, e, kiiik);

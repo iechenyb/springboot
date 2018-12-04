@@ -22,7 +22,8 @@ public class Contants_Test {
 	public static String TEST_ADD_RoleNAME="ROLE_ADD";
 	public static String TEST_UPD_RoleNAME="ROLE_UPDATE";
 	public static String TEST_DEL_RoleNAME="ROLE_DELETE"; 
-	public static String TEST_QUERY_RoleNAME="ROLE_QUERY"; 
+	public static String TEST_QUERY_RoleNAME="ROLE_QUERY";
+	public static String TEST_OTHER_RoleNAME="ROLE_OTHER";
 	
 	
 	/**
@@ -61,17 +62,17 @@ public class Contants_Test {
 	public static SimpleGrantedAuthority testRoles(String empno){
 		//测试使用
 		if(Contants_Test.TEST_ADD_USERNAME.equals(empno)){
-			return new SimpleGrantedAuthority(Contants_Test.TEST_ADD_RoleNAME);
-		}else if(Contants_Test.TEST_DEL_USERNAME.equals(empno)){
-			return new SimpleGrantedAuthority(Contants_Test.TEST_DEL_RoleNAME);
-		} else if(Contants_Test.TEST_UPD_USERNAME.equals(empno)){
-			return new SimpleGrantedAuthority(Contants_Test.TEST_UPD_RoleNAME);
-		}else if(Contants_Test.TEST_QUERY_USERNAME.equals(empno)){
-			return new SimpleGrantedAuthority(Contants_Test.TEST_QUERY_RoleNAME);
-		}else if(Contants_Test.TEST_OA_USERNAME.equals(empno)){
-			return new SimpleGrantedAuthority(Contants_Test.TEST_ADD_RoleNAME);
+			return new SimpleGrantedAuthority(TEST_ADD_RoleNAME);
+		}else if(TEST_DEL_USERNAME.equals(empno)){
+			return new SimpleGrantedAuthority(TEST_DEL_RoleNAME);
+		} else if(TEST_UPD_USERNAME.equals(empno)){
+			return new SimpleGrantedAuthority(TEST_UPD_RoleNAME);
+		}else if(TEST_QUERY_USERNAME.equals(empno)){
+			return new SimpleGrantedAuthority(TEST_QUERY_RoleNAME);
+		}else if(TEST_OA_USERNAME.equals(empno)){
+			return new SimpleGrantedAuthority(TEST_ADD_RoleNAME);
 		}else {
-			return new SimpleGrantedAuthority("");
+			return new SimpleGrantedAuthority(TEST_OTHER_RoleNAME);
 		}
 	}
 }

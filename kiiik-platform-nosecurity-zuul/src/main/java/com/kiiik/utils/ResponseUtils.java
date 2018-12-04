@@ -9,12 +9,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.method.HandlerMethod;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.pub.exception.KiiikException;
 import com.kiiik.pub.exception.UserSessionTimeoutException;
@@ -28,7 +29,7 @@ import net.sf.json.JSONObject;
  */
 public class ResponseUtils {
 	static Log log = LogFactory.getLog(ResponseUtils.class);
-	public static void writeResult(HttpServletResponse response, ResultBean<String> result) {
+	public static void writeResult(HttpServletResponse response, R<String> result) {
         response.setCharacterEncoding(KiiikContants.UTF8);
         response.setHeader("Content-type", "application/json;charset=UTF-8");
         response.setStatus(200);
@@ -57,7 +58,7 @@ public class ResponseUtils {
 	 *@param kiiik
 	 */
 	public static void HandlerMethodExceptionDispatcher(HttpServletRequest request, HttpServletResponse response,Object handler,Exception e,KiiikProperties kiiik){
-		ResultBean<String> result = new ResultBean<String>();
+		R<String> result = new R<String>();
 		result.data(KiiikContants.BLANK);
 		if (e instanceof AccessDeniedException) {
 			result.refuse("无权限访问！");
@@ -65,7 +66,10 @@ public class ResponseUtils {
 		} else if (e instanceof UserSessionTimeoutException) {
 			result.sessionTimeOut("尚未登录或者会话过期！");
 			writeResult(response, result);
-		} else if (e instanceof BadCredentialsException) {// InternalAuthenticationServiceException提示重新修改密码,内部授权失败
+		} else if(e instanceof InternalAuthenticationServiceException){
+			result.fail(e.getMessage());// 
+			writeResult(response, result);
+		} else if (e instanceof BadCredentialsException) {
 			result.fail("用户名或者密码错误！");// "密码为默认值，请修改!"
 			writeResult(response, result);
 		} else if (e instanceof KiiikException) {// 业务失败的异常，如“账号或密码错误”

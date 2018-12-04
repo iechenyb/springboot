@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.utils.VerifyCodeUtils;
 
 import io.swagger.annotations.Api;
@@ -66,21 +66,21 @@ public class VerityCodeController {
 	@GetMapping(value="validImage")
 	@ResponseBody
 	@ApiOperation("验证码校验")
-    public ResultBean<String> validImage(String code,HttpSession session){
+    public R<String> validImage(String code,HttpSession session){
     	Object verCode = session.getAttribute("verCode");
     	if (null == verCode) {
-    		return new ResultBean<String>().fail("验证码已失效，请重新输入");
+    		return new R<String>().fail("验证码已失效，请重新输入");
     	}
     	String verCodeStr = verCode.toString();
     	if(verCodeStr == null || code == null || code.isEmpty() || !verCodeStr.equalsIgnoreCase(code)){
-    		return new ResultBean<String>().fail("验证码错误");
+    		return new R<String>().fail("验证码错误");
     	}/* else if((now-past)/1000/60>5){
     		request.setAttribute("errmsg", "验证码已过期，重新获取");
     		return "验证码已过期，重新获取";
     	} */else {
     		//验证成功，删除存储的验证码
     		session.removeAttribute("verCode");
-    		return new ResultBean<String>().success("验证码正确！");
+    		return new R<String>().success("验证码正确！");
     	}
     }
 }

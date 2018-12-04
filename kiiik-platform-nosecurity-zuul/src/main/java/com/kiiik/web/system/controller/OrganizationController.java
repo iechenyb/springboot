@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.employee.entity.EmployeeEntity;
 import com.kiiik.web.system.service.impl.OrganizationServiceImpl;
@@ -34,8 +34,8 @@ public class OrganizationController {
 	
 	@ApiOperation("组织结构树")
 	@GetMapping("tree")
-	public ResultBean<TreeNode> orgTree(){
-		return new ResultBean<TreeNode>(orgService.getOranizationTree()).success();
+	public R<TreeNode> orgTree(){
+		return new R<TreeNode>(orgService.getOranizationTree()).success();
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public class OrganizationController {
 	 */
 	@ApiOperation("查询员工信息")
 	@GetMapping("findEmp")
-	public ResultBean<JSONArray> listEmp(EmployeeEntity emp){
+	public R<JSONArray> listEmp(EmployeeEntity emp){
 		if(!StringUtils.isEmpty(emp.getPassword())){
 			emp.setPassword(null);//密码查询禁用
 		}

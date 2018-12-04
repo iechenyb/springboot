@@ -20,7 +20,7 @@ import com.kiiik.pub.ann.KiiikCachesParam;
 import com.kiiik.pub.ann.KiiikCachesParams;
 import com.kiiik.pub.bean.KiiikPage;
 import com.kiiik.pub.bean.PageData;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.RedisKeyContants;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.employee.entity.EmployeeEntity;
@@ -64,12 +64,12 @@ public class EmployeeController {
      */
 	@GetMapping("list")
 	@ApiOperation("分页查询")
-	public ResultBean<PageData<EmployeeEntity>> listUsersPage(EmployeeEntity entity,KiiikPage page) {
+	public R<PageData<EmployeeEntity>> listUsersPage(EmployeeEntity entity,KiiikPage page) {
 		if(page.needAll()){//当分页参数不传时传回所有记录
-		    return new ResultBean<PageData<EmployeeEntity>>(new PageData<EmployeeEntity>(genericService.queryDBEntityListLike(entity))).success();
+		    return new R<PageData<EmployeeEntity>>(new PageData<EmployeeEntity>(genericService.queryDBEntityListLike(entity))).success();
 	   }else{
 			Page<EmployeeEntity> datas = genericService.queryDBEntityListLike(entity, page);
-			return new ResultBean<PageData<EmployeeEntity>>(new PageData<EmployeeEntity>(datas,page)).success();
+			return new R<PageData<EmployeeEntity>>(new PageData<EmployeeEntity>(datas,page)).success();
 	   }
 	}
     
@@ -88,7 +88,7 @@ public class EmployeeController {
 		@KiiikCachesParam(cacheName=RedisKeyContants.EMPNOUSERNAMEMAP,clazz=UserServiceImpl.class)
 	  }
 	)
-	public ResultBean<String> addEmployeeEntity(@RequestBody EmployeeEntity entity){
+	public R<String> addEmployeeEntity(@RequestBody EmployeeEntity entity){
 		return employeeService.addEmployeeEntity(entity);
 		
 	}
@@ -108,7 +108,7 @@ public class EmployeeController {
 		@KiiikCachesParam(cacheName=RedisKeyContants.EMPNOUSERNAMEMAP,clazz=UserServiceImpl.class)
 	  }
 	)
-	public ResultBean<String> updEmployeeEntity(@RequestBody EmployeeEntity entity){
+	public R<String> updEmployeeEntity(@RequestBody EmployeeEntity entity){
 		return employeeService.updEmployeeEntity(entity);
 	}
 	
@@ -127,7 +127,7 @@ public class EmployeeController {
 		@KiiikCachesParam(cacheName=RedisKeyContants.EMPNOUSERNAMEMAP,clazz=UserServiceImpl.class)
 	  }
 	)
-	public ResultBean<String> delEmployeeEntity(@RequestParam("ids") List<Integer> ids){
+	public R<String> delEmployeeEntity(@RequestParam("ids") List<Integer> ids){
 		return employeeService.delEmployeeEntity(ids);
 	}
 }

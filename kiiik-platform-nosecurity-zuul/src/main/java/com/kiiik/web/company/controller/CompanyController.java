@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.Page;
 import com.kiiik.pub.bean.KiiikPage;
 import com.kiiik.pub.bean.PageData;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.company.entity.CompanyEntity;
 import com.kiiik.web.company.service.CompanyService;
@@ -61,12 +61,12 @@ public class CompanyController {
      */
     @ApiOperation("分页查询")
     @GetMapping(value="/list")
-    public ResultBean<PageData<CompanyEntity>> list(CompanyEntity entity,KiiikPage page){
+    public R<PageData<CompanyEntity>> list(CompanyEntity entity,KiiikPage page){
     	if(page.needAll()){//当分页参数不传时传回所有记录
-		    return new ResultBean<PageData<CompanyEntity>>(new PageData<CompanyEntity>(genericService.queryDBEntityListLike(entity))).success();
+		    return new R<PageData<CompanyEntity>>(new PageData<CompanyEntity>(genericService.queryDBEntityListLike(entity))).success();
 	   }else{
 			Page<CompanyEntity> datas = genericService.queryDBEntityListLike(entity, page);
-			return new ResultBean<PageData<CompanyEntity>>(new PageData<CompanyEntity>(datas,page)).success();
+			return new R<PageData<CompanyEntity>>(new PageData<CompanyEntity>(datas,page)).success();
 	   }
     }
     
@@ -81,7 +81,7 @@ public class CompanyController {
      */
 	@PostMapping("add")
 	@ApiOperation("新增信息")
-	public ResultBean<String> addCompanyEntity(@RequestBody CompanyEntity entity){
+	public R<String> addCompanyEntity(@RequestBody CompanyEntity entity){
 		return companyService.addCompanyEntity(entity);
 		
 	}
@@ -96,7 +96,7 @@ public class CompanyController {
      */
 	@PutMapping("update")
 	@ApiOperation("更新信息")
-	public ResultBean<String> updCompanyEntity(@RequestBody CompanyEntity entity){
+	public R<String> updCompanyEntity(@RequestBody CompanyEntity entity){
 		return companyService.updCompanyEntity(entity);
 	}
 	
@@ -110,7 +110,7 @@ public class CompanyController {
      */
 	@DeleteMapping("deleteByIds")
 	@ApiOperation("根据主键删除信息")
-	public ResultBean<String> delCompanyEntity(@RequestParam("ids") List<Integer> ids){
+	public R<String> delCompanyEntity(@RequestParam("ids") List<Integer> ids){
 		return companyService.delCompanyEntity(ids);
 	}
 }

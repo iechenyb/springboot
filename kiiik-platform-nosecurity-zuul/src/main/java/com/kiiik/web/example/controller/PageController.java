@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 import com.github.pagehelper.Page;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.example.bean.TestBean;
 
@@ -29,21 +29,21 @@ public class PageController {
 	// 分页查询  每次重新查询时都需要设置成第一页   ，更具当前条件查询进行翻页
 	@ApiOperation("根据分页查询(单表表属性),排序参数 为password asc,name desc")
 	@GetMapping("queryByPage1")
-	public ResultBean<Page<TestBean>> queryUserByPage1(int page, int pageSize,String[] orders) {
+	public R<Page<TestBean>> queryUserByPage1(int page, int pageSize,String[] orders) {
 		TestBean po = new TestBean();
 		//po.setAccount(account);//全表查询
 		Page<TestBean> page1 = genericService.queryDBEntityList(po, page, pageSize,orders);// "password asc", "name desc"
 		page1.getTotal();
-		return new ResultBean<Page<TestBean>>(page1).success();
+		return new R<Page<TestBean>>(page1).success();
 	}
 	
 	
 	@ApiOperation("根据分页查询(单表自定义属性),排序参数 为password asc,name desc")
 	@GetMapping("queryByPage2")
-	public ResultBean<Page<TestBean>> queryUserByPage2(int page, int pageSize,String[] orders) {
+	public R<Page<TestBean>> queryUserByPage2(int page, int pageSize,String[] orders) {
 		TestBean po = new TestBean();
 		//po.setAccount(account);//全表查询
 		Page<TestBean> page1 = genericService.queryDBEntityList(po, page, pageSize,orders);// "password asc", "name desc"
-		return new ResultBean<Page<TestBean>>(page1).success();
+		return new R<Page<TestBean>>(page1).success();
 	}
 }

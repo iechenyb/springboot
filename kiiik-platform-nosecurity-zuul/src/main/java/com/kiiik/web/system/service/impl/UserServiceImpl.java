@@ -16,7 +16,8 @@ import com.cyb.computer.ComputerUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.kiiik.pub.bean.KiiikPage;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
+import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.pub.contant.RedisKeyContants;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.service.BaseService;
@@ -109,7 +110,7 @@ public class UserServiceImpl extends BaseService {
 			// 1 查询当前用户
 			User newUserInfo = new User();
 			newUserInfo.setId(user.getId());
-			User oldUserInfor = this.genericDao.queryDBEntitySingle(newUserInfo);
+			User oldUserInfor = this.genericDao.queryDBEntitySingle(newUserInfo);//查询的时候时间是时间戳
 			if (oldUserInfor != null) {
 				newUserInfo.setLastLoginIp(oldUserInfor.getLoginIp());
 				newUserInfo.setLoginIp(ComputerUtil.getRealIP());
@@ -117,7 +118,7 @@ public class UserServiceImpl extends BaseService {
 					oldUserInfor.setLoginSum(0);//第一次登录 进行初始化
 				}
 				newUserInfo.setLoginSum( oldUserInfor.getLoginSum()+ 1);
-				newUserInfo.setLastLoginTime(oldUserInfor.getLoginTime());
+				newUserInfo.setLastLoginTime(ConcurrentDateUtil.timeStamp2Date(oldUserInfor.getLoginTime()));
 				newUserInfo.setLoginTime(ConcurrentDateUtil.date2long14());
 				this.genericDao.updateDBEntityByKey(newUserInfo);
 			}
@@ -138,6 +139,27 @@ public class UserServiceImpl extends BaseService {
 				map.put(e.getLoginid(), e.getLastname());
 			}
 			return map;
+		}
+	}
+	
+	@Cacheable(value={RedisKeyContants.USERINFO},keyGenerator=RedisKeyContants.KEYGENERATOR)
+	public Map<String,String> getUserInforMap() {
+		Map<String,String> data = null;
+		List<User> users = this.genericDao.queryDBEntityList(new User());
+		if(!CollectionUtils.isEmpty(users)){
+			data = new HashMap<>();
+			for(User u:users){
+				u.setPassword(KiiikContants.BLANK);
+				if(u.getLastLoginTime()!=null){
+					data.put(u.getEmpNo(), u.getLastLoginTime().toString());
+				}else{
+					data.put(u.getEmpNo(), KiiikContants.ZERO.toString());
+				}
+				
+			}
+			return data;
+		}else{
+			return null;
 		}
 	}
 	
@@ -184,7 +206,7 @@ public class UserServiceImpl extends BaseService {
 	 *@param ids
 	 *@return
 	 */
-	public  ResultBean<String> deleteUsers(List<Integer> ids){
+	public  R<String> deleteUsers(List<Integer> ids){
 		List<UserRole> urs = genericDao.queryDBEntityListComplex(
 				UserRole.class,
 				new ComplexCondition().col("userId").inList(ids));
@@ -195,9 +217,9 @@ public class UserServiceImpl extends BaseService {
 		genericDao.deleteDBEntityByKeyBatchs(new UserRole(),urIds);//先删除用户角色信息
 		int count = genericDao.deleteDBEntityByKeyBatchs(new User(),ids);
 		if(count==0){
-			return new ResultBean<String>().fail("删除失败！");
+			return new R<String>().fail("删除失败！");
 		}else{
-			return new ResultBean<String>().success("删除成功！");
+			return new R<String>().success("删除成功！");
 		}
 	}
 	

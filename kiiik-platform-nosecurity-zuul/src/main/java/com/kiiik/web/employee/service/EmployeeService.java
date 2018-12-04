@@ -4,7 +4,7 @@ import com.kiiik.web.employee.entity.EmployeeEntity;
 
 import java.util.List;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 
 /**
  * 服务接口定义
@@ -22,7 +22,7 @@ public interface EmployeeService  {
  *@param 
  *@return
  */
- ResultBean<String> addEmployeeEntity(EmployeeEntity entity);
+ R<String> addEmployeeEntity(EmployeeEntity entity);
  
  /**
  * 
@@ -32,7 +32,7 @@ public interface EmployeeService  {
  *@param 
  *@return
  */
- ResultBean<String> updEmployeeEntity(EmployeeEntity entity);
+ R<String> updEmployeeEntity(EmployeeEntity entity);
  
  /**
  * 
@@ -42,6 +42,6 @@ public interface EmployeeService  {
  *@param 
  *@return
  */
- ResultBean<String> delEmployeeEntity(List<Integer> ids);
+ R<String> delEmployeeEntity(List<Integer> ids);
 }
 

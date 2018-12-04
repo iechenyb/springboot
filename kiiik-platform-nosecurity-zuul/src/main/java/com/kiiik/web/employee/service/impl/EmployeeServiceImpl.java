@@ -5,8 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.dao.GenericDao;
 import com.kiiik.web.company.entity.CompanyEntity;
@@ -39,30 +40,30 @@ public class EmployeeServiceImpl  implements EmployeeService {
 	 *@param 
 	 *@return
 	 */
-	 public ResultBean<String> addEmployeeEntity(EmployeeEntity entity){
+	 public R<String> addEmployeeEntity(EmployeeEntity entity){
 	    EmployeeEntity tmp = new EmployeeEntity();
 		tmp.setLoginid(entity.getLoginid());
 		if(!CollectionUtils.isEmpty(genericDao.queryDBEntityList(tmp))){
-			 return new ResultBean<String>().fail("职工登录账号"+entity.getLoginid()+"已经存在!");
+			 return new R<String>().fail("职工登录账号"+entity.getLoginid()+"已经存在!");
 		}
 		//查看员工信息是否存在
 		DepartmentEntity department = new DepartmentEntity();
 		department.setId(entity.getDepartmentid());
 		department = genericDao.queryDBEntitySingle(department);
 		if(department==null){
-			return new ResultBean<String>().fail("员工所在部门不存在!");
+			return new R<String>().fail("员工所在部门不存在!");
 		}
 		CompanyEntity company = new CompanyEntity();
 		company.setId(entity.getSubcompanyid1());
 		company = genericDao.queryDBEntitySingle(company);
 		if(company==null){
-			return new ResultBean<String>().fail("员工所在公司不存在!");
+			return new R<String>().fail("员工所在公司不存在!");
 		}
 	 	int count = genericDao.insertDBEntity(entity);
 		if(count==0){
-			return new ResultBean<String>().fail("新增记录失败!");
+			return new R<String>().fail("新增记录失败!");
 		}else{
-			return new ResultBean<String>().success("新增记录成功!");
+			return new R<String>().success("新增记录成功!");
 		}
 	 }
 	 
@@ -74,7 +75,7 @@ public class EmployeeServiceImpl  implements EmployeeService {
 	 *@param 
 	 *@return
 	 */
-	 public ResultBean<String> updEmployeeEntity(EmployeeEntity entity){
+	 public R<String> updEmployeeEntity(EmployeeEntity entity){
 		EmployeeEntity tmp = new EmployeeEntity();
 		tmp = genericDao.queryDBEntitySingleComplex(EmployeeEntity.class, 
 					new ComplexCondition()
@@ -83,25 +84,29 @@ public class EmployeeServiceImpl  implements EmployeeService {
 					.eq(entity.getLoginid())
 		 			.and().col("id").notIn(entity.getId()));
 		if(tmp!=null){
-			 return  new ResultBean<String>().fail("职工登录账号["+entity.getLoginid()+"]已经存在!");
+			 return  new R<String>().fail("职工登录账号["+entity.getLoginid()+"]已经存在!");
 		} 
-		DepartmentEntity department = new DepartmentEntity();
-		department.setId(entity.getDepartmentid());
-		department = genericDao.queryDBEntitySingle(department);
-		if(department==null){
-			return new ResultBean<String>().fail("员工所在部门不存在!");
+		if(!StringUtils.isEmpty(entity.getDepartmentid())){//更新时可以为空，不更新
+			DepartmentEntity department = new DepartmentEntity();
+			department.setId(entity.getDepartmentid());
+			department = genericDao.queryDBEntitySingle(department);
+			if(department==null){
+				return new R<String>().fail("员工所在部门不存在!");
+			}
 		}
-		CompanyEntity company = new CompanyEntity();
-		company.setId(entity.getSubcompanyid1());
-		company = genericDao.queryDBEntitySingle(company);
-		if(company==null){
-			return new ResultBean<String>().fail("员工所在公司不存在!");
+		if(!StringUtils.isEmpty(entity.getSubcompanyid1())){//更新时可以为空，不更新
+			CompanyEntity company = new CompanyEntity();
+			company.setId(entity.getSubcompanyid1());
+			company = genericDao.queryDBEntitySingle(company);
+			if(company==null){
+				return new R<String>().fail("员工所在公司不存在!");
+			}
 		}
 	 	int count = genericDao.updateDBEntityByKey(entity);
 		if(count==0){
-			return new ResultBean<String>().fail("更新记录失败!");
+			return new R<String>().fail("更新记录失败!");
 		}else{
-			return new ResultBean<String>().success("更新记录成功!");
+			return new R<String>().success("更新记录成功!");
 		}
 	 }
 	 
@@ -113,12 +118,12 @@ public class EmployeeServiceImpl  implements EmployeeService {
 	 *@param 
 	 *@return
 	 */
-	 public ResultBean<String> delEmployeeEntity(List<Integer> ids){
+	 public R<String> delEmployeeEntity(List<Integer> ids){
 		int count = genericDao.deleteDBEntityByKeyBatchs(new EmployeeEntity(),ids);
 		if(count==0){
-			return new ResultBean<String>().fail("删除记录失败!");
+			return new R<String>().fail("删除记录失败!");
 		}else{
-			return new ResultBean<String>().success("删除记录成功!");
+			return new R<String>().success("删除记录成功!");
 		}
 	 }
  

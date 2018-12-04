@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.kiiik.config.SwitchProperties;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.pub.context.TimeContext;
 
@@ -68,7 +68,7 @@ public class StatisticsResponseTimeAdvice implements ResponseBodyAdvice<Object> 
 		if(o.getClass().getSimpleName().contains("ResultBean")){
 			//自定义对象上新增一个参数，也可以，不需要在其他bean上定义一个time字段
 			@SuppressWarnings("unchecked")
-			ResultBean<Object> ret = (ResultBean<Object>) o;
+			R<Object> ret = (R<Object>) o;
 			if(ret.getD()==null){
 				ret.setD(KiiikContants.BLANK);
 			}
@@ -78,7 +78,7 @@ public class StatisticsResponseTimeAdvice implements ResponseBodyAdvice<Object> 
 			}
 			return object;
 		} else if(o.getClass().getSimpleName().contains("VO")) {
-			ResultBean<Object> ret  = new ResultBean<Object>();
+			R<Object> ret  = new R<Object>();
 			ret.data(o).success("执行成功");
 			JSONObject object = JSONObject.fromObject(ret);
 			if(switchPro.isShowControllerTime()){

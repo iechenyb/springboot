@@ -23,7 +23,7 @@ import com.cyb.web.utils.ResponseUtils;
 @Controller
 public class ErrorControllerAdvice implements ErrorController {
 	Log log = LogFactory.getLog(ErrorControllerAdvice.class);
-	 private final static String ERROR_PATH = "/error";
+	 private final static String ERROR_PATH = "/error1";
 	    /**
 	     * Supports the HTML Error View
 	     *

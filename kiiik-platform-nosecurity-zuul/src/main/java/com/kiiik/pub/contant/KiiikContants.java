@@ -48,4 +48,7 @@ public class KiiikContants {
      */
     public static final String KEY_SPLIT_CHAR = ":";
     public static final String ERROR_KEY_DEFALUT="99999";
+	public static final int USER_ISEFFECT_OK = 1;
+	public static final String USERNAMEPASSWORDEXCEPTION = "用户名或密码不正确！";
+	public static final String USER_ACCOUNT_BLOCK_UP = "账户已停用！";
 }

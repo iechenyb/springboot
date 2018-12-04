@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.Page;
 import com.kiiik.pub.bean.KiiikPage;
 import com.kiiik.pub.bean.PageData;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.utils.RandomUtils;
@@ -43,12 +43,12 @@ public class GenericController {
 	
 	@ApiOperation("菜单信息查询-分页查询，包含全量查询")
 	@GetMapping("listLogs")
-	public ResultBean<PageData<SystemLog>> listMenus(SystemLog log,KiiikPage page){
+	public R<PageData<SystemLog>> listMenus(SystemLog log,KiiikPage page){
 		if(page.needAll()){//当分页参数不传时传回所有记录
-		    return new ResultBean<PageData<SystemLog>>(new PageData<SystemLog>(genericService.queryDBEntityListLike(log))).success();
+		    return new R<PageData<SystemLog>>(new PageData<SystemLog>(genericService.queryDBEntityListLike(log))).success();
 	   }else{
 			Page<SystemLog> datas = genericService.queryDBEntityListLike(log, page);
-			return new ResultBean<PageData<SystemLog>>(new PageData<SystemLog>(datas,page)).success();
+			return new R<PageData<SystemLog>>(new PageData<SystemLog>(datas,page)).success();
 	   }
 	}
 	
@@ -65,7 +65,7 @@ public class GenericController {
 	
 	@GetMapping("/add")
 	@ApiOperation("数据生成")
-	public ResultBean<String> addUser(Integer total) {
+	public R<String> addUser(Integer total) {
 		
 		genericService.insertDBEntity(getRandomBean());//单个插入测试
 		
@@ -81,7 +81,7 @@ public class GenericController {
 		genericService.insertDBEntityBatch(lstTBObj);//根据对象插入
 		
 		
-		return new ResultBean<String>("执行成功！").success();
+		return new R<String>("执行成功！").success();
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class GenericController {
 	 * @throws Exception 
 	 */
 	@GetMapping("delete")
-	public ResultBean<String> delUserByKey() throws Exception {
+	public R<String> delUserByKey() throws Exception {
 		Integer id =RandomUtils.getNum(1,1000);
 		TestBean po = new TestBean();
 		po.setId(id.toString());
@@ -111,7 +111,7 @@ public class GenericController {
 		po.setName("iechenyb");//根据非空属性进行删除
 		genericService.deleteDBEntity(po);
 		genericService.deleteDBEntityT(po);
-		return new ResultBean<String>("执行成功！").success();
+		return new R<String>("执行成功！").success();
 	}
 	/**
 	 * 
@@ -124,7 +124,7 @@ public class GenericController {
 	 */
 	@ApiOperation("根据分页查询(单表),排序参数 为password asc,name desc")
 	@GetMapping("queryByPage")
-	public ResultBean<PageData<TestBean>> queryUserByPage(TestBean entity, KiiikPage page) {
+	public R<PageData<TestBean>> queryUserByPage(TestBean entity, KiiikPage page) {
 		
 		Page<TestBean> pageData = null;
 		List<TestBean> data;
@@ -133,7 +133,7 @@ public class GenericController {
 			data = genericService.queryDBEntityList(entity, "id asc");
 			data = genericService.queryDBEntityListLike(entity);
 			data = genericService.queryDBEntityListLike(entity,"id asc");
-			System.out.println(new ResultBean<PageData<TestBean>>(new PageData<TestBean>(data)).success());
+			System.out.println(new R<PageData<TestBean>>(new PageData<TestBean>(data)).success());
 		}else{
 			pageData = genericService.queryDBEntityList(entity,page);
 			pageData = genericService.queryDBEntityList(entity, page,"id asc");
@@ -141,13 +141,13 @@ public class GenericController {
 			pageData = genericService.queryDBEntityListLike(entity,page);
 			pageData = genericService.queryDBEntityListLike(entity, page,"id asc");
 			pageData = genericService.queryDBEntityListLike(entity, page.getCurPage(),page.getPageSize(),"id asc");
-			System.out.println(new ResultBean<PageData<TestBean>>(new PageData<TestBean>(pageData)).success());
+			System.out.println(new R<PageData<TestBean>>(new PageData<TestBean>(pageData)).success());
 		}
-		return new ResultBean<PageData<TestBean>>().success("执行成功！");
+		return new R<PageData<TestBean>>().success("执行成功！");
 	}
 
 	@GetMapping("queryComplex")
-	public ResultBean<List<TestBean>> queryUserComplex(KiiikPage page) {
+	public R<List<TestBean>> queryUserComplex(KiiikPage page) {
 		
 		ComplexCondition condition = new ComplexCondition().col("id").gt(5);
 		condition = new ComplexCondition().col("id").gt(5)
@@ -170,7 +170,7 @@ public class GenericController {
 		}
 		// 查出 id>5 或(test = 123 且 uid = null)
 		// or 和 and 都有 or() or(Object)/ and() and(Object) 两种可以嵌套使用
-		return  new ResultBean<List<TestBean>>().success();
+		return  new R<List<TestBean>>().success();
 
 	}
 }

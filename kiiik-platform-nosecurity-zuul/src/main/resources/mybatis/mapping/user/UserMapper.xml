@@ -33,7 +33,8 @@
             t.id,
 			t.empno,
 			t.isEffect,
-			t.lastLoginTime,
+			cast(UNIX_TIMESTAMP(t.lastLoginTime) as decimal(50)) as lastLoginTime,
+			cast(UNIX_TIMESTAMP(t.loginTime) as decimal(50)) as loginTime,
 			e.lastname AS userName
 		FROM
 			t_sys_user t,

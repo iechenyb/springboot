@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.web.rsa.service.RsaService;
 
 import io.swagger.annotations.Api;
@@ -28,8 +28,8 @@ public class RSAController {
 	@GetMapping("getPublicKey")
 	@ResponseBody
 	@ApiOperation("获取公钥信息")
-	public ResultBean<String> getPubValue() throws Exception {
-		return new ResultBean<String>(utils.getPublicKey()).success();
+	public R<String> getPubValue() throws Exception {
+		return new R<String>(utils.getPublicKey()).success();
 	}
 	
 	/*@GetMapping("getPrivateKeys")
@@ -42,8 +42,8 @@ public class RSAController {
 	@GetMapping("encode")
 	@ResponseBody
 	@ApiOperation("公钥加密")
-	public ResultBean<String> encode(String password) throws Exception {
-		return new ResultBean<String>(utils.encodePassword(password)).success();
+	public R<String> encode(String password) throws Exception {
+		return new R<String>(utils.encodePassword(password)).success();
 	}
    
 	
@@ -58,13 +58,13 @@ public class RSAController {
 	@ResponseBody
 	@GetMapping("validatePasswordSTD")
 	@ApiOperation("密码校验")
-	public ResultBean<String> validatePasswrod(String encrypted,String decrypted) throws Exception {
+	public R<String> validatePasswrod(String encrypted,String decrypted) throws Exception {
 		String orginPassword = utils.decodePassword(encrypted);
 		String infor = "解析密码:"+orginPassword+"，原密码:"+decrypted;
 		if(orginPassword.equals(delSpace(decrypted))){
-			return new ResultBean<String>(infor).success("密码解析成功");
+			return new R<String>(infor).success("密码解析成功");
 		}else{
-			return new ResultBean<String>(infor).fail("密码解析失败");
+			return new R<String>(infor).fail("密码解析失败");
 		}
 	}
 	

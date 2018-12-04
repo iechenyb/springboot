@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.Page;
 import com.kiiik.pub.bean.KiiikPage;
 import com.kiiik.pub.bean.PageData;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.mybatis.bean.ComplexCondition;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.system.po.Role;
@@ -51,19 +51,19 @@ public class RoleController {
      */
 	@ApiOperation("角色列表信息")
 	@GetMapping("list")
-	public ResultBean<PageData<Role>> listMenus(Role role,KiiikPage page){
+	public R<PageData<Role>> listMenus(Role role,KiiikPage page){
 		if(page.needAll()){//当分页参数不传时传回所有记录
-		    return new ResultBean<PageData<Role>>(new PageData<Role>(genericService.queryDBEntityListLike(role))).success();
+		    return new R<PageData<Role>>(new PageData<Role>(genericService.queryDBEntityListLike(role))).success();
 	   }else{
 			Page<Role> datas = genericService.queryDBEntityListLike(role, page);
-			return new ResultBean<PageData<Role>>(new PageData<Role>(datas,page)).success();
+			return new R<PageData<Role>>(new PageData<Role>(datas,page)).success();
 	   }
 	}
 	
 
 	@PostMapping("add")
 	@ApiOperation("新增角色信息")
-	public ResultBean<String> addRole(@RequestBody Role role){
+	public R<String> addRole(@RequestBody Role role){
 		Role role_tmp = null;
 		role_tmp = genericService.queryDBEntitySingleComplex(Role.class, 
 				new ComplexCondition()
@@ -72,21 +72,21 @@ public class RoleController {
 				.eq(role.getRoleName()));
 		if(role_tmp==null){
 			genericService.insertDBEntity(role);
-			return new ResultBean<String>().success("角色插入成功!");
+			return new R<String>().success("角色插入成功!");
 		}
-		return new ResultBean<String>().fail("角色名称已经存在！");
+		return new R<String>().fail("角色名称已经存在！");
 	}
 	
 	@DeleteMapping("deleteByIds")
 	@ApiOperation("根据主键删除角色信息")
-	public ResultBean<String> delRole(@RequestParam("ids") List<Integer> ids) throws Exception{
+	public R<String> delRole(@RequestParam("ids") List<Integer> ids) throws Exception{
 		//查询是否存在当前角色在用
 		List<UserRole> data = genericService.queryDBEntityListComplex(UserRole.class, new ComplexCondition().and().col("roleid").inList(ids));
 		if(!CollectionUtils.isEmpty(data)){
-			return new ResultBean<String>().fail("删除的角色正在使用，不能删除！");
+			return new R<String>().fail("删除的角色正在使用，不能删除！");
 		}
 		int count = genericService.deleteDBEntityByKeyBatchs(new Role(),ids);
-		return new ResultBean<String>("删除"+count+"记录！").success();
+		return new R<String>("删除"+count+"记录！").success();
 	}
 	
 	/*@DeleteMapping("deleteById")
@@ -109,15 +109,15 @@ public class RoleController {
 
 	@PutMapping("update")
 	@ApiOperation("更新角色信息")
-	public ResultBean<String> updRole(@RequestBody Role role){
+	public R<String> updRole(@RequestBody Role role){
 		Role role_tmp = null;
 		role_tmp = genericService.queryDBEntitySingleComplex(Role.class, 
 				new ComplexCondition().col("id").notIn(role.getId()).and().col("rolename").eq(role.getRoleName()));
 		if(role_tmp!=null){
-			return new ResultBean<String>().fail("角色名已经存在！");
+			return new R<String>().fail("角色名已经存在！");
 		}else{
 			int count = genericService.updateDBEntityByKey(role);
-			return new ResultBean<String>().success("更新成功！更新记录数"+count);
+			return new R<String>().success("更新成功！更新记录数"+count);
 		}
 	}
 }

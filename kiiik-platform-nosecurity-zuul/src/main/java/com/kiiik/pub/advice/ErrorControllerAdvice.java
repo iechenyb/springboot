@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 
 import net.sf.json.JSONObject;
 /**
@@ -84,7 +84,7 @@ public class ErrorControllerAdvice implements ErrorController {
 	    private ErrorAttributes errorAttributes;
 
 	    @SuppressWarnings({"unused" })
-		private ResultBean<String> buildBody(HttpServletRequest request,HttpServletResponse response,Boolean includeStackTrace){
+		private R<String> buildBody(HttpServletRequest request,HttpServletResponse response,Boolean includeStackTrace){
 	        Map<String,Object> errorAttributes = getErrorAttributes(request, includeStackTrace);
 	        Integer status=(Integer)errorAttributes.get("status");
 	        String path=(String)errorAttributes.get("path");
@@ -107,7 +107,7 @@ public class ErrorControllerAdvice implements ErrorController {
 	                 message += String.format(" and trace %s", trace);
 	             }
 	        }
-	        return new ResultBean<String>().refuse(message);
+	        return new R<String>().refuse(message);
 	    }
 	    private Map<String, Object> getErrorAttributes(HttpServletRequest request, boolean includeStackTrace) {
 	        RequestAttributes requestAttributes = new ServletRequestAttributes(request);

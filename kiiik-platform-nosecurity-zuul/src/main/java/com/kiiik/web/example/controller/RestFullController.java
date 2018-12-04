@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kiiik.pub.bean.KiiikPage;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.web.example.bean.TestBean;
 
 import io.swagger.annotations.ApiOperation;
@@ -38,9 +38,9 @@ public class RestFullController {
 	 */
 	@GetMapping("entity/{id}")
 	@ApiOperation("根据主键查询用户信息")
-	public ResultBean<String> get(@PathVariable String id ){
+	public R<String> get(@PathVariable String id ){
 		log.info("get");
-		return new ResultBean<String>(id).success();
+		return new R<String>(id).success();
 	}
 	
 	/**
@@ -54,9 +54,9 @@ public class RestFullController {
 	 */
 	@GetMapping("entitys")
 	@ApiOperation("批量分页查询")
-	public ResultBean<TestBean> get(TestBean testBean,KiiikPage page ){
+	public R<TestBean> get(TestBean testBean,KiiikPage page ){
 		log.info("get");
-		return new ResultBean<TestBean>(testBean).success();
+		return new R<TestBean>(testBean).success();
 	}
 	
 	/**
@@ -69,9 +69,9 @@ public class RestFullController {
 	 */
 	@ApiOperation("新增信息")
 	@PostMapping("entity")
-	public ResultBean<TestBean> add(@RequestBody TestBean testBean){
+	public R<TestBean> add(@RequestBody TestBean testBean){
 		log.info("add");
-		return new ResultBean<TestBean>(testBean).success();
+		return new R<TestBean>(testBean).success();
 	}
 	
 	/**
@@ -84,9 +84,9 @@ public class RestFullController {
 	 */
 	@PutMapping("entity")
 	@ApiOperation("更新信息")
-	public  ResultBean<TestBean> update(@RequestBody TestBean testBean){
+	public  R<TestBean> update(@RequestBody TestBean testBean){
 		log.info("update");
-		return new ResultBean<TestBean>(testBean).success();
+		return new R<TestBean>(testBean).success();
 	}
 	
 	/**
@@ -99,13 +99,13 @@ public class RestFullController {
 	 */
 	@DeleteMapping("entity/{id}")
 	@ApiOperation("删除信息，支持批量")
-	public ResultBean<String> delete(@PathVariable String[] id){
+	public R<String> delete(@PathVariable String[] id){
 		log.info("delete");
 		List<String> ids = new ArrayList<String>();
 		for(int i=0;i<id.length;i++){
 			ids.add(id[i]);
 		}
-		return new ResultBean<String>(ids.toString()).success();
+		return new R<String>(ids.toString()).success();
 	}
 	
 }

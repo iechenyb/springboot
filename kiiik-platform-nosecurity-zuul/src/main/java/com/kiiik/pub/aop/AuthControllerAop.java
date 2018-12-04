@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.kiiik.config.cache.BaseCacheKey;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.pub.context.TimeContext;
 import com.kiiik.utils.RequestUtils;
@@ -78,9 +78,9 @@ public class AuthControllerAop extends BaseAop{
 
 		if (retType == null) {
 			return null;// 空方法
-		} else if (ResultBean.class.toString().equals(retType.toString())) {
+		} else if (R.class.toString().equals(retType.toString())) {
 			// 如果是500或者404直接跳转到全局定义的页面
-			return new ResultBean<Object>(exception);
+			return new R<Object>(exception);
 		} else if (ModelAndView.class.toString().equals(retType.toString())) {
 			// 如果是500或者404直接跳转到全局定义的页面
 			ModelAndView view = new ModelAndView();

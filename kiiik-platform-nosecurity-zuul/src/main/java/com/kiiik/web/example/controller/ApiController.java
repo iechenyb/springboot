@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cyb.date.DateUtil;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.controller.BaseController;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.utils.RandomUtils;
@@ -105,9 +105,9 @@ public class ApiController extends BaseController{
 	
 	@PostMapping("validateBean")
 	@ResponseBody
-	public ResultBean<String> validateBean(@RequestBody @Validated ValidateBean bean){
+	public R<String> validateBean(@RequestBody @Validated ValidateBean bean){
 		System.out.println(bean);
-		return new ResultBean<String>("").success();
+		return new R<String>("").success();
 	}
 	
 	@GetMapping("validateParam")
@@ -115,16 +115,16 @@ public class ApiController extends BaseController{
 		@ApiImplicitParam(name="param1",value="参数1",dataType="String",paramType="query")
 	})//并未成功校验
 	@ResponseBody
-	public ResultBean<String> validateParam( @Validated @NotBlank String param1){
+	public R<String> validateParam( @Validated @NotBlank String param1){
 		System.out.println(param1);
-		return new ResultBean<String>("").success(param1);
+		return new R<String>("").success(param1);
 	}
 	@Autowired
 	GenericService genericService;
 
 	@PostMapping("genUsers")
 	@ApiOperation("模拟生成用户信息，仅供测试使用")
-	public ResultBean<String> genUsers(@ApiParam("生成用户数量") Integer theNumbersOfToGen) {
+	public R<String> genUsers(@ApiParam("生成用户数量") Integer theNumbersOfToGen) {
 		User po = null;
 		if (theNumbersOfToGen == null) {
 			theNumbersOfToGen = 10;
@@ -148,7 +148,7 @@ public class ApiController extends BaseController{
 			}
 		}
 		genericService.insertDBEntityBatch(users);
-		return new ResultBean<String>("生成" + theNumbersOfToGen + "个用户信息！").success();
+		return new R<String>("生成" + theNumbersOfToGen + "个用户信息！").success();
 	}
 	
 	@GetMapping("paramListInt")

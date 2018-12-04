@@ -11,4 +11,5 @@ public class RedisKeyContants {
 	public static final String EMPNOUSERNAMEMAP = "employees#1800#90";
 	public static final String CompanyNameMap = "companyNameMap#1800#90";
 	public static final String DempartmentNameMap = "dempartmentMap#1800#90";
+	public static final String USERINFO = "userInfor#1800#90";
 }

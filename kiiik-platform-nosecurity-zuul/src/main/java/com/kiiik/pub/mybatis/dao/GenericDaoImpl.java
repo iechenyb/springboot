@@ -113,8 +113,11 @@ public class GenericDaoImpl implements GenericDao {
 		EntityInfo config = getInfoNoValue(entity.getClass());
 		for (EntityInfoCol colConfg : config.getCols()) {
 			try {
-				//如果value是空值，则将值设置为null，配置文件只判断空值
 				colConfg.setValue(PropertyUtils.getProperty(entity, colConfg.getEntityColName()));
+				//如果value是空值，则将值设置为null，配置文件只判断空值
+				/*if(colConfg.getNeedTimestamp()&&"wrapperValue".equals(colConfg.getEntityColName().toString())){//需要时间戳
+					
+				}*/
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new IllegalArgumentException("read property from entity error");

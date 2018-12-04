@@ -5,7 +5,7 @@ import com.kiiik.web.department.entity.DepartmentEntity;
 import java.util.List;
 import java.util.Map;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 
 /**
  * 服务接口定义
@@ -23,7 +23,7 @@ public interface DepartmentService  {
  *@param 
  *@return
  */
- ResultBean<String> addDepartmentEntity(DepartmentEntity entity);
+ R<String> addDepartmentEntity(DepartmentEntity entity);
  
  /**
  * 
@@ -33,7 +33,7 @@ public interface DepartmentService  {
  *@param 
  *@return
  */
- ResultBean<String> updDepartmentEntity(DepartmentEntity entity);
+ R<String> updDepartmentEntity(DepartmentEntity entity);
  
  /**
  * 
@@ -43,7 +43,7 @@ public interface DepartmentService  {
  *@param 
  *@return
  */
- ResultBean<String> delDepartmentEntity(List<Integer> ids);
+ R<String> delDepartmentEntity(List<Integer> ids);
  Map<String,String> getDepartmentNameById();
 }
 

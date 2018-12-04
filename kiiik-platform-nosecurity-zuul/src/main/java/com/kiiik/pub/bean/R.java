@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 创建时间: 2018年1月10日
  */
 @ApiModel(value="统一返回对象",description="统一的返回值定义方式")
-public class ResultBean<T> implements Serializable {
+public class R<T> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -24,11 +24,11 @@ public class ResultBean<T> implements Serializable {
 	@ApiModelProperty(value="数据体",name="data",example="任意类型数据集合")
 	protected  T d;
 
-	public ResultBean() {
+	public R() {
 		super();
 	}
 
-	public ResultBean(T d) {
+	public R(T d) {
 		super();
 		this.d = d;
 	}
@@ -38,43 +38,43 @@ public class ResultBean<T> implements Serializable {
 		this.d = d;
 	}*/
 
-	public ResultBean(Throwable e) {
+	public R(Throwable e) {
 		super();
 		this.es = e.toString();
 		this.ec = ResponseStatus.FAIL;
 	}
-	public ResultBean<T> success() {
+	public R<T> success() {
 		this.ec = ResponseStatus.SUCCESS;
 		return this;
 	}
-	public ResultBean<T> success(String msg) {
+	public R<T> success(String msg) {
 		this.ec = ResponseStatus.SUCCESS;
 		this.es = msg;
 		return this;
 	}
-	public ResultBean<T> data(T data) {
+	public R<T> data(T data) {
 		this.d = data;
 		return this;
 	}
 
-	public ResultBean<T> fail() {
+	public R<T> fail() {
 		this.ec = ResponseStatus.FAIL;
 		return this;
 	}
-	public ResultBean<T> fail(String msg) {
+	public R<T> fail(String msg) {
 		this.ec = ResponseStatus.FAIL;
 		this.es = msg;
 		return this;
 	}
 
-	public ResultBean<T> fail(Throwable e) {
+	public R<T> fail(Throwable e) {
 		this.ec = ResponseStatus.FAIL;
 		this.es = e.toString();
 		
 		return this;
 	}
 	
-	public  ResultBean<T> msg(String msg) {
+	public  R<T> msg(String msg) {
 		this.es = msg;
 		return this;
 	}
@@ -83,32 +83,32 @@ public class ResultBean<T> implements Serializable {
 		return ResponseStatus.NO_PERMISSION;
 	}
 	
-	public ResultBean<T> refuse(){
+	public R<T> refuse(){
 		this.ec = ResponseStatus.NO_PERMISSION;
 		return this;
 	}
-	public ResultBean<T> sessionTimeOut(String msg){
+	public R<T> sessionTimeOut(String msg){
 		this.ec = ResponseStatus.SESSION_TIME_OUT;
 		this.es=msg;
 		return this;
 	}
-	public ResultBean<T> sessionTimeOut(){
+	public R<T> sessionTimeOut(){
 		this.ec = ResponseStatus.SESSION_TIME_OUT;
 		return this;
 	}
 	
-	public ResultBean<T> refuse(String msg){
+	public R<T> refuse(String msg){
 		this.ec = ResponseStatus.NO_PERMISSION;
 		this.es = msg;
 		return this;
 	}
 	
-	public ResultBean<T> needToModifyPassword(){
+	public R<T> needToModifyPassword(){
 		this.ec = ResponseStatus.USE_DEFAULT_PASSWORD;
 		return this;
 	}
 	
-	public ResultBean<T> needToModifyPassword(String msg){
+	public R<T> needToModifyPassword(String msg){
 		this.ec = ResponseStatus.USE_DEFAULT_PASSWORD;
 		this.es = msg;
 		return this;

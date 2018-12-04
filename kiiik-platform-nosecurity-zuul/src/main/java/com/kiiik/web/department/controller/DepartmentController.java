@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.pagehelper.Page;
 import com.kiiik.pub.bean.KiiikPage;
 import com.kiiik.pub.bean.PageData;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.department.entity.DepartmentEntity;
 import com.kiiik.web.department.service.DepartmentService;
@@ -61,12 +61,12 @@ public class DepartmentController {
      */
     @GetMapping("/list")
     @ApiOperation("列表信息")
-    public ResultBean<PageData<DepartmentEntity>> list(DepartmentEntity entity,KiiikPage page){
+    public R<PageData<DepartmentEntity>> list(DepartmentEntity entity,KiiikPage page){
     	if(page.needAll()){//当分页参数不传时传回所有记录
-		    return new ResultBean<PageData<DepartmentEntity>>(new PageData<DepartmentEntity>(genericService.queryDBEntityListLike(entity))).success();
+		    return new R<PageData<DepartmentEntity>>(new PageData<DepartmentEntity>(genericService.queryDBEntityListLike(entity))).success();
 	   }else{
 			Page<DepartmentEntity> datas = genericService.queryDBEntityListLike(entity, page);
-			return new ResultBean<PageData<DepartmentEntity>>(new PageData<DepartmentEntity>(datas,page)).success();
+			return new R<PageData<DepartmentEntity>>(new PageData<DepartmentEntity>(datas,page)).success();
 	   }
     }
     
@@ -81,7 +81,7 @@ public class DepartmentController {
      */
 	@PostMapping("add")
 	@ApiOperation("新增信息")
-	public ResultBean<String> addDepartmentEntity(@RequestBody DepartmentEntity entity){
+	public R<String> addDepartmentEntity(@RequestBody DepartmentEntity entity){
 		return departmentService.addDepartmentEntity(entity);
 		
 	}
@@ -96,7 +96,7 @@ public class DepartmentController {
      */
 	@PutMapping("update")
 	@ApiOperation("更新信息")
-	public ResultBean<String> updDepartmentEntity(@RequestBody DepartmentEntity entity){
+	public R<String> updDepartmentEntity(@RequestBody DepartmentEntity entity){
 		return departmentService.updDepartmentEntity(entity);
 	}
 	
@@ -110,7 +110,7 @@ public class DepartmentController {
      */
 	@DeleteMapping("deleteByIds")
 	@ApiOperation("根据主键删除信息")
-	public ResultBean<String> delDepartmentEntity(@RequestParam(value = "ids") List<Integer> ids){
+	public R<String> delDepartmentEntity(@RequestParam(value = "ids") List<Integer> ids){
 		return departmentService.delDepartmentEntity(ids);
 	}
 }

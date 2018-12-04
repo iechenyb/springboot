@@ -20,7 +20,7 @@ import com.kiiik.pub.ann.KiiikCachesParam;
 import com.kiiik.pub.ann.KiiikCachesParams;
 import com.kiiik.pub.bean.KiiikPage;
 import com.kiiik.pub.bean.PageData;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.RedisKeyContants;
 import com.kiiik.pub.controller.BaseController;
 import com.kiiik.pub.exception.UserSessionTimeoutException;
@@ -55,25 +55,25 @@ public class MenuController extends BaseController{
      */
 	@ApiOperation("菜单信息查询")
 	@GetMapping("list")
-	public ResultBean<PageData<Menu>> listMenus(Menu menu,KiiikPage page){
+	public R<PageData<Menu>> listMenus(Menu menu,KiiikPage page){
 		if(page.needAll()){//当分页参数不传时传回所有记录
-		    return new ResultBean<PageData<Menu>>(new PageData<Menu>(genericService.queryDBEntityListLike(menu))).success();
+		    return new R<PageData<Menu>>(new PageData<Menu>(genericService.queryDBEntityListLike(menu))).success();
 	   }else{
 			Page<Menu> datas = genericService.queryDBEntityListLike(menu, page);
-			return new ResultBean<PageData<Menu>>(new PageData<Menu>(datas,page)).success();
+			return new R<PageData<Menu>>(new PageData<Menu>(datas,page)).success();
 	   }
 	}
 	
 
 	@PostMapping("add")
 	@ApiOperation("菜单信息新增")
-	public ResultBean<String> addMenu(@RequestBody @Validated Menu menu){
+	public R<String> addMenu(@RequestBody @Validated Menu menu){
 		return menuService.saveMenu(menu); 
 	}
 	
 	@DeleteMapping("deleteByIds")
 	@ApiOperation(value="根据主键删除菜单")
-	public ResultBean<String> delMenu(@RequestParam("ids") List<Integer> ids) throws Exception{
+	public R<String> delMenu(@RequestParam("ids") List<Integer> ids) throws Exception{
 		return menuService.delMenu(ids);
 	}
 
@@ -82,7 +82,7 @@ public class MenuController extends BaseController{
 			@KiiikCachesParam(clazz=MenuServiceImpl.class,cacheName=RedisKeyContants.RoleMenus)
 	})
 	@ApiOperation(value="更新菜单信息")
-	public ResultBean<String> updMenu(@RequestBody Menu menu){
+	public R<String> updMenu(@RequestBody Menu menu){
 		return menuService.updMenu(menu);
 	}
 	
@@ -98,8 +98,8 @@ public class MenuController extends BaseController{
 	 */
 	@GetMapping("getSystemMenuTree")
 	@ApiOperation(value="系统菜单树")
-	public ResultBean<Menu> getSystemMenuTree(){
-		return new ResultBean<Menu>(menuService.getSystemMenuTree()).success();
+	public R<Menu> getSystemMenuTree(){
+		return new R<Menu>(menuService.getSystemMenuTree()).success();
 	}
 	
 	
@@ -113,11 +113,11 @@ public class MenuController extends BaseController{
 	 */
 	@GetMapping("getUserSystemMenuTree")
 	@ApiOperation(value="用户系统菜单")
-	public ResultBean<Menu> getUserSystemMenuTree(Integer userId) throws UserSessionTimeoutException{
+	public R<Menu> getUserSystemMenuTree(Integer userId) throws UserSessionTimeoutException{
 		if(StringUtils.isEmpty(userId)){
 			userId = getSystemUser().getId();
 		}
-		return new ResultBean<Menu>(menuService.getUserSystemMenuTree(userId)).success();
+		return new R<Menu>(menuService.getUserSystemMenuTree(userId)).success();
 	}
 	
 }

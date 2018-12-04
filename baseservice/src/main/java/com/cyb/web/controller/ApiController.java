@@ -126,7 +126,8 @@ public class ApiController extends BaseController{
 		}
 		try {
 			byte[] bytes = file.getBytes();
-			Path path = Paths.get("D:\\data\\fileUpload/" + file.getOriginalFilename());
+			String dir = System.getProperty("user.dir");
+			Path path = Paths.get(dir+"/" + file.getOriginalFilename());
 			Files.write(path, bytes);
 			model.addAttribute("message", file.getOriginalFilename() + "上传succes！");
 

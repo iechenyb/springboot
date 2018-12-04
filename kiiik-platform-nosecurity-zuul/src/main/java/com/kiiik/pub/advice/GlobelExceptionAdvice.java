@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.exception.KiiikException;
 /**
  *作者 : iechenyb<br>
@@ -31,9 +31,9 @@ public class GlobelExceptionAdvice {
 	    */
 	   @ExceptionHandler(value = Exception.class)
 	   @ResponseBody
-	   public ResultBean<String> defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+	   public R<String> defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
 	       log.error("", e);
-	       ResultBean<String> r = new ResultBean<String>();
+	       R<String> r = new R<String>();
 	       
 	       if (e instanceof org.springframework.web.servlet.NoHandlerFoundException) {
 	            r.msg("请求尚未开发！"+e.getMessage());

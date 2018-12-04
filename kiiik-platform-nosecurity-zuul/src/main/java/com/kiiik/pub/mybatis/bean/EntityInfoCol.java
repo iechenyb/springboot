@@ -15,7 +15,8 @@ public class EntityInfoCol implements Cloneable{
 	private Boolean isKeyColumn;
 	private Boolean needTimestamp;
 	private Boolean useGeneratedKeys;
-	private Object value;
+	private Object value;//原始值
+	private Object wrapperValue;//转换值
 	public String getEntityColName() {
 		return entityColName;
 	}
@@ -64,6 +65,13 @@ public class EntityInfoCol implements Cloneable{
 	}
 	public void setNeedTimestamp(Boolean needTimestamp) {
 		this.needTimestamp = needTimestamp;
+	}
+	
+	public Object getWrapperValue() {
+		return wrapperValue;
+	}
+	public void setWrapperValue(Object wrapperValue) {
+		this.wrapperValue = wrapperValue;
 	}
 	@Override
 	public String toString() {

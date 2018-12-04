@@ -3,7 +3,7 @@ package com.kiiik.web.company.service;
 import java.util.List;
 import java.util.Map;
 
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.web.company.entity.CompanyEntity;
 
 /**
@@ -22,7 +22,7 @@ public interface CompanyService  {
  *@param 
  *@return
  */
- ResultBean<String> addCompanyEntity(CompanyEntity entity);
+ R<String> addCompanyEntity(CompanyEntity entity);
  
  /**
  * 
@@ -32,7 +32,7 @@ public interface CompanyService  {
  *@param 
  *@return
  */
- ResultBean<String> updCompanyEntity(CompanyEntity entity);
+ R<String> updCompanyEntity(CompanyEntity entity);
  
  /**
  * 
@@ -42,7 +42,7 @@ public interface CompanyService  {
  *@param 
  *@return
  */
- ResultBean<String> delCompanyEntity(List<Integer> ids);
+ R<String> delCompanyEntity(List<Integer> ids);
  
  Map<String,String> getCompanyNameById();
 }

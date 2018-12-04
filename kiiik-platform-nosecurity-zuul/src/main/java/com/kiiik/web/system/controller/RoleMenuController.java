@@ -18,7 +18,7 @@ import com.kiiik.pub.ann.KiiikCachesParam;
 import com.kiiik.pub.ann.KiiikCachesParams;
 import com.kiiik.pub.bean.KiiikPage;
 import com.kiiik.pub.bean.PageData;
-import com.kiiik.pub.bean.ResultBean;
+import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.RedisKeyContants;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.system.po.RoleMenu;
@@ -53,12 +53,12 @@ public class RoleMenuController {
      */
 	@ApiOperation("菜单信息查询")
 	@GetMapping("list")
-	public ResultBean<PageData<RoleMenu>> listRoleMenus(RoleMenu rmenu,KiiikPage page){
+	public R<PageData<RoleMenu>> listRoleMenus(RoleMenu rmenu,KiiikPage page){
 		if(page.needAll()){//当分页参数不传时传回所有记录
-		    return new ResultBean<PageData<RoleMenu>>(new PageData<RoleMenu>(genericService.queryDBEntityListLike(rmenu))).success();
+		    return new R<PageData<RoleMenu>>(new PageData<RoleMenu>(genericService.queryDBEntityListLike(rmenu))).success();
 	   }else{
 			Page<RoleMenu> datas = genericService.queryDBEntityListLike(rmenu, page);
-			return new ResultBean<PageData<RoleMenu>>(new PageData<RoleMenu>(datas,page)).success();
+			return new R<PageData<RoleMenu>>(new PageData<RoleMenu>(datas,page)).success();
 	   }
 	}
 	
@@ -75,10 +75,10 @@ public class RoleMenuController {
 	@KiiikCachesParams(caches={
 		@KiiikCachesParam(clazz=MenuServiceImpl.class,cacheName=RedisKeyContants.RoleMenus)
 	})
-	public ResultBean<String> addRoleMenu(@RequestBody RoleMenu rmenu){
+	public R<String> addRoleMenu(@RequestBody RoleMenu rmenu){
 		genericService.deleteDBEntity(rmenu);
 		genericService.insertDBEntity(rmenu);
-		return new ResultBean<String>().success("新增成功！");
+		return new R<String>().success("新增成功！");
 	}
 	
 	@DeleteMapping("deleteByIds")
@@ -86,13 +86,13 @@ public class RoleMenuController {
 	@KiiikCachesParams(caches={
 			@KiiikCachesParam(clazz=MenuServiceImpl.class,cacheName=RedisKeyContants.RoleMenus)
 	})
-	public ResultBean<String> delRoleMenu(@RequestParam("ids") List<Integer> ids) throws Exception{
+	public R<String> delRoleMenu(@RequestParam("ids") List<Integer> ids) throws Exception{
 		//查询菜单是否被某个角色使用，若使用则不能删除
 		int count = genericService.deleteDBEntityByKeyBatchs(new RoleMenu(),ids);
 		if(count>0){
-			return new ResultBean<String>().success("记录删除成功！");
+			return new R<String>().success("记录删除成功！");
 		}else{
-			return new ResultBean<String>().fail("记录删除失败！");
+			return new R<String>().fail("记录删除失败！");
 		}
 		
 	}
@@ -109,16 +109,12 @@ public class RoleMenuController {
 	@KiiikCachesParams(caches={
 			@KiiikCachesParam(clazz=MenuServiceImpl.class,cacheName=RedisKeyContants.RoleMenus)
 	})
-	public ResultBean<String> saveRMBatch(@RequestBody RoleMenuVo2 vo){
+	public R<String> saveRMBatch(@RequestBody RoleMenuVo2 vo){
 		if(StringUtils.isEmpty(vo.getRoleId())){
-			return new ResultBean<String>().fail("角色信息不能为空！");//菜单为空时，说明删除角色权限
+			return new R<String>().fail("角色信息不能为空！");//菜单为空时，说明删除角色权限
 		}
-		int count = menuService.saveRMBatch(vo.getMenuIds(), vo.getRoleId());
-		if(count>0){
-			return new ResultBean<String>().success("角色菜单信息保存成功！");
-		}else{
-			return new ResultBean<String>().fail("角色菜单信息保存失败！");	
-		}
+		menuService.saveRMBatch(vo.getMenuIds(), vo.getRoleId());
+		return new R<String>().success("角色菜单信息保存成功！");
 	}
 	
 	/**
@@ -130,9 +126,9 @@ public class RoleMenuController {
 	 */
 	@GetMapping("getRoleMenu")
 	@ApiOperation("获取当前角色的菜单信息")
-	public ResultBean<List<RoleMenu>> getAssignedRoleMenu(Integer roleId){
+	public R<List<RoleMenu>> getAssignedRoleMenu(Integer roleId){
 		List<RoleMenu> rm = menuService.getAssignedRoleMenu(roleId);
-		return new ResultBean<List<RoleMenu>>(rm).success();
+		return new R<List<RoleMenu>>(rm).success();
 	}
 	
 	@Autowired
