@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kiiik.pub.filter.AccessErrorFilter;
 import com.kiiik.pub.filter.AccessFilter;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.utils.req.RequestParamAnalysis;
@@ -48,6 +49,12 @@ public class ZuulAuthServiceStarter {
 		filter.setAnalysis(analysis);
 		return filter;
 	}
+	
+	@Bean
+	public AccessErrorFilter accessExFilter() {
+		return new AccessErrorFilter();
+	}
+	
 	
 	@RequestMapping(value = "/")
     public String index() {

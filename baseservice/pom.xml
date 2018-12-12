@@ -6,7 +6,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.2.RELEASE</version>
 	</parent>
-	<artifactId>service-B2</artifactId>
+	<artifactId>service</artifactId>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -134,6 +134,7 @@
             </plugin>
             <!-- end::plugin[] -->
         </plugins>
+        <finalName>service</finalName>
 	</build>
 
 </project>

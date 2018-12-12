@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cyb.pub.SpringContextUtil;
 import com.cyb.web.bean.SessionUser;
 
 /**
@@ -86,6 +88,13 @@ public class ApiController extends BaseController{
 	@GetMapping("delete")
 	public String delete(HttpServletRequest req) {
 		return "删除信息成功";
+	}
+	@Autowired
+	SpringContextUtil util;
+	@ResponseBody
+	@GetMapping("active")
+	public String active() {
+		return util.getActiveProfile();
 	}
 
 	@ResponseBody
