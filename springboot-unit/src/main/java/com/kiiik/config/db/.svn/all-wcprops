@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/java/!svn/ver/26182/kiiik-platform-kffl/src/main/java/com/kiiik/config/db
+END
+KiiikDBConfig.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/java/!svn/ver/26254/kiiik-platform-kffl/src/main/java/com/kiiik/config/db/KiiikDBConfig.java
+END
+KiiikOracleDBConfig.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/java/!svn/ver/26254/kiiik-platform-kffl/src/main/java/com/kiiik/config/db/KiiikOracleDBConfig.java
+END
+KiiikOracleDruidSettings.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/java/!svn/ver/26254/kiiik-platform-kffl/src/main/java/com/kiiik/config/db/KiiikOracleDruidSettings.java
+END
+KiiikDruidSettings.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/config/db/KiiikDruidSettings.java
+END
+KiiikOracleSetting.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/java/!svn/ver/26144/kiiik-platform-kffl/src/main/java/com/kiiik/config/db/KiiikOracleSetting.java
+END
+KiiikSetting.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/config/db/KiiikSetting.java
+END

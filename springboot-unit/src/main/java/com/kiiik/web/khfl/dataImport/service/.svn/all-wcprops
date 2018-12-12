@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/java/!svn/ver/26104/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/service
+END
+MatchRateServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/java/!svn/ver/26104/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/service/MatchRateServiceImpl.java
+END
+ContractSpiritDMImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/java/!svn/ver/26090/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/service/ContractSpiritDMImpl.java
+END
+MarketQuotationsServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/java/!svn/ver/26090/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/service/MarketQuotationsServiceImpl.java
+END

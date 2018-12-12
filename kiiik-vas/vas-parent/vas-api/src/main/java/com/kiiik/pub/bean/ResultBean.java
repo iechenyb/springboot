@@ -38,37 +38,31 @@ public class ResultBean<T> implements Serializable {
 		this.es = e.toString();
 		this.ec = ResponseStatus.FAIL;
 	}
-	@SuppressWarnings("rawtypes")
-	public ResultBean success() {
+	public ResultBean<T> success() {
 		this.ec = ResponseStatus.SUCCESS;
 		return this;
 	}
-	@SuppressWarnings("rawtypes")
-	public ResultBean success(String msg) {
+	public ResultBean<T> success(String msg) {
 		this.ec = ResponseStatus.SUCCESS;
 		this.es = msg;
 		return this;
 	}
-	@SuppressWarnings("rawtypes")
-	public ResultBean data(T data) {
+	public ResultBean<T> data(T data) {
 		this.d = data;
 		return this;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ResultBean fail() {
+	public ResultBean<T> fail() {
 		this.ec = ResponseStatus.FAIL;
 		return this;
 	}
-	@SuppressWarnings("rawtypes")
-	public ResultBean fail(String msg) {
+	public ResultBean<T> fail(String msg) {
 		this.ec = ResponseStatus.FAIL;
 		this.es = msg;
 		return this;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ResultBean fail(Throwable e) {
+	public ResultBean<T> fail(Throwable e) {
 		this.ec = ResponseStatus.FAIL;
 		this.es = e.toString();
 		return this;

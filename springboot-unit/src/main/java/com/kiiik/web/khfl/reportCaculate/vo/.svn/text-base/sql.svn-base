@@ -1,0 +1,89 @@
+--获取人员指定区间的交易天数 预计0.6秒
+SELECT
+	COUNT(DISTINCT record_date) days,
+	fund_account
+FROM
+	t_cf_day_transaction_detail
+WHERE
+/*record_date BETWEEN 20181001
+AND 20181131*/
+	record_date >= 20181001
+AND record_date<=20181131
+GROUP BY
+	fund_account  
+-- 查询市场行情数据 审核通过且存在的最大日期值
+SELECT
+	risk_level
+FROM
+	t_cf_market_quotations
+WHERE
+	record_Date = (
+		SELECT
+			max(record_Date)
+		FROM
+			t_cf_market_quotations
+		WHERE
+			record_Date <= 20181103
+      and is_verify=2
+	)
+-- 穿仓次数
+select count(record_Date),fund_account from t_cf_day_funds 
+where (record_Date between 20181001 and 20181031) and khqy<0
+group by fund_account
+-- 追加保证金次数
+select count(record_Date),fund_account from t_cf_day_funds 
+where (record_Date between 20181001 and 20181031) and zjbzj>1
+group by fund_account
+-- 风险度累计值
+select sum(fxd),fund_account from t_cf_day_funds 
+where (record_Date between 20181001 and 20181031) 
+group by fund_account	
+-- 不配合0即 强行平仓。配合自行平仓0.003
+select fund_account,count(record_Date) from t_cf_client_match_rate 
+where record_Date>=20181001 and record_Date<=20181031 
+and process_result=0
+group BY fund_account;
+-- 不配合0即 强行平仓。配合自行平仓0.002
+select fund_account,count(record_Date) from t_cf_client_match_rate 
+where record_Date>=20181001 and record_Date<=20181031 
+and process_result=1 group BY fund_account;
+--契约精神 表中没有则默认有契约精神，否则无契约精神
+SELECT
+	*
+FROM
+	(
+		SELECT
+			t.*,
+		IF (
+			@fund_account = fund_account ,@RN :=@RN + 1 ,@RN := 1
+		) AS ROW_NUMBER,
+		@fund_account := fund_account AS VAR1
+	FROM
+		(
+			SELECT
+				*
+			FROM
+				t_cf_contract_spirit
+			WHERE
+				RECORD_DATE > 20181001
+			AND RECORD_DATE < 20181101
+		) t,
+		(
+			SELECT
+				@fund_account := '' ,@RN := 0
+		) C
+	ORDER BY
+		FUND_ACCOUNT,
+		RECORD_dATE DESC
+	) a
+WHERE
+	a.row_number = 1
+--持仓合约数量统计 sql查询效率低，所以计数在java程序里进行
+SELECT
+	contract,
+	fund_account
+FROM
+	t_cf_day_position_detail -- force index(idx_date)
+WHERE
+	record_date between 20180101
+AND  20181130

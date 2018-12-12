@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kiiik.web.khfl.reportCaculate.mapper.ParamCalDMMapper" >
+    <resultMap id="String" type="java.lang.String"/>
+    <resultMap id="FundAccountDays" type="com.kiiik.web.khfl.reportCaculate.vo.FundAccountDays"/>
+    <parameterMap id="CalDate" type="com.kiiik.web.khfl.reportCaculate.vo.CalDate"></parameterMap>
+    <resultMap id="ParamSettings" type="com.kiiik.web.khfl.reportCaculate.vo.ParamSettings"></resultMap>
+    <resultMap id="FreezeClientGrade" type="com.kiiik.web.khfl.reportCaculate.vo.FreezeClientGrade"></resultMap>
+    <resultMap id="reportForm" type="com.kiiik.web.khfl.reportCaculate.bean.ReportFormEntity"></resultMap>
+    <resultMap id="ImportStatus" type="com.kiiik.web.khfl.readClientCtpData.vo.ImportStatus"></resultMap>
+    <!-- 获取休眠客户信息：fund_account-->
+    <select id="getFreezeClient" resultMap="String">       
+	 select u.fund_account fundAccount
+     from t_cf_qh_cuinvestorproperty u,t_cf_qh_currinvestors t
+     where t.fund_account = u.fund_account 
+       and u.freeze_status = #{freezeStatus} 
+       and t.is_active = #{active}
+ 	</select>
+ 	
+ 	 <!-- 计算交易未满一个月的新客户：fund_account-->
+    <select id="getLessOneMonthClients" resultMap="String">       
+	 SELECT DISTINCT
+		t.fund_account
+	FROM
+		t_cf_validclient_startdate t
+	WHERE
+		t.start_date IS NULL
+		OR t.start_date > #{endDate}
+ 	</select>
+ 	
+ 	<!--计算休眠客户的原评级  定周期-->
+ 	<select id="getFreezeClientGradeCircle" resultMap="FreezeClientGrade">       
+	SELECT
+		t1.fund_account,
+		substring_index(group_concat(t1.grade ORDER BY t1.circle_type DESC,t1.end_date DESC ),',',1) latestGrade
+	FROM
+		(
+			SELECT
+				t.fund_account AS fund_account,t.circle_type AS circle_type,t.grade AS grade,t.end_date AS end_date
+			FROM
+				t_cf_report_form t
+			WHERE
+				t.fund_account IN 
+				 <foreach collection="freezeList" item="freeze" index="index"
+             open="(" close=")" separator=",">
+      				#{freeze}
+      			</foreach>
+			and t.end_date <![CDATA[ <= ]]>  #{endDate}
+			and t.circle_type <![CDATA[ <= ]]>  #{circleType}
+			order by
+				t.fund_account ASC,
+				t.circle_type DESC,
+				t.end_date DESC
+		) t1
+	GROUP BY t1.fund_account
+ 	</select>
+ 	
+ 	<!--计算休眠客户的原评级  自定义周期-->
+ 	<select id="getFreezeClientGradeNoCircle" resultMap="FreezeClientGrade">       
+	SELECT
+		t1.fund_account,
+		substring_index(group_concat(t1.grade ORDER BY t1.circle_type ASC,t1.end_date DESC ),',',1) latestGrade
+	FROM
+		(
+			SELECT
+				t.fund_account AS fund_account,t.circle_type AS circle_type,t.grade AS grade,t.end_date AS end_date
+			FROM
+				t_cf_report_form t
+			WHERE
+				t.fund_account IN 
+				 <foreach collection="freezeList" item="freeze" index="index"
+             open="(" close=")" separator=",">
+      				#{freeze}
+      			</foreach>
+			and t.end_date <![CDATA[ <= ]]>  #{endDate}
+			and t.circle_type <![CDATA[ >= ]]> #{circleType}
+			order by
+				t.fund_account ASC,
+				t.circle_type ASC,
+				t.end_date DESC
+		) t1
+	GROUP BY t1.fund_account
+ 	</select>
+ 	
+ 	 <!--//获取CTP数据导入最新状态信息-->
+ 	<select id="getCTPDataImportStatus" resultMap="ImportStatus">       
+
+	 SELECT
+		t1.importType importType,
+		substring_index(group_concat(t1.importStatus ORDER BY t1.importType ASC,t1.id DESC),',',1) lastestImportStatus,
+		substring_index(group_concat(t1.beginDate ORDER BY t1.importType ASC,t1.id DESC),',',1) lastestBeginDate,
+		substring_index(group_concat(t1.endDate ORDER BY t1.importType ASC,t1.id DESC),',',1) lastestEndDate
+	
+		FROM
+		(
+			SELECT
+				t.import_data_type AS importType,
+				t.import_status AS importStatus,
+				t.select_start_date AS beginDate,
+				t.select_end_date AS endDate,
+				t.id AS id
+			FROM
+				t_cf_data_import_log t
+			WHERE
+				t.operator = #{operator} 
+			AND t.import_mode = 1
+			ORDER BY
+				t.import_data_type ASC,
+				t.id DESC
+		) t1
+	GROUP BY
+		t1.importType
+	 	
+ 	
+ 	</select>
+ 	
+
+ 	<select id="paramSettings" resultMap="ParamSettings">
+		 	SELECT
+			s.param_identy identy,
+			s.weight,
+			subs.subsection_condition term,
+			subs.subsection_value value
+		FROM
+			t_cf_param_setting s,
+			t_cf_param_subsection_setting subs
+		WHERE
+			s.id = subs.param_id
+		ORDER BY
+			param_identy,subsection_order
+ 	</select>
+ 	
+ 	<!-- 指定区间的交易天数统计 -->
+ 	<select id="tradeDays" resultMap="FundAccountDays" parameterMap="CalDate">
+	 	SELECT
+		COUNT(DISTINCT record_date) days,
+		fund_account
+		FROM
+			t_cf_day_transaction_detail
+		WHERE
+		record_date BETWEEN ${date.beginDate}
+		AND ${date.endDate}
+		GROUP BY fund_account  
+ 	</select>
+ 	<!-- 最新的市场行情 -->
+ 	<select id="marketQutoes" resultType="java.util.HashMap" parameterMap="CalDate">
+	 	SELECT
+		risk_level
+		FROM
+			t_cf_market_quotations
+		WHERE
+			record_Date = (
+				SELECT
+					max(record_Date)
+				FROM
+					t_cf_market_quotations
+				WHERE
+					record_Date &lt;= ${endDate}
+		      and is_verify=2
+			)
+ 	</select>
+ 	<!-- 指定区间 追加保证金天数 -->
+ 	<select id="additionalMarginDays" resultMap="FundAccountDays" parameterMap="CalDate">
+		SELECT
+				count(record_Date) days,
+				fund_account
+			FROM
+				t_cf_day_funds
+			WHERE
+				(
+					record_Date BETWEEN ${beginDate} AND ${endDate}
+				)
+			AND zjbzj &gt;1
+			GROUP BY
+				fund_account
+ 	</select>
+ 	<!--指定区间 风险度累计值 -->
+ 	<select id="riskDays" resultType="java.util.HashMap" parameterMap="CalDate">
+ 	SELECT
+			sum(fxd) fxd,
+			fund_account
+		FROM
+			t_cf_day_funds
+		WHERE
+			(
+				record_Date BETWEEN ${beginDate} AND ${endDate}
+			)
+		GROUP BY fund_account
+ 	</select>
+ 	<!--指定区间穿仓次数 -->
+ 	<select id="throughWarehouseDays" resultMap="FundAccountDays" parameterMap="CalDate">
+	 	SELECT
+		count(record_Date) days,
+		fund_account
+		FROM
+			t_cf_day_funds
+		WHERE
+			(
+				record_Date BETWEEN ${beginDate} AND ${endDate}
+			)
+		AND khqy &lt;0
+		GROUP BY fund_account 
+ 	</select>
+ 	<!--指定区间每人的最新契约精神，没有则存在契约精神 -->
+ 	<select id="contractSpirit" resultType="java.util.HashMap" parameterMap="CalDate">
+		 	SELECT
+		fund_account,
+			is_verify
+		FROM
+			(
+				SELECT
+					t.*,
+				IF (
+					@fund_account = fund_account ,@RN :=@RN + 1 ,@RN := 1
+				) AS ROW_NUMBER,
+				@fund_account := fund_account AS VAR1
+			FROM
+				(
+					SELECT
+						*
+					FROM
+						t_cf_contract_spirit
+					WHERE
+						(record_Date BETWEEN ${beginDate} AND ${endDate})
+				) t,
+				(
+					SELECT
+						@fund_account := '' ,@RN := 0
+				) C
+			ORDER BY
+				FUND_ACCOUNT,
+				RECORD_dATE DESC
+			) a
+		WHERE
+			a.row_number = 1
+ 	</select>
+ 	<!--指定区间强平次数 -->
+ 	<select id="forceLiquidationDays" resultMap="FundAccountDays" parameterMap="CalDate">
+		 	SELECT
+			fund_account,
+			count(record_Date) days
+		FROM
+			t_cf_client_match_rate
+		WHERE
+			(record_Date BETWEEN ${beginDate} AND ${endDate})
+		AND process_result = 0
+		GROUP BY fund_account
+ 	</select>
+ 	<!--指定区间配合度 -->
+ 	<select id="cooperateDays" resultMap="FundAccountDays" parameterMap="CalDate">
+	 	SELECT
+				fund_account,
+				count(record_Date) days
+			FROM
+				t_cf_client_match_rate
+			WHERE
+				(record_Date BETWEEN ${beginDate} AND ${endDate})
+			AND process_result = 1
+			GROUP BY fund_account
+ 	</select>
+ 	<!--指定区间分散投资合约类目 -->
+ 	<select id="investmentContracts" resultType="java.util.HashMap" parameterMap="CalDate">
+		 	SELECT
+			contract,
+			fund_account
+		FROM
+			t_cf_day_position_detail
+		WHERE
+			record_Date BETWEEN ${beginDate} AND ${endDate}
+ 	</select>
+ 	
+ 	<!--上一周期的风险率  大周期没有忘小周期查询 
+ 	SELECT
+		fund_account,
+		average_risk_rate
+		FROM
+			t_cf_report_form t
+		WHERE
+			t.start_Date = #{date.beginDate}
+		AND t.end_date = #{date.endDate}
+		AND t.circle_type = ${type}
+ 	-->
+ 	<select id="lastCycleAvgRiskRate" resultMap="reportForm">
+	 	SELECT
+		
+			fund_account,circle_type,end_date,grade,average_risk_rate
+		FROM
+			(
+				SELECT
+					t.*,
+				IF (
+					@fund_account = fund_account ,@RN :=@RN + 1 ,@RN := 1
+				) AS ROW_NUMBER,
+				@fund_account := fund_account AS VAR1
+			FROM
+				(
+					SELECT
+						*
+					FROM
+						t_cf_report_form
+					WHERE
+						end_Date &lt;= ${date.endDate}
+            and circle_type &lt;= ${type}
+				) t,
+				(
+					SELECT
+						@fund_account := '' ,@RN := 0
+				) C
+			ORDER BY
+				FUND_ACCOUNT ,
+        end_Date desc,
+				circle_type DESC
+			) a
+		WHERE
+			a.row_number = 1
+ 	</select>
+ 	
+</mapper>

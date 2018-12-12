@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/java/!svn/ver/26236/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean
+END
+DayForceCloseTradeEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/java/!svn/ver/26219/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/DayForceCloseTradeEntity.java
+END
+ValidclientStartdateEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/java/!svn/ver/26189/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/ValidclientStartdateEntity.java
+END
+VipClientEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/java/!svn/ver/26111/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/VipClientEntity.java
+END
+DayPositionDetailEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/java/!svn/ver/26219/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/DayPositionDetailEntity.java
+END
+QhCuinvestorpropertyEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/java/!svn/ver/26124/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/QhCuinvestorpropertyEntity.java
+END
+DataImportLogEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/java/!svn/ver/26236/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/DataImportLogEntity.java
+END
+DayTransactionDetailEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/java/!svn/ver/26219/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/DayTransactionDetailEntity.java
+END
+ContractSpiritEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/java/!svn/ver/26090/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/ContractSpiritEntity.java
+END
+MacthRateEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/java/!svn/ver/26111/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/MacthRateEntity.java
+END
+MarketQuotationsEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/java/!svn/ver/26090/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/MarketQuotationsEntity.java
+END
+ParamSettingEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/java/!svn/ver/26165/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/ParamSettingEntity.java
+END
+DayFundsEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/java/!svn/ver/26219/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/DayFundsEntity.java
+END
+QhCurrinvestorsEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/java/!svn/ver/26180/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/bean/QhCurrinvestorsEntity.java
+END

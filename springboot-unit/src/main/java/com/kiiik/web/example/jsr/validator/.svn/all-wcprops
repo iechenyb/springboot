@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/web/example/jsr/validator
+END
+EmailValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/web/example/jsr/validator/EmailValidator.java
+END
+PhoneValidator.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/web/example/jsr/validator/PhoneValidator.java
+END

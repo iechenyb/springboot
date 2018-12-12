@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/pub/bean
+END
+BaseResult.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/java/!svn/ver/26055/kiiik-platform-kffl/src/main/java/com/kiiik/pub/bean/BaseResult.java
+END
+ResultBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/java/!svn/ver/26249/kiiik-platform-kffl/src/main/java/com/kiiik/pub/bean/ResultBean.java
+END
+KiiikPage.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/java/!svn/ver/26249/kiiik-platform-kffl/src/main/java/com/kiiik/pub/bean/KiiikPage.java
+END
+PageData.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/java/!svn/ver/26249/kiiik-platform-kffl/src/main/java/com/kiiik/pub/bean/PageData.java
+END
+SessionUser.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/pub/bean/SessionUser.java
+END

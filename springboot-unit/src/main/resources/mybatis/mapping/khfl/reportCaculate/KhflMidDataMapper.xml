@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kiiik.web.khfl.reportCaculate.mapper.KhflMidDataMapper">
+	<resultMap id="String" type="java.lang.String" />
+	<resultMap id="KhflMidDateEntity" type="com.kiiik.web.khfl.reportCaculate.bean.KhflMidDateEntity" />
+	<resultMap id="FundsInfor" type="com.kiiik.web.khfl.reportCaculate.vo.FundsInfor" />
+	<resultMap id="FundAccountStatics" type="com.kiiik.web.khfl.reportCaculate.vo.FundAccountStatics" />
+	<!-- 计算某一天需要计算的人员 -->
+	<select id="getAccountsOfDay" resultMap="String">
+		select distinct(fund_account) from t_cf_day_funds where record_Date=${ywrq}
+	</select>
+
+	<!-- 首次初始化时 获取日期数据 -->
+	<select id="getDates" resultMap="String">
+		select distinct(record_Date) from t_cf_day_transaction_detail order by
+		record_date asc
+	</select>
+	
+	<select id="getTradeAcounts" resultMap="String">
+		select distinct(fund_account) fund_account from t_cf_day_transaction_detail where record_Date = ${ywrq}
+	</select>
+	
+	<!--清除某一天的累计信息 -->
+	<delete id="deleteByDay">
+		delete from t_cf_day_lj where record_Date=${ywrq}
+	</delete>
+	<select id="sectionMarginLj" resultMap="KhflMidDateEntity">
+	SELECT
+			 `id` as id , `fund_account` as fundAccount , 
+			 `contract_nums` as contractNums , `contract_nums_total` as contractNumsTotal ,
+			  `fxd` as fxd , `fxd_total` as fxdTotal , `cc_nums` as ccNums , 
+			  `cc_nums_total` as ccNumsTotal , `qp_nums` as qpNums , 
+			  `qp_days_total` as qpDaysTotal , `zb_nums` as zbNums , 
+			  `zb_days_total` as zbDaysTotal , `phqp_nums` as phqpNums , 
+			  `phqp_days_total` as phqpDaysTotal 
+			,  `trade_days_total` as tradeDaysTotal 
+			FROM
+			(
+			SELECT
+			t.*,
+			IF (
+			@fund_account = fund_account ,@RN :=@RN + 1 ,@RN := 1
+			) AS ROW_NUMBER,
+			@fund_account := fund_account AS VAR1
+			FROM
+			(
+			SELECT
+			*
+			FROM
+			t_cf_day_lj
+			WHERE
+			record_Date between ${start} and ${end}
+			) t,
+			(
+			SELECT
+			@fund_account := '' ,@RN := 0
+			) C
+			ORDER BY
+			FUND_ACCOUNT asc,
+			record_Date ${ordor}
+			) a
+			WHERE
+			a.row_number = 1;
+	</select>
+	<!-- 查找所有人上一天的累计信息 -->
+	<select id="getLastDayLj" resultMap="KhflMidDateEntity" >
+		SELECT
+		 `id` as id , `fund_account` as fundAccount , `record_date` as recordDate ,
+		 `contract_nums` as contractNums , `contract_nums_total` as contractNumsTotal ,
+		  `fxd` as fxd , `fxd_total` as fxdTotal , `cc_nums` as ccNums , 
+		  `cc_nums_total` as ccNumsTotal , `qp_nums` as qpNums , 
+		  `qp_days_total` as qpDaysTotal , `zb_nums` as zbNums , 
+		  `zb_days_total` as zbDaysTotal , `phqp_nums` as phqpNums , 
+		  `phqp_days_total` as phqpDaysTotal 
+		, `has_trade` as hasTrade , `trade_days_total` as tradeDaysTotal 
+		FROM
+		(
+		SELECT
+		t.*,
+		IF (
+		@fund_account = fund_account ,@RN :=@RN + 1 ,@RN := 1
+		) AS ROW_NUMBER,
+		@fund_account := fund_account AS VAR1
+		FROM
+		(
+		SELECT
+		*
+		FROM
+		t_cf_day_lj
+		WHERE
+		record_Date &lt;${ywrq}
+		) t,
+		(
+		SELECT
+		@fund_account := '' ,@RN := 0
+		) C
+		ORDER BY
+		FUND_ACCOUNT asc,
+		record_Date desc
+		) a
+		WHERE
+		a.row_number = 1
+	</select>
+	<!--查询某一天的风险度、当日权益、追加保证金。 -->
+	<select id="getFundInfor" resultMap="FundsInfor">
+		select (case when khqy &lt; 0 then 1 else 0 end) cc,fxd,
+		(case when zjbzj &gt;1 then 1 else 0 end) zb,fund_account
+		from t_cf_day_funds where record_Date=${ywrq};
+	</select>
+	<!-- select * from t_cf_client_match_rate where record_date=20180906 where 
+		type =1; 查询强平次数 0不配合 被强平 1配合 主动交易 -->
+	<select id="getMatchfor" resultMap="FundAccountStatics">
+		select count(process_result) num,fund_account
+		from t_cf_client_match_rate 
+		where record_date=${ywrq} and process_result=${type}
+		group by fund_account
+	</select>
+	<!-- 每天的合约数 分散投资 -->
+	<select id="getContractsfor" resultMap="FundAccountStatics">
+		select count(distinct(contract)) num,fund_account
+		from t_cf_day_position_detail where record_Date=${ywrq}
+		group by fund_account
+	</select>
+</mapper>

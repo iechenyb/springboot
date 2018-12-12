@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/pub/advice
+END
+ErrorControllerAdvice.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/java/!svn/ver/26254/kiiik-platform-kffl/src/main/java/com/kiiik/pub/advice/ErrorControllerAdvice.java
+END
+StatisticsResponseTimeAdvice.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/java/!svn/ver/26055/kiiik-platform-kffl/src/main/java/com/kiiik/pub/advice/StatisticsResponseTimeAdvice.java
+END
+GlobelExceptionAdvice.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/java/!svn/ver/26055/kiiik-platform-kffl/src/main/java/com/kiiik/pub/advice/GlobelExceptionAdvice.java
+END

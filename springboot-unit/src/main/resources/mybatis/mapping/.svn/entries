@@ -1,0 +1,68 @@
+10
+
+dir
+26185
+http://192.168.29.5:8088/svn/java/kiiik-platform-kffl/src/main/resources/mybatis/mapping
+http://192.168.29.5:8088/svn/java
+
+
+
+2018-11-27T08:10:06.825844Z
+26178
+qinxiang
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d3784d8d-92ad-4847-8afd-0f06e949865c
+
+
+
+
+
+
+0
+
+common
+dir
+
+example
+dir
+
+khfl
+dir
+
+user
+dir
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+deleted
+

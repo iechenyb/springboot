@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kiiik.web.khfl.readClientCtpData.mapper.QhClientDataMapper" >
+    <resultMap id="String" type="java.lang.String"/>
+  	<resultMap id="DayFundsEntity" type="com.kiiik.web.khfl.dataImport.bean.DayFundsEntity"/>
+  	<resultMap id="DayForceCloseTradeEntity" type="com.kiiik.web.khfl.dataImport.bean.DayForceCloseTradeEntity"/>
+  	<resultMap id="DayPositionDetailEntity" type="com.kiiik.web.khfl.dataImport.bean.DayPositionDetailEntity"/>
+  	<resultMap id="DayTransactionDetailEntity" type="com.kiiik.web.khfl.dataImport.bean.DayTransactionDetailEntity"/>
+  	<resultMap id="QhCurrinvestorsEntity" type="com.kiiik.web.khfl.dataImport.bean.QhCurrinvestorsEntity"/>
+  	<resultMap id="QhCuinvestorpropertyEntity" type="com.kiiik.web.khfl.dataImport.bean.QhCuinvestorpropertyEntity"/>
+  	<resultMap id="ValidclientStartdateEntity" type="com.kiiik.web.khfl.dataImport.bean.ValidclientStartdateEntity"/>
+    
+    <!-- 获取客户选定时间段内的日资金数据：khqy,fxd,zjbzj  -->
+    <select id="getDayFundsData" resultMap="DayFundsEntity">       
+	   select t.fund_account fundAccount,
+       		  to_char(t.record_date) recordDate,
+       		  t.khqy,
+       		  t.fxd,
+       		  t.zjbzj
+  	   from tb_qh_funds t
+ 	   where t.record_date between #{startDate} and #{endDate}
+ 	</select>
+ 	
+ 	<!-- 获取客户选定时间段内的日强平记录数据：record_date,fund_account -->
+    <select id="getDayForceTradeByDate" resultMap="DayForceCloseTradeEntity">       
+	   select t.investorid fundAccount,
+	           to_char(t.tradingday) recordDate
+  	   from tb_qh_force_close_trade t
+       where t.tradingday between #{startDate} and #{endDate}
+ 	</select>
+ 	
+ 	<!-- 获取客户日持仓明细：record_date,fund_account,contract,buy_positions,sell_positions -->
+    <select id="getPositionDetail" resultMap="DayPositionDetailEntity">       
+	   select t.fund_account fundAccount,
+			  to_char(t.record_date) recordDate,
+			  t.contract contract,
+			  t.buy_positions buyPositions,
+			  t.sell_positions sellPositions
+  	  from tb_qh_positions_detail t
+ 	  where t.record_date between #{startDate} and #{endDate}
+ 	</select>
+ 	
+ 	<!-- 获取客户日成交明细：fund_account,record_date-->
+    <select id="getTransDetail" resultMap="DayTransactionDetailEntity">       
+	  select 
+	  	t.fund_account fundAccount,
+	  	to_char(t.record_date) recordDate
+  	  from tb_qh_transaction_detail t
+      where t.record_date between #{startDate} and #{endDate}
+ 	</select>
+ 	
+ 	<!-- 获取客户基本信息：fund_account,investor_name，is_active -->
+    <select id="getCurrInvestorDetail" resultMap="QhCurrinvestorsEntity">       
+	  select 
+	      t.investorid   fundAccount,
+          t.investorname investorName,
+          t.isactive     isActive
+      from tb_qh_currinvestors t
+    <if test="active != null"> 
+		where t.isactive =  #{active}
+    </if>
+ 	</select>
+ 	
+ 	<!-- 获取客属性信息：fund_account,freeze_status-->
+    <select id="getCurrInvProperties" resultMap="QhCuinvestorpropertyEntity">       
+	  select 
+	  	t.investorid fundAccount,
+	    t.freezestatus freezeStatus
+      from tb_qh_cuinvestorproperty t
+ 	</select>
+ 
+ 
+ <!-- 读取客户第一个交易日日期-->
+    <select id="getClientStatrtDate" resultMap="ValidclientStartdateEntity">       
+	select t1.fundAccount,t2.startDate
+    from (select a.investorid fundAccount
+          from tb_qh_currinvestors a
+         where a.isactive = 1) t1
+    left join (select t.fund_account fundAccount, min(t.record_date) startDate
+               from tb_qh_transaction_detail t
+              group by t.fund_account) t2 on rtrim(t1.fundAccount) =  to_char(t2.fundAccount)
+ 	</select>
+</mapper>

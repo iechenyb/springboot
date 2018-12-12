@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/java/!svn/ver/26174/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/controller
+END
+ParamSettingController.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/java/!svn/ver/26253/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/controller/ParamSettingController.java
+END
+MarketQuotationsController.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/java/!svn/ver/26253/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/controller/MarketQuotationsController.java
+END
+ContractSpiritDMController.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/java/!svn/ver/26253/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/controller/ContractSpiritDMController.java
+END
+VipClientController.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/java/!svn/ver/26253/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/controller/VipClientController.java
+END
+MatchRateController.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/java/!svn/ver/26247/kiiik-platform-kffl/src/main/java/com/kiiik/web/khfl/dataImport/controller/MatchRateController.java
+END

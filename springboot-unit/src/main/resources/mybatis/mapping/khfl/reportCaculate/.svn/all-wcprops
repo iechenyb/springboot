@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/java/!svn/ver/26178/kiiik-platform-kffl/src/main/resources/mybatis/mapping/khfl/reportCaculate
+END
+ParamCalDMMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/java/!svn/ver/26242/kiiik-platform-kffl/src/main/resources/mybatis/mapping/khfl/reportCaculate/ParamCalDMMapper.xml
+END
+KhflMidDataMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/java/!svn/ver/26251/kiiik-platform-kffl/src/main/resources/mybatis/mapping/khfl/reportCaculate/KhflMidDataMapper.xml
+END

@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/pub/mybatis/annotation
+END
+KeyColumn.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/pub/mybatis/annotation/KeyColumn.java
+END
+DBColumn.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/pub/mybatis/annotation/DBColumn.java
+END
+DBEntity.java
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/java/!svn/ver/26052/kiiik-platform-kffl/src/main/java/com/kiiik/pub/mybatis/annotation/DBEntity.java
+END
