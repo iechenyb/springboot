@@ -1,4 +1,6 @@
 package test.com.boot.task;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
@@ -6,10 +8,12 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.kiiik.web.example.task.HelloWorld;
 import com.kiiik.web.example.task.HelloWorldBean;
 import com.kiiik.web.example.task.QuartzManager;
 import com.kiiik.web.example.task.QuartzManagerBean;
+import com.kiiik.web.example.task1.SftpTask;
+import com.kiiik.web.example.task1.TaskFactory;
+import com.kiiik.web.example.task1.TaskInfor;
 
 import test.com.boot.pub.BaseUnit;
 /**
@@ -63,5 +67,16 @@ public class ManualTaskTest extends BaseUnit{
         } catch (Exception e) {  
             e.printStackTrace();  
         }  
+	}
+	@Autowired
+	SftpTask task;
+	
+	@Test
+	public void test(){
+		List<TaskInfor> a = TaskFactory.tasks;
+		for(TaskInfor t:a){
+			task.addJob(t);
+		}
+		while(true){}
 	}
 }
