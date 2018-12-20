@@ -20,11 +20,12 @@ import org.springframework.util.AntPathMatcher;
 
 import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.KiiikContants;
+import com.kiiik.utils.EnvUtils;
 import com.kiiik.utils.ResponseUtils;
 import com.kiiik.web.property.KiiikProperties;
 /**
  *作者 : iechenyb<br>
- *类描述: 说点啥<br>
+ *类描述: 解决会话过期使用<br>
  *创建时间: 2018年11月3日
  */
 @Component
@@ -32,50 +33,49 @@ public class KiiikCustomizationFilter implements Filter {
 	Log log = LogFactory.getLog(KiiikCustomizationFilter.class);
 	public static List<String> paths= new ArrayList<String>();
 	AntPathMatcher antPathMatcher = new AntPathMatcher();
-	boolean checkSession = true;//前后端分离，未登录时重定向（关键问题解决思路）
 	
 	@Autowired
 	KiiikProperties kiiik;
-	static String[] pathsstrs =new String[]{"/v2/api-docs","/v2/api-docs","/swagger-resources",
-			"/**/v2/api-docs/**",
-			"/**/configuration/ui/**","/**/swagger-resources/**","/**/configuration/security/**",
-			"/swagger-ui.html","/**/webjars/**/*.*","/**/swagger-resources/configuration/ui/**"};
+	
+	@Autowired
+	EnvUtils env;
+//	static String[] pathsstrs =new String[]{"/v2/api-docs","/v2/api-docs","/swagger-resources",
+//			"/**/v2/api-docs/**",
+//			"/**/configuration/ui/**","/**/swagger-resources/**","/**/configuration/security/**",
+//			"/swagger-ui.html","/**/webjars/**/*.*","/**/swagger-resources/configuration/ui/**"};
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		paths.add("/user/login");
+		/*paths.add("/user/login");
 		paths.add("/user/logout");
 		paths.add("/rsa/**");
+		paths.add("/");
 		paths.add("/favicon.ico");
-		paths.add("/**/*.jpg");//:
-		paths.add("/**/*.css");
-		paths.add("/user/getImage");
+		paths.add("/user/getImage");*/
 		
-		paths.add("/fonts/**");
+		/*paths.add("/fonts/**");
 		paths.add("/css/**");
 		paths.add("/js/**");
-		paths.add("/img/**");
-		paths.add("/index.html");
-		
+		paths.add("/img/**");交给security的静态文件处理
+		paths.add("/index.html");*/
 		//屏蔽swagger-ui接口页面
-		if(!KiiikContants.PROD.equals(kiiik.environment)){
+		/*if(!KiiikContants.PROD.equals(env.getActiveProfile())){
 			for(int i=0;i<pathsstrs.length;i++){
 				paths.add(pathsstrs[i]);
 			}
-		}
+		}*/
 		//开发环境免登陆
-        if(KiiikContants.DEV.equals(kiiik.environment)){
-        	for(int i=0;i<KiiikContants.reqs.length;i++){
-        		paths.add("/"+KiiikContants.reqs[i]+"/**");
+       /* if(KiiikContants.DEV.equals(env.getActiveProfile())){
+        	for(String uri:PackageScanUtil.getAllControllerUri("com.kiiik")){
+        		paths.add("/"+uri+"/**");
         	}
-        }
+        }*/
 	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		//过滤器掉静态资源  
-		
-		if(checkSession){
+		if(kiiik.checkSession){
 			Object auth = ((HttpServletRequest)request).getSession().getAttribute(KiiikContants.SPRING_CONTEXT_KEY);
 	    	if(auth==null&&!isAccess( ((HttpServletRequest)request).getRequestURI())){
 		        R<String> result = new R<String>();

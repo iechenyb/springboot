@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class KiiikProperties {
-	@Value("${spring.profiles.active}")
+	/*@Value("${spring.profiles.active}")
 	public String environment;//环境
+   */	
+	@Value("${checkSession}")
+	public boolean checkSession;
 }

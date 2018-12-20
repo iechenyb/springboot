@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
  *创建时间: 2018年10月19日
  */
 
+import com.kiiik.pub.ann.IgnoreApi;
 import com.kiiik.pub.bean.R;
 import com.kiiik.web.example.jsr.bean.ValidateBean;
 @RestController
 @RequestMapping("jsr")
+@IgnoreApi
 public class JSRController {
 	Log log = LogFactory.getLog(JSRController.class);
 	@PostMapping("validate")

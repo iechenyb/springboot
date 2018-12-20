@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kiiik.pub.bean.SystemConfig;
+import com.kiiik.pub.bean.YamlEntity;
 import com.kiiik.pub.filter.AccessErrorFilter;
 import com.kiiik.pub.filter.AccessFilter;
 import com.kiiik.pub.mybatis.service.GenericService;
@@ -22,12 +24,17 @@ import com.kiiik.utils.req.RequestParamAnalysis;
 @EnableDiscoveryClient
 @EnableZuulProxy
 @Controller
-//@EnableAutoConfiguration(exclude = {SecurityAutoConfiguration.class})
 public class ZuulAuthServiceStarter {
 	
+	@Autowired
+	YamlEntity yaml;
+	
+	@Autowired
+	SystemConfig user;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ZuulAuthServiceStarter.class, args);
+		
 	}
 	
 	@GetMapping("info")
@@ -44,6 +51,7 @@ public class ZuulAuthServiceStarter {
 	    
 	@Bean
 	public AccessFilter accessFilter() {
+		System.err.println(user.getSwaggerStaticUris()+",aaa="+yaml.getSpecialStr());
 		AccessFilter filter = new AccessFilter();
 		filter.setGenericService(genericService);
 		filter.setAnalysis(analysis);
@@ -56,7 +64,7 @@ public class ZuulAuthServiceStarter {
 	}
 	
 	
-	@RequestMapping(value = "/")
+	@RequestMapping(value = {"/",""})
     public String index() {
        return "redirect:index.html";//swagger-ui
 	}

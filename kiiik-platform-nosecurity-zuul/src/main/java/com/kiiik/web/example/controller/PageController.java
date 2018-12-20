@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 import com.github.pagehelper.Page;
+import com.kiiik.pub.ann.IgnoreApi;
 import com.kiiik.pub.bean.R;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.web.example.bean.TestBean;
@@ -21,6 +22,7 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("page")
+@IgnoreApi
 public class PageController {
 	Log log = LogFactory.getLog(PageController.class);
 

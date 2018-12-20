@@ -23,6 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.KiiikContants;
+import com.kiiik.utils.EnvUtils;
 import com.kiiik.utils.ResponseUtils;
 import com.kiiik.web.example.anno.RequestDateParamMethodArgumentResolver;
 import com.kiiik.web.property.KiiikProperties;
@@ -71,15 +72,31 @@ public class KiiikWebMvcConfigurer extends WebMvcConfigurerAdapter {
             }
         });
     }
-    //swagger-ui.html显示的关键
+    @Autowired
+    EnvUtils utils;
+    
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-        registry.addResourceHandler("/static/**")/*.addResourceHandler("/public/**")*/
-        .addResourceLocations("classpath:/static");
+    	System.err.println("jar目录："+utils.getRunDir().getParentFile().getAbsolutePath());
+    	 registry
+    	 .addResourceHandler("/**")
+         .addResourceLocations("classpath:/META-INF/resources/")
+         .addResourceLocations("classpath:/resources/")
+         .addResourceLocations("classpath:/static/")
+         .addResourceLocations("classpath:/public/")
+    	 //.addResourceLocations("file:D:/data/web/")//手动指定某个目录
+    	 .addResourceLocations("file:"+utils.getRunDir().getParentFile().getAbsolutePath()+"/webapp/")
+    	 .addResourceLocations("file:"+utils.getRunDir().getParentFile().getAbsolutePath()+"/app/");
+    	 if(KiiikContants.DEV.equals(utils.getActiveProfile())){
+    		 //开发环境
+    		 registry
+        	 .addResourceHandler("/**").addResourceLocations("file:"+utils.getRunDir().getParentFile().getParentFile().getAbsolutePath()+"/webapp/")
+    		 .addResourceLocations("file:"+utils.getRunDir().getParentFile().getParentFile().getParentFile().getAbsolutePath()+"/app/");
+    	 }
+         registry.addResourceHandler("swagger-ui.html")
+         .addResourceLocations("classpath:/META-INF/resources/");
+         registry.addResourceHandler("/webjars/**")
+         .addResourceLocations("classpath:/META-INF/resources/webjars/");
         super.addResourceHandlers(registry);
     }
     
@@ -88,21 +105,6 @@ public class KiiikWebMvcConfigurer extends WebMvcConfigurerAdapter {
         StringHttpMessageConverter converter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
         return converter;
     }
-    
-    /* @Bean
-    public FilterRegistrationBean repeatedlyReadFilter() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        RepeatedlyReadFilter repeatedlyReadFilter = new RepeatedlyReadFilter();
-        registration.setFilter(repeatedlyReadFilter);
-        registration.addUrlPatterns("/*");
-        return registration;
-    }*/
-    
-   /* @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new RepeatedlyReadInterceptor()).addPathPatterns("/**");
-        super.addInterceptors(registry);
-    }*/
     
     /**
      * 修改StringHttpMessageConverter默认配置

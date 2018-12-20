@@ -42,7 +42,7 @@ public class ResponseUtils {
     }
 	
 	public static String getMessage(Exception e,KiiikProperties kiiik){
-		if(KiiikContants.PROD.equals(kiiik.environment)){
+		if(KiiikContants.PROD.equals(KiiikContants.PROD)){
 			return e.toString();
 		}else{
 			return e.getMessage();

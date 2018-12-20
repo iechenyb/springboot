@@ -1,6 +1,7 @@
 package com.kiiik.config.swagger;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.kiiik.pub.contant.KiiikContants;
+import com.kiiik.utils.EnvUtils;
+import com.kiiik.utils.PackageScanUtil;
 import com.kiiik.web.property.KiiikProperties;
 
 import springfox.documentation.RequestHandler;
@@ -45,18 +48,33 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @version 2017年10月19日 许畅 新建
  */
 @Configuration
-@PropertySources({ @PropertySource(value = "classpath:swagger2.properties",
-ignoreResourceNotFound = true, encoding = "UTF-8") })
+@PropertySources({ 
+	@PropertySource(
+			value = "classpath:swagger2.properties",
+			ignoreResourceNotFound = true,
+			encoding = "UTF-8") })
 @EnableSwagger2
 public class Swagger2UIConfig {
+	
 	@Autowired
 	KiiikProperties kiiik;
+	
+	@Autowired
+	EnvUtils env;
     
     /**
      * 获取API标题
      */
     @Value("${swagger2.title}")
     public String title = "Spring Boot中使用Swagger2构建Restful API";
+    @Value("${swagger2.description}")
+    public String description;
+    @Value("${swagger2.termsOfServiceUrl}")
+    public String termsOfServiceUrl;
+    @Value("${swagger2.version}")
+    public String version;
+    @Value("${swagger2.basePackage}")
+    public String basePackage;
     
     /**
      * Swagger2创建Docket的Bean
@@ -71,8 +89,7 @@ public class Swagger2UIConfig {
         			,HttpServletResponse.class
         			,HttpSession.class,
         			ModelMap.class).select()
-            .apis(basePackage("com.kiiik.web"))
-            
+            .apis(basePackage(basePackage))
             .paths(PathSelectors.any()).build();
     }
     
@@ -92,16 +109,21 @@ public class Swagger2UIConfig {
             }
         };
     }
-   public  Map<String,String> ignoreController = null;
+   public  Set<String> ignoreController = null;
    public  synchronized void  initIngoreControllers() {
-    	ignoreController=new HashMap<>();
-    	if(!KiiikContants.DEV.equals(kiiik.environment)){
-	    	ignoreController.put("GenericController",KiiikContants.BLANK);
+	    ignoreController = new HashSet<>();
+    	List<String> controllers = PackageScanUtil.getAllIgnoreController(basePackage);
+    	if(!KiiikContants.DEV.equals(env.getActiveProfile())){
+	    	/*ignoreController.put("GenericController",KiiikContants.BLANK);
 	    	ignoreController.put("JSRController", KiiikContants.BLANK);
 	    	ignoreController.put("ApiController", KiiikContants.BLANK);
 	    	ignoreController.put("CacheController", KiiikContants.BLANK);
-	    	//ignoreController.put("RSAController", KiiikContants.BLANK);
-	    	ignoreController.put("VerityCodeController", KiiikContants.BLANK);
+	    	ignoreController.put("RSAController", KiiikContants.BLANK);
+	    	ignoreController.put("VerityCodeController", KiiikContants.BLANK);*/
+    		for(String controller:controllers){
+    			ignoreController.add(controller);
+    		}
+    		
     	}
     	
     }
@@ -118,12 +140,12 @@ public class Swagger2UIConfig {
             @Override
             public Boolean apply(Class<?> input) {
             	//如果生产环境，直接返回false,不生成接口信息
-            	if(KiiikContants.PROD.equals(kiiik.environment)){
+            	if(KiiikContants.PROD.equals(env.getActiveProfile())){
             		return false;
             	}
                 for (String strPackage : basePackage.split(",")) {
                     boolean isMatch = input.getPackage().getName().startsWith(strPackage);
-                    if(ignoreController.containsKey(input.getSimpleName())){
+                    if(ignoreController.contains(input.getSimpleName())){
                     	return false;
                     }
                     if (isMatch) {
@@ -152,9 +174,12 @@ public class Swagger2UIConfig {
      */
     @Bean
     public ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title(title)
-            .description("更多Swagger2配置相关文章请关注：https://springfox.github.io/springfox/docs/current/")
-            .termsOfServiceUrl("https://springfox.github.io/springfox/docs/current/").version("1.0").build();
+        return new ApiInfoBuilder()
+        	.title(title)
+            .description(description)
+            .termsOfServiceUrl(termsOfServiceUrl)
+            .version(version)
+            .build();
     }
     
 }

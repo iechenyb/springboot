@@ -14,6 +14,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,6 +31,7 @@ import com.kiiik.config.cache.BaseCacheKey;
 import com.kiiik.pub.bean.R;
 import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.pub.context.TimeContext;
+import com.kiiik.utils.EnvUtils;
 import com.kiiik.utils.RequestUtils;
 import com.kiiik.web.log.bean.SystemLog;
 
@@ -96,7 +98,8 @@ public class AuthControllerAop extends BaseAop{
 			}
 		}
 	}
-	
+	@Autowired
+	EnvUtils env;
 	/**
 	 * 
 	 *作者 : iechenyb<br>
@@ -106,7 +109,7 @@ public class AuthControllerAop extends BaseAop{
 	 * @throws Exception 
 	 */
 	private void recordVisitLog(ProceedingJoinPoint proceedingJoinPoint) throws Exception {
-		if(KiiikContants.DEV.equals(kiiik.environment)){
+		if(KiiikContants.DEV.equals(env.getActiveProfile())){
 			try {
 					Signature signature = proceedingJoinPoint.getSignature();    
 					MethodSignature methodSignature = (MethodSignature)signature;    

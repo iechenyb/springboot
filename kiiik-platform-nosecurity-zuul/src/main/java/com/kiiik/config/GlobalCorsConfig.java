@@ -11,18 +11,21 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import com.kiiik.pub.contant.KiiikContants;
+import com.kiiik.utils.EnvUtils;
 import com.kiiik.web.property.KiiikProperties;
 
 //@Configuration
 public class GlobalCorsConfig {
 	@Autowired
 	KiiikProperties kiiik;
+	@Autowired
+	EnvUtils env;
     @Bean
     public CorsFilter corsFilter() {
     	 //1.添加CORS配置信息
          CorsConfiguration config = new CorsConfiguration();
          UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
-    	 if(!KiiikContants.PROD.equals(kiiik.environment)){
+    	 if(!KiiikContants.PROD.equals(env.getActiveProfile())){
 	        //1) 允许的域,不要写*，否则cookie就无法使用了
 	        // 允许跨域访问的域名
 	        config.addAllowedOrigin("*");

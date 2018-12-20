@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kiiik.pub.ann.IgnoreApi;
 import com.kiiik.pub.bean.R;
 import com.kiiik.utils.VerifyCodeUtils;
 
@@ -26,6 +27,7 @@ import io.swagger.annotations.ApiOperation;
 @Controller
 @RequestMapping("code")
 @Api
+@IgnoreApi
 public class VerityCodeController {
 	Log log = LogFactory.getLog(VerityCodeController.class);
 	/**

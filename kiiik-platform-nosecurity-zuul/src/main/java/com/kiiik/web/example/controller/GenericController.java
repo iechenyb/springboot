@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 import com.github.pagehelper.Page;
+import com.kiiik.pub.ann.IgnoreApi;
 import com.kiiik.pub.bean.KiiikPage;
 import com.kiiik.pub.bean.PageData;
 import com.kiiik.pub.bean.R;
@@ -34,6 +35,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("generic")
+@IgnoreApi
 public class GenericController {
 	Log log = LogFactory.getLog(GenericController.class);
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kiiik.pub.ann.IgnoreApi;
 import com.kiiik.pub.bean.KiiikPage;
 import com.kiiik.pub.bean.R;
 import com.kiiik.web.example.bean.TestBean;
@@ -25,6 +26,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("rest")
+@IgnoreApi
 public class RestFullController {
 	Log log = LogFactory.getLog(RestFullController.class);
 	

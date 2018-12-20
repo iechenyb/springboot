@@ -1,5 +1,7 @@
 package com.kiiik.config.sec;
 
+import java.io.File;
+
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,10 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
+import com.kiiik.pub.bean.SystemConfig;
 import com.kiiik.pub.contant.KiiikContants;
+import com.kiiik.utils.EnvUtils;
+import com.kiiik.utils.PackageScanUtil;
 import com.kiiik.web.property.KiiikProperties;
 
 @Configuration
@@ -34,17 +39,29 @@ public class KiiikSecurityConfig extends WebSecurityConfigurerAdapter {
 	 @Autowired
 	 KiiikProperties kiiik;
 	 
+	 @Autowired
+	 SystemConfig infor;
+	 
+	 @Autowired
+	 EnvUtils env;
+	 
 	 @Override
     protected void configure(HttpSecurity http) throws Exception {
 		http.addFilterBefore(firstFilter, FilterSecurityInterceptor.class);
-        http
+		for(String uri:infor.getSecurityExcloudUris()){
+			 http.authorizeRequests().antMatchers(uri).permitAll();
+		}
+        /*http
         .authorizeRequests()
         .antMatchers("/user/login","/","/user/getImage","/user/toLogin").permitAll()
-        .antMatchers("/rsa/**","/public/index.html").permitAll();
+        .antMatchers("/rsa/**").permitAll();*/
         //开发环境免登陆
-        if(KiiikContants.DEV.equals(kiiik.environment)){
-        	for(int i=0;i<KiiikContants.reqs.length;i++){
+        if(KiiikContants.DEV.equals(env.getActiveProfile())){
+        	/*for(int i=0;i<KiiikContants.reqs.length;i++){
         	    http.authorizeRequests().antMatchers("/"+KiiikContants.reqs[i]+"/**").permitAll();
+        	}*/
+        	for(String uri:PackageScanUtil.getAllControllerUri("com.kiiik")){
+        		 http.authorizeRequests().antMatchers("/"+uri+"/**").permitAll();
         	}
         }
         
@@ -105,19 +122,28 @@ public class KiiikSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+    
+    @Autowired
+    EnvUtils utils;
+    
     @Override
     public void configure(WebSecurity web) throws Exception {
-        //解决静态资源被拦截的问题
+    	File dir= utils.getStaticResourcesDir();
+    	if(dir!=null){
+    		File files[] = dir.listFiles();
+    		if(files.length>0){
+            	for(int i=0;i<files.length;i++){
+            		System.err.println(files[i].getName());
+            		if(files[i].isFile()){
+            			web.ignoring().antMatchers("/"+files[i].getName());
+            		}else{
+            			web.ignoring().antMatchers("/"+files[i].getName()+"/**");
+            		}
+            	}
+            }
+    	}
+    	System.err.println(env.getActiveProfile());
         web.ignoring()
-        .antMatchers("/public/index.html")
-        //版本二的登录页面打开
-        .antMatchers("/favicon.ico")
-        .antMatchers("/img/**")
-        .antMatchers("/fonts/**")
-        .antMatchers("/js/**")
-        .antMatchers("/css/**")
-        .antMatchers("/index.html")
-        .antMatchers("/css/")
         .antMatchers("/druid/**","/druid/index.html")
         .antMatchers("/v2/api-docs", "/configuration/ui",
                 "/swagger-resources", "/configuration/security",

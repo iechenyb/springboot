@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UrlPathHelper;
 
+import com.kiiik.pub.ann.IgnoreApi;
+
 import io.swagger.annotations.Api;
 /**
  *作者 : iechenyb<br>
@@ -13,6 +15,7 @@ import io.swagger.annotations.Api;
 @Api
 @Controller
 @RequestMapping("test/rsa")
+@IgnoreApi
 public class RSADevController {
 	
 	RouteLocator a;

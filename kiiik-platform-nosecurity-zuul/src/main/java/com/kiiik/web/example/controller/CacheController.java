@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kiiik.pub.ann.IgnoreApi;
 import com.kiiik.web.example.bean.TestBean;
 /**
  *作者 : iechenyb<br>
@@ -21,6 +22,7 @@ import com.kiiik.web.example.service.CacheService;
 import com.kiiik.web.rsa.service.RsaService;
 @RestController
 @RequestMapping("cache")
+@IgnoreApi
 public class CacheController {
 	Log log = LogFactory.getLog(CacheController.class);
 	
