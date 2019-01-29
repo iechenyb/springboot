@@ -6,8 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -15,6 +17,7 @@ import org.springframework.util.StringUtils;
 import com.cyb.date.DateUtil;
 import com.kiiik.pub.bean.SessionUser;
 import com.kiiik.pub.contant.KiiikContants;
+import com.kiiik.pub.exception.UserSessionTimeoutException;
 import com.kiiik.utils.req.RequestParamAnalysis;
 import com.kiiik.utils.req.RequestParamAnalyst;
 import com.kiiik.web.log.bean.SystemLog;
@@ -52,7 +55,14 @@ public class RequestUtils {
 		log.setVisitorTime(DateUtil.date2long14());
 		return log;
 	}
-
+	
+	public static SystemUser getSystemUser (HttpServletRequest request){
+		UsernamePasswordAuthenticationToken principal = (UsernamePasswordAuthenticationToken) request.getUserPrincipal();
+		return (SystemUser) principal.getPrincipal();
+	}
+	public static SessionUser getSessionUser(HttpServletRequest request) {
+		return getSessionUser(securityContext(request).getAuthentication());
+	}
 	public static SessionUser getSessionUser(Authentication authentication) {
 		try{
 			SystemUser user = (SystemUser) authentication.getPrincipal();
@@ -76,7 +86,17 @@ public class RequestUtils {
 		}
 		
 	}
-	
+	public static SecurityContext securityContext(HttpServletRequest request) throws UserSessionTimeoutException {
+		try{
+			SecurityContext securityContext = (SecurityContext) request.getSession().getAttribute(KiiikContants.SPRING_CONTEXT_KEY);
+			securityContext.getAuthentication().getPrincipal();//用户信息
+			securityContext.getAuthentication().getDetails();//详情
+			securityContext.getAuthentication().getAuthorities();//角色
+			return securityContext;
+		}catch(Exception e){
+			throw new UserSessionTimeoutException("尚未登录，请先登录！");
+		}
+	}
 	static AntPathMatcher matcher = new AntPathMatcher();
 	/**
 	 * 

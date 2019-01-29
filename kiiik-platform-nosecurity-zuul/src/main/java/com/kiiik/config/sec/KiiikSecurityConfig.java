@@ -51,6 +51,7 @@ public class KiiikSecurityConfig extends WebSecurityConfigurerAdapter {
 		for(String uri:infor.getSecurityExcloudUris()){
 			 http.authorizeRequests().antMatchers(uri).permitAll();
 		}
+		http.authorizeRequests().antMatchers("/metrics","/env").permitAll();
         /*http
         .authorizeRequests()
         .antMatchers("/user/login","/","/user/getImage","/user/toLogin").permitAll()
@@ -144,7 +145,7 @@ public class KiiikSecurityConfig extends WebSecurityConfigurerAdapter {
     	}
     	System.err.println(env.getActiveProfile());
         web.ignoring()
-        .antMatchers("/druid/**","/druid/index.html")
+        .antMatchers("/druid/**","/druid/index.html","/metrics")
         .antMatchers("/v2/api-docs", "/configuration/ui",
                 "/swagger-resources", "/configuration/security",
                 "/swagger-ui.html","/webjars/**",

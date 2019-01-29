@@ -37,7 +37,7 @@ public class ValidateBean {
 	private String password;
 	
 	
-	@IsPhone
+	@IsPhone(message="手机号码格式不正确！")
 	@Length(min=11, max=11)
 	private String phone;
 	

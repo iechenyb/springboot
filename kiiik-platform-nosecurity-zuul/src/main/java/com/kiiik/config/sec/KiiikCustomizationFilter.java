@@ -19,13 +19,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
 import com.kiiik.pub.bean.R;
+import com.kiiik.pub.bean.SystemConfig;
 import com.kiiik.pub.contant.KiiikContants;
 import com.kiiik.utils.EnvUtils;
 import com.kiiik.utils.ResponseUtils;
 import com.kiiik.web.property.KiiikProperties;
 /**
  *作者 : iechenyb<br>
- *类描述: 解决会话过期使用<br>
+ *类描述: 解决会话过期使用
+ *
+ *前后端分离时  ，会话过期直接返回过期提示，不能进行重定向！<br>
  *创建时间: 2018年11月3日
  */
 @Component
@@ -37,6 +40,9 @@ public class KiiikCustomizationFilter implements Filter {
 	@Autowired
 	KiiikProperties kiiik;
 	
+    @Autowired
+    SystemConfig infor;
+	 
 	@Autowired
 	EnvUtils env;
 //	static String[] pathsstrs =new String[]{"/v2/api-docs","/v2/api-docs","/swagger-resources",
@@ -74,21 +80,28 @@ public class KiiikCustomizationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
+		System.out.println("进入first过滤器。。。");
 		//过滤器掉静态资源  
-		if(kiiik.checkSession){
+		if(true){//kiiik.checkSession
 			Object auth = ((HttpServletRequest)request).getSession().getAttribute(KiiikContants.SPRING_CONTEXT_KEY);
+			//System.out.println("登录信息："+auth);
 	    	if(auth==null&&!isAccess( ((HttpServletRequest)request).getRequestURI())){
 		        R<String> result = new R<String>();
 		        result.sessionTimeOut("会话过期，请重新登陆!");
 		        ResponseUtils.writeResult((HttpServletResponse)response, result);
 		        return ;
-	    	}
+	    	}/*else{
+	    		initUserInfo((HttpServletRequest)request);
+	    	}*/
     	}
     	chain.doFilter(request, response);
 	}
+	 /*private void initUserInfo(HttpServletRequest request){
+	      UserInfoContext.setUser(RequestUtils.getSessionUser(request));
+	 }*/
 
 	private boolean isAccess(String uri) {
-		for(String path:paths){
+		for(String path:infor.getSecurityExcloudUris()){
 			if(antPathMatcher.match(path, uri)){//准入
 				System.err.println("match:"+path);
 				return true;//不需要session也能访问

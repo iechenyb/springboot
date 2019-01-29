@@ -47,7 +47,7 @@ public class RSAUtil {
 	/**
 	 * 加密算法RSA
 	 */
-	public static final String KEY_ALGORITHM = "RSA";//RSA RSA/ECB/PKCS1Padding
+	public static final String KEY_ALGORITHM = "RSA";// RSA RSA/ECB/PKCS1Padding
 
 	/** */
 	/**
@@ -94,10 +94,10 @@ public class RSAUtil {
 		KeyPair keyPair = keyPairGen.generateKeyPair();
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
 		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-		KiiikContants.RSASER = new RsaSer(publicKey,privateKey);
+		KiiikContants.RSASER = new RsaSer(publicKey, privateKey);
 		System.out.println(KiiikContants.RSASER);
 	}
-	
+
 	public synchronized static KeyPair genKeyPair() throws Exception {
 		KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(KEY_ALGORITHM);
 		keyPairGen.initialize(1024);
@@ -298,7 +298,7 @@ public class RSAUtil {
 	public static byte[] encryptByPrivateKey(byte[] data, String privateKey) throws Exception {
 		byte[] keyBytes = Base64Utils.decode(privateKey);
 		PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(keyBytes);
-		KeyFactory keyFactory = KeyFactory.getInstance("KEY_ALGORITHM");//KEY_ALGORITHM
+		KeyFactory keyFactory = KeyFactory.getInstance("KEY_ALGORITHM");// KEY_ALGORITHM
 		Key privateK = keyFactory.generatePrivate(pkcs8KeySpec);
 		Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
 		cipher.init(Cipher.ENCRYPT_MODE, privateK);
@@ -357,55 +357,62 @@ public class RSAUtil {
 
 	/**
 	 * java端公钥加密
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	public static String encryptedDataOnJava(String data, String PUBLICKEY) throws Exception {
-		//try {
-			data = Base64Utils.encode(encryptByPublicKey(data.getBytes(), PUBLICKEY));
-		/*} catch (Exception e) {
-			e.printStackTrace();
-		}*/
+		// try {
+		data = Base64Utils.encode(encryptByPublicKey(data.getBytes(), PUBLICKEY));
+		/*
+		 * } catch (Exception e) { e.printStackTrace(); }
+		 */
 		return data;
 	}
 
 	/**
 	 * java端私钥解密
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	public static String decryptDataOnJava(String data, String PRIVATEKEY) throws Exception {
 		String temp = "";
 		try {
 			byte[] rs = Base64Utils.decode(data);
-			temp = new String(RSAUtil.decryptByPrivateKey(rs, PRIVATEKEY),"UTF-8");
+			temp = new String(RSAUtil.decryptByPrivateKey(rs, PRIVATEKEY), "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception("解密失败，请更新密文！");
 		}
 		return temp;
 	}
-	
-	
+
 	// 字节数组转Base64编码
-		public static String byte2Base64(byte[] bytes) {
-			BASE64Encoder encoder = new BASE64Encoder();
-			return encoder.encode(bytes);
-		}
+	public static String byte2Base64(byte[] bytes) {
+		BASE64Encoder encoder = new BASE64Encoder();
+		return encoder.encode(bytes);
+	}
 
-		// Base64编码转字节数组
-		public static byte[] base642Byte(String base64Key) throws IOException {
-			BASE64Decoder decoder = new BASE64Decoder();
-			return decoder.decodeBuffer(base64Key);
-		}
-		
-		// 获取公钥(Base64编码)
-		public static String getPublicKey(PublicKey publicKey) {
-			byte[] bytes = publicKey.getEncoded();
-			return byte2Base64(bytes);
-		}
+	// Base64编码转字节数组
+	public static byte[] base642Byte(String base64Key) throws IOException {
+		BASE64Decoder decoder = new BASE64Decoder();
+		return decoder.decodeBuffer(base64Key);
+	}
 
-		// 获取私钥(Base64编码)
-		public static String getPrivateKey(PrivateKey privateKey) {
-			byte[] bytes = privateKey.getEncoded();
-			return byte2Base64(bytes);
-		}
+	// 获取公钥(Base64编码)
+	public static String getPublicKey(PublicKey publicKey) {
+		byte[] bytes = publicKey.getEncoded();
+		return byte2Base64(bytes);
+	}
+
+	// 获取私钥(Base64编码)
+	public static String getPrivateKey(PrivateKey privateKey) {
+		byte[] bytes = privateKey.getEncoded();
+		return byte2Base64(bytes);
+	}
+	public static void main(String[] args) throws Exception {
+		byte[] r = encryptByPublicKey("12345678a".getBytes(), "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC58/kgMpjmLZmChToXvng7T6+TDisyTGJvUyxU\nNXGgyyFnA2akvx14H6uZVamCyelEwfmVQiYyeeA0lJ7VZAhO+p8VroPCyTWTwSe3QfdRc7zPojXc\nEOq1FO6tPbjZxPvohZNtFGHbJ1atpFe3uYaz1cMFMiHCk6+UpA5qTdEgRwIDAQAB");
+		System.out.println(new String(byte2Base64(r)));
+	}
+	
+	
 }

@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.kiiik.pub.mybatis.service.GenericService;
 import com.kiiik.utils.RequestUtils;
 import com.kiiik.utils.req.RequestParamAnalysis;
+import com.kiiik.web.feign.context.UserInfoContext;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 
@@ -33,11 +34,14 @@ public class AccessFilter extends ZuulFilter {
         //是否执行该过滤器，true代表需要过滤
         return true;
     }
-
+/**
+ * 子服务和本服务是否都拦截？？？
+ */
     @Override
     public Object run() {
+    	System.out.println("accessfilter....");
         RequestContext.getCurrentContext()
-        .addZuulRequestHeader("X-AUTH-ID",
+        .addZuulRequestHeader(UserInfoContext.KEY_USERINFO_IN_HTTP_HEADER,
         		JSON.toJSONString(
         				RequestUtils.getSessionUser(
         						SecurityContextHolder.getContext().getAuthentication())));

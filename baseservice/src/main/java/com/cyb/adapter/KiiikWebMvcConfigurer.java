@@ -1,4 +1,5 @@
 package com.cyb.adapter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -33,8 +34,14 @@ public class KiiikWebMvcConfigurer extends WebMvcConfigurerAdapter {
             		HttpServletResponse response,
             		Object handler, 
             		Exception e) {
-            	System.err.println(e.getMessage());
-                return new ModelAndView();
+            	System.err.println(request.getRequestURI()+","+request.getMethod()+","+e.getMessage());
+                try {
+					response.getWriter().write("BaseService Error："+e.getMessage());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					
+				}
+            	return new ModelAndView();
             }
         });
     }

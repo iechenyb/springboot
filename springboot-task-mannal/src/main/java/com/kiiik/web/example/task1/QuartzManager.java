@@ -55,7 +55,7 @@ public class QuartzManager {
 
             // 调度容器设置JobDetail和Trigger
             scheduler.scheduleJob(job, trigger);
-
+            //scheduler.startDelayed(3);延时启动
             // 启动
             if (!scheduler.isShutdown()) {
                 scheduler.start();

@@ -1,5 +1,7 @@
 package com.cyb.web.controller;
 
+import java.net.URLDecoder;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -16,10 +18,11 @@ import com.cyb.web.bean.SessionUser;
 public class BaseController {
 	Log log = LogFactory.getLog(BaseController.class);
 
+	@SuppressWarnings("deprecation")
 	protected String getRemoteUser() {
 		String user = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
 				.getHeader("X-AUTH-ID");
-		return user;
+		return URLDecoder.decode(user);
 	}
 	
 	protected SessionUser getUser(){

@@ -45,6 +45,7 @@ public class SftpTask {
 		String id = task.getId();
 		Map<String, Object> params = Maps.newHashMap();
 		params.put("id", id);
+		params.put("task", task);
 		params.put("name", task.getName());
 		quartzManager.addJob(job_prefix + id, job_group_prefix + id, trigger_prefix + id, trigger_group_prefix + id,
 				SftpJob.class, task.getCron(), params);

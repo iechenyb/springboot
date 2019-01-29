@@ -9,13 +9,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -75,19 +74,20 @@ public class ApiController extends BaseController{
 	@GetMapping("query")
 	@ResponseBody
 	public String getP(String username) {
-		return "信息列表!";
+		
+		return "信息列表!"+this.getRemoteUser();
 	}
 
 	@ResponseBody
-	@GetMapping("add")
+	@PostMapping("add")
 	public String add(String name) {
-		return "添加信息成功！";
+		return "添加信息成功！"+name+","+this.getRemoteUser();
 	}
 
 	@ResponseBody
-	@GetMapping("delete")
-	public String delete(HttpServletRequest req) {
-		return "删除信息成功";
+	@DeleteMapping("delete")
+	public String delete(String id) {
+		return "删除信息成功!"+id+","+this.getRemoteUser();
 	}
 	@Autowired
 	SpringContextUtil util;

@@ -11,15 +11,16 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.kiiik.pub.bean.SessionUser;
 import com.kiiik.pub.exception.UserSessionTimeoutException;
+import com.kiiik.utils.RequestUtils;
 import com.kiiik.web.system.vo.SystemUser;
 /**
  *作者 : iechenyb<br>
@@ -64,8 +65,19 @@ public class BaseController {
 	 */
 	protected SystemUser getSystemUser () throws UserSessionTimeoutException {
 		try{
-			UsernamePasswordAuthenticationToken principal = (UsernamePasswordAuthenticationToken) getCurrentRequest().getUserPrincipal();
-			return (SystemUser) principal.getPrincipal();
+			return RequestUtils.getSystemUser(getCurrentRequest());
+		}catch(Exception e){
+			throw new UserSessionTimeoutException("尚未登录，请先登录！");
+		}
+	}
+	
+	protected SecurityContext securityContext() throws UserSessionTimeoutException {
+		try{
+			SecurityContext securityContext = RequestUtils.securityContext(getCurrentRequest());
+			securityContext.getAuthentication().getPrincipal();//用户信息
+			securityContext.getAuthentication().getDetails();//详情
+			securityContext.getAuthentication().getAuthorities();//角色
+			return securityContext;
 		}catch(Exception e){
 			throw new UserSessionTimeoutException("尚未登录，请先登录！");
 		}

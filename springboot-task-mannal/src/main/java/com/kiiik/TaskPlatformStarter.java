@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 @SpringBootApplication
 @Controller
 @ServletComponentScan
+//@EnableConfigServer
 public class TaskPlatformStarter {
 	public static void main(String[] args) {
 		SpringApplication.run(TaskPlatformStarter.class, args);

@@ -29,8 +29,10 @@ import net.sf.json.JSONObject;
 @ControllerAdvice
 public class StatisticsResponseTimeAdvice implements ResponseBodyAdvice<Object> {
 	Log logger = LogFactory.getLog(StatisticsResponseTimeAdvice.class);
+	
 	@Autowired
 	SwitchProperties switchPro;
+	
 	@Override
 	public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
         return true;

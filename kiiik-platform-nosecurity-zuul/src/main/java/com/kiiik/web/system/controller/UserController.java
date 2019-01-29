@@ -263,6 +263,28 @@ public class UserController extends BaseController {
 			}
 		}
 	}
+	@GetMapping(value = "/loginSimple")
+	@ApiOperation("用户登陆，ajax请求用")
+	@ResponseBody
+	@KiiikCachesParams(
+	  caches = { 
+		@KiiikCachesParam(cacheName=RedisKeyContants.USERINFO,clazz=UserServiceImpl.class)
+	  }
+	)
+	public R<String> loginJson2(String username, String password, String code, HttpServletRequest req) throws Exception {
+		
+		{
+			if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+				return new R<String>().fail("用户名或者密码不能为空！");
+			}
+			Authentication request = new UsernamePasswordAuthenticationToken(username, password);
+			Authentication result = authenticationManager.authenticate(request);
+			SecurityContextHolder.getContext().setAuthentication(result);
+			req.getSession().setAttribute(KiiikContants.SPRING_CONTEXT_KEY, SecurityContextHolder.getContext()); // 这个非常重要，否则验证后将无法登陆
+			userService.recordLoginStatus(getSystemUser());
+			return new R<String>().success("登录成功！");
+		}
+	}
 
 	@GetMapping(value = "/loginPage", produces = { "text/html" })
 	@ApiOperation("用户登陆，页面跳转用")

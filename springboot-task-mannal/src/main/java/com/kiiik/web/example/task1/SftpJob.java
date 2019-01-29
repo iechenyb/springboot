@@ -27,6 +27,6 @@ public class SftpJob extends QuartzJobBean {
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		// 传入的参数
 		JobDataMap params = context.getJobDetail().getJobDataMap();
-		log.error(params.get("name")+",service=" + service);
+		System.err.println(params.get("task")+",service=" + service);
 	}
 }
