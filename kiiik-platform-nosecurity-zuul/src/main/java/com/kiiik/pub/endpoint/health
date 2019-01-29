@@ -1,0 +1,46 @@
+{
+status: "UP",
+cusDiskSpace: {
+status: "UP",
+disk.free: 801618829312,
+disk.total: 892826808320
+},
+discoveryComposite: {
+description: "Composite Discovery Client",
+status: "UP",
+discoveryClient: {
+description: "Composite Discovery Client",
+status: "UP",
+services: [
+"service-admin",
+"kiiik-zuul"
+]
+},
+eureka: {
+description: "Remote status from Eureka server",
+status: "UP",
+applications: {
+SERVICE-ADMIN: 1,
+KIIIK-ZUUL: 1
+}
+}
+},
+diskSpace: {
+status: "UP",
+total: 892826808320,
+free: 801618829312,
+threshold: 10485760
+},
+redis: {
+status: "UP",
+version: "3.2.0"
+},
+db: {
+status: "UP",
+database: "MySQL",
+hello: 1
+},
+hystrix: {
+status: "UP"
+}
+}

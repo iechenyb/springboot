@@ -1,0 +1,3 @@
+127.0.0.1 localhost 192.168.16.211 eureka.kiiik.com mysql.kiiik.com
+192.168.108.119 redis.kiiik.com
+192.168.108.224 test.kiiik.com
