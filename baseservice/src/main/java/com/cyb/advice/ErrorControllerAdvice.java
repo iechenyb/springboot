@@ -23,6 +23,14 @@ import com.cyb.web.utils.ResponseUtils;
 @Controller
 public class ErrorControllerAdvice implements ErrorController {
 	Log log = LogFactory.getLog(ErrorControllerAdvice.class);
+	public int a=init();
+	public int init(){
+		System.out.println("ErrorControllerAdvice基础属性初始化！");
+		return 1;
+	}
+	public ErrorControllerAdvice(){
+		System.out.println("ErrorControllerAdvice调用构造器执行初始化！");
+	}
 	 private final static String ERROR_PATH = "/error1";
 	    /**
 	     * Supports the HTML Error View
